@@ -5,19 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f7f6f1">
   <meta name="description" content="Daily makes planning simple: find a little inspiration, plan your week, and make a shopping list." />
-  <title>Daily - a little easier, every day</title>
+  <title>Daily — a little easier, every day</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <style>
     :root { --ink:#252923; --muted:#72776e; --paper:#f7f6f1; --white:#fffefa; --green:#43634d; --lime:#d8e6a8; --line:#e7e6dd; --orange:#f1bd8c; }
-    body.dark-mode { --ink:#eff0e8; --muted:#b6b9ae; --paper:#171b18; --white:#222823; --green:#8dbb86; --line:#394139; --lime:#d8e6a8; }
+    body.dark-mode { --ink:#eff0e8; --muted:#b6b9ae; --paper:#171b18; --white:#242c26; --green:#8dbb86; --line:#3a473d; --lime:#d8e6a8; --icon-bg:#34483a; --icon-ink:#b7d19d; }
+    :root { --icon-bg:#e8eedf; --icon-ink:#43634d; }
     body.dark-mode .nav-cta,body.dark-mode .button,body.dark-mode .recipe-search button { background:#43634d; color:#fff }
     * { box-sizing:border-box }
     html { scroll-behavior:smooth }
-    body { margin:0; background:var(--paper); color:var(--ink); font-family:'DM Sans',sans-serif; }
+    body { margin:0; background:radial-gradient(ellipse at 80% 15%,#e9ecdf 0,transparent 34%),var(--paper); color:var(--ink); font-family:'DM Sans',sans-serif; transition:background-color .3s,color .3s; }
+    body.dark-mode { background:radial-gradient(ellipse at 80% 15%,#202a22 0,transparent 34%),var(--paper); }
     a { color:inherit; text-decoration:none }
     button { font:inherit; cursor:pointer }
+    a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible { outline:3px solid #8da976; outline-offset:3px }
     .wrap { width:min(1160px, calc(100% - 48px)); margin:auto }
     header { height:78px; display:flex; align-items:center; border-bottom:1px solid rgba(37,41,35,.08) }
     nav { display:flex; align-items:center; justify-content:space-between; width:100% }
@@ -43,10 +46,11 @@
     .avatar { display:grid; place-items:center; width:25px; height:25px; margin-left:-4px; border:2px solid var(--paper); border-radius:50%; background:#ebbd91; font-size:11px }
     .avatar:nth-child(2) { background:#b9c9a1 }.avatar:nth-child(3) { background:#dfab9d }
     .visual { position:relative; min-height:450px; display:grid; place-items:center }
-    .blob { position:absolute; width:min(440px,95%); aspect-ratio:1; border-radius:50%; background:#e6ead9; right:1%; top:5% }
+    .blob { position:absolute; width:min(440px,95%); aspect-ratio:1; border-radius:50%; background:#e6ead9; right:1%; top:5%; animation:float 8s ease-in-out infinite }
+    body.dark-mode .blob { background:#29392c }
     .food { z-index:1; width:min(440px,95%); aspect-ratio:1; border-radius:50%; overflow:hidden; box-shadow:0 26px 70px #33433124; border:9px solid #f7f6f1; background:#d8ae73; }
     .food img { width:100%; height:100%; object-fit:cover }
-    .float-card { position:absolute; z-index:2; background:var(--white); border-radius:16px; padding:14px 17px; box-shadow:0 12px 35px #26301d18; }
+    .float-card { position:absolute; z-index:2; background:var(--white); border:1px solid var(--line); border-radius:16px; padding:14px 17px; box-shadow:0 12px 35px #26301d18; animation:float 6s ease-in-out infinite }
     .float-card small { display:block; color:var(--muted); font-size:11px; margin-bottom:5px }
     .float-card strong { font-size:14px }
     .float-card.top { top:48px; left:0 }
@@ -110,11 +114,12 @@
     .forgot-button { justify-self:end; font-size:12px }
     .meal-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:15px }
     .meal { background:var(--white); border:1px solid var(--line); border-radius:18px; overflow:hidden; transition:.2s }
-    .meal:hover { transform:translateY(-4px); box-shadow:0 12px 28px #26301d0c }
+    .meal:hover { transform:translateY(-6px); box-shadow:0 18px 34px #26301d20; border-color:#b6c7a6 }
     .meal-image { height:162px; position:relative; background:#e7e3d5; overflow:hidden }
     .meal-image img { width:100%; height:100%; object-fit:cover; transition:transform .35s }
     .meal:hover .meal-image img { transform:scale(1.04) }
-    .day { position:absolute; top:12px; left:12px; background:#fffef3ed; border-radius:999px; padding:6px 10px; font-size:10px; font-weight:700; letter-spacing:.4px }
+    .day { position:absolute; top:12px; left:12px; background:#fffef3ed; color:#30382d; border-radius:999px; padding:6px 10px; font-size:10px; font-weight:700; letter-spacing:.4px; box-shadow:0 2px 8px #0002; backdrop-filter:blur(6px) }
+    body.dark-mode .day { background:#19221dec; color:#e9eee3; border:1px solid #ffffff26 }
     .meal-info { padding:15px 16px 17px }
     .meal-info h3 { font-size:15px; margin:0 0 8px; letter-spacing:-.25px }
     .meta { color:var(--muted); font-size:11px; display:flex; justify-content:space-between }
@@ -125,10 +130,25 @@
     body.dark-mode .food { border-color:var(--paper) }
     body.dark-mode .recipe-controls select,body.dark-mode .auth-form input,body.dark-mode .google-button { background:#171b18; color:var(--ink); border-color:var(--line) }
     body.dark-mode .firebase-note { background:#3b3021; border-color:#645033; color:#f1d6ad }
-    .feature-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:44px; margin-top:34px }
-    .feature-icon { width:44px; height:44px; border-radius:14px; background:#fffefa; display:grid; place-items:center; font-size:21px; margin-bottom:17px }
-    .feature h3 { font-size:16px; margin-bottom:8px }
-    .feature p { color:var(--muted); font-size:13px; line-height:1.7; max-width:270px; margin-bottom:0 }
+    .feature-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:30px }
+    .feature { position:relative; isolation:isolate; overflow:hidden; padding:25px 24px 27px; border:1px solid var(--line); border-radius:22px; background:var(--white); box-shadow:0 8px 24px #26301d08; transition:transform .28s ease,border-color .28s ease,box-shadow .28s ease }
+    .feature::before { content:''; position:absolute; z-index:-1; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,#8da976,#d8e6a8,#e8b98c); opacity:.85 }
+    .feature::after { content:attr(data-number); position:absolute; z-index:-1; right:16px; top:6px; color:#e8eddf; font:700 68px/1 'Playfair Display',serif; letter-spacing:-5px }
+    body.dark-mode .feature::after { color:#303a32 }
+    .feature:hover { transform:translateY(-7px); border-color:#aabf96; box-shadow:0 20px 42px #26301d18 }
+    body.dark-mode .feature { box-shadow:0 10px 28px #0002 }
+    body.dark-mode .feature:hover { border-color:#6f916f; box-shadow:0 20px 44px #0005 }
+    .feature-icon { width:50px; height:50px; border-radius:17px; background:var(--icon-bg); color:var(--icon-ink); display:grid; place-items:center; font-size:22px; margin-bottom:20px; box-shadow:inset 0 0 0 1px #43634d14; transition:transform .3s cubic-bezier(.2,.8,.2,1),border-radius .3s }
+    .feature:nth-child(2) .feature-icon { background:#f5ead9; color:#8c643e }
+    .feature:nth-child(3) .feature-icon { background:#f5e4df; color:#a75f51 }
+    body.dark-mode .feature:nth-child(2) .feature-icon { background:#483a2b; color:#edc997 }
+    body.dark-mode .feature:nth-child(3) .feature-icon { background:#4a3230; color:#efb4a4 }
+    .feature:hover .feature-icon { transform:rotate(-7deg) scale(1.08); border-radius:15px }
+    .feature h3 { font-size:17px; line-height:1.35; letter-spacing:-.25px; margin-bottom:10px; max-width:270px }
+    .feature p { color:var(--muted); font-size:13px; line-height:1.75; max-width:290px; margin-bottom:0 }
+    .feature-more { display:inline-flex; align-items:center; gap:7px; margin-top:18px; color:var(--green); font-size:12px; font-weight:700 }
+    .feature-more span { display:inline-block; transition:transform .2s }
+    .feature:hover .feature-more span { transform:translateX(4px) }
     .closing { text-align:center; padding:86px 0 }
     .closing h2 { font:600 clamp(34px,5vw,52px)/1.12 'Playfair Display',serif; letter-spacing:-1px; margin:14px auto 15px; max-width:650px }
     .closing p { color:var(--muted); font-size:15px; margin-bottom:24px }
@@ -139,6 +159,10 @@
     .footer-controls { display:flex; align-items:center; gap:8px; margin-left:auto }
     .footer-control { display:inline-flex; align-items:center; gap:7px; border:1px solid var(--line); color:var(--ink); background:var(--white); border-radius:999px; padding:8px 12px; font-size:12px; font-weight:600; white-space:nowrap; transition:background .2s,border-color .2s }
     .footer-control:hover { border-color:var(--green); background:var(--paper) }
+    @keyframes float { 0%,100% { transform:translateY(0) } 50% { transform:translateY(-9px) } }
+    .reveal { opacity:0; transform:translateY(20px); transition:opacity .65s ease,transform .65s cubic-bezier(.2,.7,.2,1); transition-delay:var(--reveal-delay,0ms) }
+    .reveal.is-visible { opacity:1; transform:translateY(0) }
+    @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important }.reveal { opacity:1; transform:none } }
     @media(max-width:800px) { .hero { grid-template-columns:1fr; padding-top:55px; gap:15px }.hero-copy{max-width:540px}.visual{min-height:390px}.food,.blob{width:min(390px,84vw)}.float-card.top{left:8%}.float-card.bottom{right:5%}.meal-grid{grid-template-columns:repeat(2,1fr)}.plan-grid{grid-template-columns:repeat(4,1fr)} }
     @media(max-width:700px) { .footer-inner { justify-content:center; text-align:center; gap:12px 18px }.footer-copy { flex:0 1 auto }.footer-controls { width:100%; justify-content:center; margin-left:0 } }
     @media(max-width:540px) { .wrap{width:min(100% - 34px,1160px)} header{height:68px}.navlinks{display:none}.hero{padding:45px 0 48px}.hero-copy{font-size:15px}.visual{min-height:315px}.float-card.top{top:8px}.float-card.bottom{bottom:12px}.section-head{align-items:start;gap:12px;flex-direction:column}.section-head h2{font-size:31px}.meal-grid{gap:10px}.meal-image{height:125px}.meal-info{padding:12px}.meal-info h3{font-size:13px}.feature-grid{grid-template-columns:1fr;gap:27px}.features{padding:55px 0}.closing{padding:66px 0}.footer-inner{gap:8px;flex-wrap:wrap}.account-label{display:none}.account-actions{gap:5px}.account-actions .outline-button{padding:9px 11px}.plan-grid{grid-template-columns:repeat(2,1fr)}.dash-head{align-items:start;flex-direction:column}.auth-dialog{padding:21px} }
@@ -184,9 +208,9 @@
     <dialog class="recipe-dialog" id="recipe-dialog" aria-labelledby="dialog-title"><img id="dialog-image" alt=""><div class="dialog-content"><h3 id="dialog-title"></h3><p id="dialog-description"></p><div class="dialog-actions"><a id="dialog-source" href="#" target="_blank" rel="noreferrer">See full recipe ↗</a><button id="dialog-close" type="button">Close</button></div><div class="recipe-controls"><select id="plan-day" aria-label="Choose a day"><option value="Monday">Monday</option><option value="Tuesday">Tuesday</option><option value="Wednesday">Wednesday</option><option value="Thursday">Thursday</option><option value="Friday">Friday</option><option value="Saturday">Saturday</option><option value="Sunday">Sunday</option></select><button class="button" id="add-to-plan" type="button">Add to my week</button><button class="outline-button" id="save-recipe" type="button">♡ Save recipe</button></div></div></dialog>
     <dialog class="auth-dialog" id="auth-dialog" aria-labelledby="auth-title"><div class="auth-top"><h2 id="auth-title">Welcome to Daily</h2><button class="close-icon" id="auth-close" type="button" aria-label="Close">×</button></div><form class="auth-form" id="auth-form"><input id="auth-name" type="text" autocomplete="name" placeholder="Your name" hidden><input id="auth-email" type="email" autocomplete="email" placeholder="Email address" required><input id="auth-password" type="password" autocomplete="current-password" placeholder="Password (at least 6 characters)" minlength="6" required><button class="forgot-button" id="forgot-password" type="button">Forgot password?</button><p class="auth-message" id="auth-message" aria-live="polite"></p><button class="button" id="email-submit" type="submit">Log in with email</button></form><div class="auth-divider">or</div><button class="google-button" id="google-signin" type="button">Continue with Google</button><p class="auth-switch" id="auth-switch">New to Daily? <button type="button">Create an account</button></p></dialog>
     <section class="features" id="how-it-works"><div class="wrap"><div class="eyebrow"><span class="dot"></span> A little help, right when you need it</div><div class="feature-grid">
-      <div class="feature"><div class="feature-icon">✦</div><h3>Find your next favorite</h3><p>Discover simple, tasty recipes that make the everyday feel a little more special.</p></div>
-      <div class="feature"><div class="feature-icon">▦</div><h3>Make a plan that fits</h3><p>Pick meals for your week and keep all your dinner ideas in one happy place.</p></div>
-      <div class="feature"><div class="feature-icon">♡</div><h3>Enjoy the little things</h3><p>Spend less time wondering what to cook and more time enjoying what’s on your plate.</p></div>
+      <div class="feature" data-number="01"><div class="feature-icon" aria-hidden="true">✦</div><h3>Find your next favorite</h3><p>Search a world of recipes, open the ingredients, and spot something delicious for tonight.</p><a class="feature-more" href="#this-week">Explore recipes <span aria-hidden="true">→</span></a></div>
+      <div class="feature" data-number="02"><div class="feature-icon" aria-hidden="true">▦</div><h3>Make a plan that fits</h3><p>Choose a recipe, pick a day, and build a week that works for your real schedule.</p><a class="feature-more" href="#this-week">Plan your week <span aria-hidden="true">→</span></a></div>
+      <div class="feature" data-number="03"><div class="feature-icon" aria-hidden="true">♡</div><h3>Keep the good ones close</h3><p>Save the recipes you love, find them again later, and make your own collection.</p><a class="feature-more" href="#this-week">Save a favorite <span aria-hidden="true">→</span></a></div>
     </div></div></section>
     <section class="closing wrap" id="about"><div class="eyebrow" style="justify-content:center"><span class="dot"></span> Your week starts here</div><h2>A little more joy at the dinner table.</h2><p>Good meals don’t have to be complicated. Let’s make them Daily.</p><a class="button" href="#this-week">Get a little inspiration <span aria-hidden="true">→</span></a></section>
   </main>
@@ -203,7 +227,7 @@
         heroEyebrow:'<span class="dot"></span> A calmer kind of meal planning', heroTitle:'Good food.<br><em>Less thinking.</em>', heroCopy:'Meet Daily: your friendly little helper for figuring out what’s for dinner. Find fresh ideas, plan your week, and make mealtimes feel easy again.', heroCta:'See this week’s menu <span aria-hidden="true">→</span>', howLink:'How it works <span aria-hidden="true">↗</span>', heroNote:'Made for real life, one meal at a time', weekSorted:'Your week, sorted', dinners:'5 dinners planned ✓', todayWin:'Today’s little win', ready:'Ready in 25 minutes',
         weekEyebrow:'<span class="dot"></span> A taste of the week', weekTitle:'What’s cooking?', weekIntro:'Fresh ideas for the days ahead.', firebaseNote:'Add your Firebase web app settings to <strong>firebase-config.js</strong>, then enable Google and Email/Password sign-in in Firebase Console to activate accounts, meal plans, and saved recipes.', searchPlaceholder:'Search recipes, like pasta…', searchLabel:'Search recipes', searchButton:'Search',
         yourSpace:'<span class="dot"></span> Your Daily space', mealPlan:'Your meal plan', savedToAccount:'Saved to your account', savedRecipes:'Saved recipes',
-        featureEyebrow:'<span class="dot"></span> A little help, right when you need it', feature1Title:'Find your next favorite', feature1:'Discover simple, tasty recipes that make the everyday feel a little more special.', feature2Title:'Make a plan that fits', feature2:'Pick meals for your week and keep all your dinner ideas in one happy place.', feature3Title:'Enjoy the little things', feature3:'Spend less time wondering what to cook and more time enjoying what’s on your plate.',
+        featureEyebrow:'<span class="dot"></span> A little help, right when you need it', feature1Title:'Find your next favorite', feature1:'Search a world of recipes, open the ingredients, and spot something delicious for tonight.', feature2Title:'Make a plan that fits', feature2:'Choose a recipe, pick a day, and build a week that works for your real schedule.', feature3Title:'Keep the good ones close', feature3:'Save the recipes you love, find them again later, and make your own collection.', featureLink1:'Explore recipes <span aria-hidden="true">→</span>', featureLink2:'Plan your week <span aria-hidden="true">→</span>', featureLink3:'Save a favorite <span aria-hidden="true">→</span>',
         closingEyebrow:'<span class="dot"></span> Your week starts here', closingTitle:'A little more joy at the dinner table.', closingCopy:'Good meals don’t have to be complicated. Let’s make them Daily.', closingCta:'Get a little inspiration <span aria-hidden="true">→</span>', footerNote:'A school project made with a love for good food.',
         login:'Log in', logout:'Log out', authWelcome:'Welcome to Daily', signupTitle:'Create your account', authClose:'Close', namePlaceholder:'Your name', emailPlaceholder:'Email address', passwordPlaceholder:'Password (at least 6 characters)', forgot:'Forgot password?', emailLogin:'Log in with email', emailSignup:'Create account with email', or:'or', google:'Continue with Google', newToDaily:'New to Daily? <button type="button">Create an account</button>', haveAccount:'Already have an account? <button type="button">Log in</button>',
         recipeSource:'See full recipe ↗', dialogClose:'Close', chooseDay:'Choose a day', addMeal:'Add to my week', saveRecipe:'♡ Save recipe', removePlan:'Remove {title} from {day}', removeSaved:'Remove {title} from saved recipes', nothingPlanned:'Nothing planned', saveToShow:'Save a recipe and it will show up here.', ingredients:'Ingredients',
@@ -219,7 +243,7 @@
         heroEyebrow:'<span class="dot"></span> Entspannt planen, lecker essen', heroTitle:'Gutes Essen.<br><em>Weniger Grübeln.</em>', heroCopy:'Das ist Daily: deine kleine Hilfe bei der Frage, was es heute gibt. Entdecke neue Ideen, plane deine Woche und mach die Mahlzeiten ganz entspannt.', heroCta:'Menü für diese Woche <span aria-hidden="true">→</span>', howLink:'So funktioniert’s <span aria-hidden="true">↗</span>', heroNote:'Für den Alltag – eine Mahlzeit nach der anderen', weekSorted:'Deine Woche ist geplant', dinners:'5 Abendessen geplant ✓', todayWin:'Das klappt heute schon', ready:'In 25 Minuten fertig',
         weekEyebrow:'<span class="dot"></span> Ein Vorgeschmack auf die Woche', weekTitle:'Was gibt’s heute?', weekIntro:'Frische Ideen für die nächsten Tage.', firebaseNote:'Füge deine Firebase-Web-App-Einstellungen in <strong>firebase-config.js</strong> ein und aktiviere anschließend Google- sowie E-Mail/Passwort-Anmeldung in der Firebase Console, um Konten, Essenspläne und gespeicherte Rezepte zu nutzen.', searchPlaceholder:'Rezepte suchen, zum Beispiel Pasta…', searchLabel:'Rezepte suchen', searchButton:'Suchen',
         yourSpace:'<span class="dot"></span> Dein Daily-Bereich', mealPlan:'Dein Essensplan', savedToAccount:'In deinem Konto gespeichert', savedRecipes:'Gespeicherte Rezepte',
-        featureEyebrow:'<span class="dot"></span> Kleine Hilfe, genau wenn du sie brauchst', feature1Title:'Finde dein neues Lieblingsgericht', feature1:'Entdecke einfache, leckere Rezepte, die den Alltag besonders machen.', feature2Title:'Plane passend zu deiner Woche', feature2:'Wähle deine Mahlzeiten und sammle alle Ideen an einem Ort.', feature3Title:'Genieße die kleinen Dinge', feature3:'Weniger überlegen, was du kochst – mehr Zeit zum Genießen.',
+        featureEyebrow:'<span class="dot"></span> Kleine Hilfe, genau wenn du sie brauchst', feature1Title:'Finde dein neues Lieblingsgericht', feature1:'Durchsuche viele Rezepte, schau dir die Zutaten an und finde etwas Leckeres für heute Abend.', feature2Title:'Plane passend zu deiner Woche', feature2:'Wähle ein Rezept und einen Tag – so entsteht ein Plan, der in deinen Alltag passt.', feature3Title:'Deine Lieblingsrezepte immer dabei', feature3:'Speichere gute Rezepte, finde sie später wieder und sammle deine persönlichen Favoriten.', featureLink1:'Rezepte entdecken <span aria-hidden="true">→</span>', featureLink2:'Woche planen <span aria-hidden="true">→</span>', featureLink3:'Favorit speichern <span aria-hidden="true">→</span>',
         closingEyebrow:'<span class="dot"></span> Deine Woche beginnt hier', closingTitle:'Mehr Freude am gemeinsamen Essen.', closingCopy:'Gutes Essen muss nicht kompliziert sein. Mach es dir Daily.', closingCta:'Lass dich inspirieren <span aria-hidden="true">→</span>', footerNote:'Ein Schulprojekt mit viel Liebe zu gutem Essen.',
         login:'Anmelden', logout:'Abmelden', authWelcome:'Willkommen bei Daily', signupTitle:'Konto erstellen', authClose:'Schließen', namePlaceholder:'Dein Name', emailPlaceholder:'E-Mail-Adresse', passwordPlaceholder:'Passwort (mindestens 6 Zeichen)', forgot:'Passwort vergessen?', emailLogin:'Mit E-Mail anmelden', emailSignup:'Konto mit E-Mail erstellen', or:'oder', google:'Mit Google fortfahren', newToDaily:'Neu bei Daily? <button type="button">Konto erstellen</button>', haveAccount:'Du hast schon ein Konto? <button type="button">Anmelden</button>',
         recipeSource:'Zum vollständigen Rezept ↗', dialogClose:'Schließen', chooseDay:'Tag auswählen', addMeal:'Zur Wochenplanung', saveRecipe:'♡ Rezept speichern', removePlan:'{title} am {day} entfernen', removeSaved:'{title} aus gespeicherten Rezepten entfernen', nothingPlanned:'Noch nichts geplant', saveToShow:'Speichere ein Rezept – dann erscheint es hier.', ingredients:'Zutaten',
@@ -243,7 +267,7 @@
         '.float-card.top small':copy.weekSorted, '.float-card.top strong':copy.dinners, '.float-card.bottom small':copy.todayWin, '.float-card.bottom strong':copy.ready,
         '.week .section-head .eyebrow':copy.weekEyebrow, '.week .section-head h2':copy.weekTitle, '.week .section-head p':copy.weekIntro, '#firebase-note':copy.firebaseNote, '#recipe-search button':copy.searchButton,
         '#dashboard .dash-head .eyebrow':copy.yourSpace, '#dashboard .dash-head h2':copy.mealPlan, '#dashboard-message':copy.savedToAccount, '#dashboard .saved-heading':copy.savedRecipes,
-        '#how-it-works>.wrap>.eyebrow':copy.featureEyebrow, '.feature:nth-child(1) h3':copy.feature1Title, '.feature:nth-child(1) p':copy.feature1, '.feature:nth-child(2) h3':copy.feature2Title, '.feature:nth-child(2) p':copy.feature2, '.feature:nth-child(3) h3':copy.feature3Title, '.feature:nth-child(3) p':copy.feature3,
+        '#how-it-works>.wrap>.eyebrow':copy.featureEyebrow, '.feature:nth-child(1) h3':copy.feature1Title, '.feature:nth-child(1) p':copy.feature1, '.feature:nth-child(1) .feature-more':copy.featureLink1, '.feature:nth-child(2) h3':copy.feature2Title, '.feature:nth-child(2) p':copy.feature2, '.feature:nth-child(2) .feature-more':copy.featureLink2, '.feature:nth-child(3) h3':copy.feature3Title, '.feature:nth-child(3) p':copy.feature3, '.feature:nth-child(3) .feature-more':copy.featureLink3,
         '.closing .eyebrow':copy.closingEyebrow, '.closing h2':copy.closingTitle, '.closing p':copy.closingCopy, '.closing .button':copy.closingCta, '.footer-copy':copy.footerNote,
         '#auth-open':copy.login, '#logout-button':copy.logout, '#auth-title':authMode === 'signup' ? copy.signupTitle : copy.authWelcome, '#auth-close':copy.authClose,
         '#forgot-password':copy.forgot, '#email-submit':authMode === 'signup' ? copy.emailSignup : copy.emailLogin, '.auth-divider':copy.or, '#google-signin':copy.google, '#auth-switch':authMode === 'signup' ? copy.haveAccount : copy.newToDaily,
@@ -318,6 +342,22 @@
       return messages[error.code] ? t(messages[error.code]) : (error.message || t('authGeneric'));
     }
 
+    const revealObserver = 'IntersectionObserver' in window ? new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold:0.12 }) : null;
+    function reveal(element, index = 0) {
+      element.classList.add('reveal');
+      element.style.setProperty('--reveal-delay', `${Math.min(index % 4, 3) * 85}ms`);
+      if (revealObserver) revealObserver.observe(element);
+      else element.classList.add('is-visible');
+    }
+    document.querySelectorAll('.hero>div,.section-head,.meal,.feature,.closing>*').forEach((element, index) => reveal(element, index));
+
     function renderMeals(meals) {
       grid.replaceChildren();
       meals.slice(0, 12).forEach((meal) => {
@@ -332,6 +372,7 @@
         card.addEventListener('click', open);
         card.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); open(); } });
         grid.append(card);
+        reveal(card, grid.children.length - 1);
       });
     }
 
