@@ -24,9 +24,11 @@ Then open `http://localhost:8000`. Add `localhost` to Firebase Authentication's 
 
 ## Features
 
-- Search Forkify recipes and view ingredients and source links.
+- Search Forkify recipes, inspect ingredients and source links, and scale ingredient quantities by serving count.
 - Create an account with email and password, sign in with either method, reset a password, or use Google sign-in.
-- Add recipes to a weekday meal plan, save favorites, and remove either from your account.
-- Plan and saved-recipe data are stored under `users/{uid}` in Cloud Firestore.
+- Add recipes to a dated weekly plan, move meals between weekdays, and mark meals as cooked.
+- Track this week's planned and cooked meals, saved recipes, and a personal cooking goal on the dashboard.
+- Reopen recipes from the planner or saved-recipe collection. Plan, favorite, and goal data are stored under `users/{uid}` in Cloud Firestore.
+- Switch the interface between English and German, and toggle dark mode from the footer. Both preferences are saved in the browser.
 
 The Firebase features remain inactive until `firebase-config.js` is filled in and the Firebase project is configured as above. Forkify API v2 also applies request limits and a restricted set of search terms.
