@@ -1,811 +1,335 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f7f6f1">
-  <meta name="description" content="Daily makes planning simple: find a little inspiration, plan your week, and make a shopping list." />
-  <title>Daily — a little easier, every day</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <style>
-    :root { --ink:#252923; --muted:#72776e; --paper:#f7f6f1; --white:#fffefa; --green:#43634d; --lime:#d8e6a8; --line:#e7e6dd; --orange:#f1bd8c; }
-    body.dark-mode { --ink:#eff0e8; --muted:#b6b9ae; --paper:#171b18; --white:#242c26; --green:#8dbb86; --line:#3a473d; --lime:#d8e6a8; --icon-bg:#34483a; --icon-ink:#b7d19d; }
-    :root { --icon-bg:#e8eedf; --icon-ink:#43634d; }
-    body.dark-mode .nav-cta,body.dark-mode .button,body.dark-mode .recipe-search button { background:#43634d; color:#fff }
-    * { box-sizing:border-box }
-    html { scroll-behavior:smooth }
-    body { margin:0; background:radial-gradient(ellipse at 80% 15%,#e9ecdf 0,transparent 34%),var(--paper); color:var(--ink); font-family:'DM Sans',sans-serif; transition:background-color .3s,color .3s; }
-    body.dark-mode { background:radial-gradient(ellipse at 80% 15%,#202a22 0,transparent 34%),var(--paper); }
-    a { color:inherit; text-decoration:none }
-    button { font:inherit; cursor:pointer }
-    a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible { outline:3px solid #8da976; outline-offset:3px }
-    .wrap { width:min(1160px, calc(100% - 48px)); margin:auto }
-    header { height:78px; display:flex; align-items:center; border-bottom:1px solid rgba(37,41,35,.08) }
-    nav { display:flex; align-items:center; justify-content:space-between; width:100% }
-    .logo { font-size:25px; font-weight:700; letter-spacing:-1.5px }
-    .logo span { color:var(--green) }
-    .navlinks { display:flex; gap:34px; color:#5d625a; font-size:14px }
-    body.dark-mode .navlinks { color:#c6c9bf }
-    .navlinks a:hover { color:var(--green) }
-    .nav-cta,.button { border:0; background:var(--green); color:white; padding:12px 19px; border-radius:999px; font-weight:600; font-size:14px; transition:.2s; display:inline-flex; align-items:center; justify-content:center; gap:8px }
-    .nav-cta:hover,.button:hover { background:#314a39; transform:translateY(-1px) }
-    .hero { display:grid; grid-template-columns:1.04fr .96fr; align-items:center; gap:44px; padding:72px 0 82px }
-    .eyebrow { display:flex; align-items:center; gap:9px; color:var(--green); font-weight:700; text-transform:uppercase; letter-spacing:1.5px; font-size:11px }
-    .dot { width:8px; height:8px; border-radius:50%; background:#91a96d }
-    h1,h2,h3,p { margin-top:0 }
-    h1 { font-family:'Playfair Display',serif; font-size:clamp(46px,6.3vw,78px); line-height:1.04; letter-spacing:-2.4px; font-weight:600; margin:20px 0 21px; max-width:580px }
-    h1 em { color:var(--green); font-weight:600 }
-    .hero-copy { color:var(--muted); font-size:17px; line-height:1.75; max-width:460px; margin-bottom:29px }
-    .hero-actions { display:flex; align-items:center; gap:20px }
-    .text-link { font-size:14px; font-weight:600; color:var(--green) }
-    .text-link span { margin-left:5px }
-    .hero-note { display:flex; align-items:center; gap:10px; color:var(--muted); font-size:12px; margin-top:28px }
-    .avatars { display:flex; padding-left:4px }
-    .avatar { display:grid; place-items:center; width:25px; height:25px; margin-left:-4px; border:2px solid var(--paper); border-radius:50%; background:#ebbd91; font-size:11px }
-    .avatar:nth-child(2) { background:#b9c9a1 }.avatar:nth-child(3) { background:#dfab9d }
-    .visual { position:relative; min-height:450px; display:grid; place-items:center }
-    .blob { position:absolute; width:min(440px,95%); aspect-ratio:1; border-radius:50%; background:#e6ead9; right:1%; top:5%; animation:float 8s ease-in-out infinite }
-    body.dark-mode .blob { background:#29392c }
-    .food { z-index:1; width:min(440px,95%); aspect-ratio:1; border-radius:50%; overflow:hidden; box-shadow:0 26px 70px #33433124; border:9px solid #f7f6f1; background:#d8ae73; }
-    .food img { width:100%; height:100%; object-fit:cover }
-    .float-card { position:absolute; z-index:2; background:var(--white); border:1px solid var(--line); border-radius:16px; padding:14px 17px; box-shadow:0 12px 35px #26301d18; animation:float 6s ease-in-out infinite }
-    .float-card small { display:block; color:var(--muted); font-size:11px; margin-bottom:5px }
-    .float-card strong { font-size:14px }
-    .float-card.top { top:48px; left:0 }
-    .float-card.bottom { bottom:48px; right:-4px; display:flex; gap:11px; align-items:center }
-    .cal-icon { display:grid; place-items:center; background:#eff2e6; width:36px; height:36px; border-radius:11px; font-size:18px }
-    .section-head { display:flex; justify-content:space-between; align-items:end; margin-bottom:23px }
-    .section-head h2 { font:600 36px/1.15 'Playfair Display',serif; letter-spacing:-.8px; margin:8px 0 0 }
-    .section-head p { margin:0 0 3px; color:var(--muted); font-size:13px }
-    .week { padding:0 0 87px }
-    .recipe-search { display:flex; gap:10px; margin:0 0 20px; max-width:560px }
-    .recipe-search input { flex:1; min-width:0; border:1px solid var(--line); background:var(--white); border-radius:999px; padding:12px 17px; color:var(--ink); font:inherit; outline:none }
-    .recipe-search input:focus { border-color:var(--green); box-shadow:0 0 0 3px #43634d18 }
-    .recipe-search button { border:0; border-radius:999px; background:var(--green); color:white; padding:0 20px; font-weight:600 }
-    .recipe-status { min-height:22px; color:var(--muted); font-size:13px; margin:-8px 0 15px }
-    .meal { cursor:pointer }
-    .recipe-dialog { border:0; border-radius:20px; width:min(620px,calc(100% - 30px)); padding:0; background:var(--white); color:var(--ink); box-shadow:0 20px 80px #0003 }
-    .recipe-dialog::backdrop { background:#20261fcc; backdrop-filter:blur(3px) }
-    .recipe-dialog img { display:block; width:100%; height:260px; object-fit:cover }
-    .dialog-content { padding:23px }
-    .dialog-content h3 { font:600 28px 'Playfair Display',serif; margin:0 0 8px }
-    .dialog-content p { color:var(--muted); line-height:1.7; font-size:14px }
-    .dialog-actions { display:flex; justify-content:space-between; align-items:center; gap:12px }
-    .dialog-actions a { color:var(--green); font-weight:600; font-size:13px }
-    .dialog-actions button { border:1px solid var(--line); background:transparent; border-radius:999px; padding:9px 15px; color:var(--ink) }
-    .account-actions { display:flex; gap:9px; align-items:center }
-    .account-label { color:var(--muted); font-size:13px; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
-    .firebase-note { display:none; background:#fff5e8; color:#674a2a; border:1px solid #f0dfc8; border-radius:12px; padding:12px 15px; margin:0 auto 18px; font-size:13px }
-    .outline-button { border:1px solid var(--line); background:var(--white); color:var(--green); padding:11px 16px; border-radius:999px; font-weight:600; font-size:13px }
-    .dashboard { display:none; padding:34px 0 70px; border-top:1px solid var(--line) }
-    .dashboard.visible { display:block }
-    .dash-head { display:flex; justify-content:space-between; align-items:end; margin-bottom:22px; gap:12px }
-    .dash-head h2 { font:600 34px 'Playfair Display',serif; margin:6px 0 0 }
-    .dash-head p { margin:0; color:var(--muted); font-size:13px }
-    .plan-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:10px }
-    .plan-day { background:var(--white); border:1px solid var(--line); border-radius:15px; padding:13px 12px; min-height:118px }
-    .plan-day strong { display:block; text-transform:uppercase; letter-spacing:.8px; color:var(--green); font-size:10px; margin-bottom:10px }
-    .plan-item { display:flex; gap:6px; align-items:start; font-size:12px; line-height:1.4; margin:7px 0 }
-    .plan-item button,.saved-item button { border:0; background:transparent; color:#8a8d84; padding:0; margin-left:auto; font-size:15px; line-height:1 }
-    .plan-empty { color:#a2a59b; font-size:11px }
-    .saved-heading { margin:29px 0 12px; font-size:15px }
-    .saved-list { display:flex; flex-wrap:wrap; gap:9px }
-    .saved-item { display:flex; align-items:center; gap:9px; background:var(--white); border:1px solid var(--line); border-radius:999px; padding:7px 11px 7px 7px; font-size:12px }
-    .saved-item img { width:30px; height:30px; object-fit:cover; border-radius:50% }
-    .recipe-controls { display:flex; flex-wrap:wrap; gap:9px; margin-top:17px; padding-top:15px; border-top:1px solid var(--line) }
-    .recipe-controls select { border:1px solid var(--line); border-radius:999px; background:white; padding:9px 12px; color:var(--ink) }
-    .recipe-controls .button { padding:10px 15px; font-size:12px }
-    .auth-dialog { border:0; border-radius:20px; width:min(430px,calc(100% - 30px)); padding:27px; color:var(--ink); background:var(--white); box-shadow:0 20px 80px #0003 }
-    .auth-dialog::backdrop { background:#20261fcc; backdrop-filter:blur(3px) }
-    .auth-top { display:flex; justify-content:space-between; align-items:start; margin-bottom:19px }
-    .auth-top h2 { font:600 30px 'Playfair Display',serif; margin:0 }
-    .close-icon { border:0; background:transparent; font-size:24px; color:var(--muted) }
-    .auth-form { display:grid; gap:12px }
-    .auth-form input { width:100%; border:1px solid var(--line); border-radius:10px; padding:12px 13px; font:inherit; background:white }
-    .auth-form input:focus { outline:2px solid #43634d55; border-color:var(--green) }
-    .auth-message { min-height:19px; margin:0; color:#9a4b31; font-size:12px; line-height:1.5 }
-    .auth-divider { display:flex; align-items:center; gap:10px; color:var(--muted); font-size:11px; margin:15px 0 }
-    .auth-divider::before,.auth-divider::after { content:''; height:1px; background:var(--line); flex:1 }
-    .google-button { width:100%; border:1px solid var(--line); background:white; border-radius:999px; padding:11px; font-weight:600; color:var(--ink) }
-    .auth-switch { color:var(--muted); font-size:12px; text-align:center; margin:17px 0 0 }
-    .auth-switch button,.forgot-button { border:0; padding:0; color:var(--green); background:transparent; font-weight:700 }
-    .forgot-button { justify-self:end; font-size:12px }
-    .meal-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:15px }
-    .meal { background:var(--white); border:1px solid var(--line); border-radius:18px; overflow:hidden; transition:.2s }
-    .meal:hover { transform:translateY(-6px); box-shadow:0 18px 34px #26301d20; border-color:#b6c7a6 }
-    .meal-image { height:162px; position:relative; background:#e7e3d5; overflow:hidden }
-    .meal-image img { width:100%; height:100%; object-fit:cover; transition:transform .35s }
-    .meal:hover .meal-image img { transform:scale(1.04) }
-    .day { position:absolute; top:12px; left:12px; background:#fffef3ed; color:#30382d; border-radius:999px; padding:6px 10px; font-size:10px; font-weight:700; letter-spacing:.4px; box-shadow:0 2px 8px #0002; backdrop-filter:blur(6px) }
-    body.dark-mode .day { background:#19221dec; color:#e9eee3; border:1px solid #ffffff26 }
-    .meal-info { padding:15px 16px 17px }
-    .meal-info h3 { font-size:15px; margin:0 0 8px; letter-spacing:-.25px }
-    .meta { color:var(--muted); font-size:11px; display:flex; justify-content:space-between }
-    .meta span:first-child:before { content:'◷'; margin-right:5px }
-    .features { background:#eeefe7; padding:70px 0 }
-    body.dark-mode .features { background:#202720 }
-    body.dark-mode header { border-bottom-color:var(--line) }
-    body.dark-mode .food { border-color:var(--paper) }
-    body.dark-mode .recipe-controls select,body.dark-mode .auth-form input,body.dark-mode .google-button { background:#171b18; color:var(--ink); border-color:var(--line) }
-    body.dark-mode .firebase-note { background:#3b3021; border-color:#645033; color:#f1d6ad }
-    .feature-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:30px }
-    .feature { position:relative; isolation:isolate; overflow:hidden; padding:25px 24px 27px; border:1px solid var(--line); border-radius:22px; background:var(--white); box-shadow:0 8px 24px #26301d08; transition:transform .28s ease,border-color .28s ease,box-shadow .28s ease }
-    .feature::before { content:''; position:absolute; z-index:-1; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,#8da976,#d8e6a8,#e8b98c); opacity:.85 }
-    .feature::after { content:attr(data-number); position:absolute; z-index:-1; right:16px; top:6px; color:#e8eddf; font:700 68px/1 'Playfair Display',serif; letter-spacing:-5px }
-    body.dark-mode .feature::after { color:#303a32 }
-    .feature:hover { transform:translateY(-7px); border-color:#aabf96; box-shadow:0 20px 42px #26301d18 }
-    body.dark-mode .feature { box-shadow:0 10px 28px #0002 }
-    body.dark-mode .feature:hover { border-color:#6f916f; box-shadow:0 20px 44px #0005 }
-    .feature-icon { width:50px; height:50px; border-radius:17px; background:var(--icon-bg); color:var(--icon-ink); display:grid; place-items:center; font-size:22px; margin-bottom:20px; box-shadow:inset 0 0 0 1px #43634d14; transition:transform .3s cubic-bezier(.2,.8,.2,1),border-radius .3s }
-    .feature:nth-child(2) .feature-icon { background:#f5ead9; color:#8c643e }
-    .feature:nth-child(3) .feature-icon { background:#f5e4df; color:#a75f51 }
-    body.dark-mode .feature:nth-child(2) .feature-icon { background:#483a2b; color:#edc997 }
-    body.dark-mode .feature:nth-child(3) .feature-icon { background:#4a3230; color:#efb4a4 }
-    .feature:hover .feature-icon { transform:rotate(-7deg) scale(1.08); border-radius:15px }
-    .feature h3 { font-size:17px; line-height:1.35; letter-spacing:-.25px; margin-bottom:10px; max-width:270px }
-    .feature p { color:var(--muted); font-size:13px; line-height:1.75; max-width:290px; margin-bottom:0 }
-    .feature-more { display:inline-flex; align-items:center; gap:7px; margin-top:18px; color:var(--green); font-size:12px; font-weight:700 }
-    .feature-more span { display:inline-block; transition:transform .2s }
-    .feature:hover .feature-more span { transform:translateX(4px) }
-    .closing { text-align:center; padding:86px 0 }
-    .closing h2 { font:600 clamp(34px,5vw,52px)/1.12 'Playfair Display',serif; letter-spacing:-1px; margin:14px auto 15px; max-width:650px }
-    .closing p { color:var(--muted); font-size:15px; margin-bottom:24px }
-    footer { border-top:1px solid var(--line); padding:22px 0; color:var(--muted); font-size:12px }
-    .footer-inner { display:flex; justify-content:space-between; align-items:center; gap:18px }
-    .footer-inner .logo { font-size:20px; color:var(--ink) }
-    .footer-copy { flex:1 }
-    .footer-controls { display:flex; align-items:center; gap:8px; margin-left:auto }
-    .footer-control { display:inline-flex; align-items:center; gap:7px; border:1px solid var(--line); color:var(--ink); background:var(--white); border-radius:999px; padding:8px 12px; font-size:12px; font-weight:600; white-space:nowrap; transition:background .2s,border-color .2s }
-    .footer-control:hover { border-color:var(--green); background:var(--paper) }
-    @keyframes float { 0%,100% { transform:translateY(0) } 50% { transform:translateY(-9px) } }
-    .reveal { opacity:0; transform:translateY(20px); transition:opacity .65s ease,transform .65s cubic-bezier(.2,.7,.2,1); transition-delay:var(--reveal-delay,0ms) }
-    .reveal.is-visible { opacity:1; transform:translateY(0) }
-    @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important }.reveal { opacity:1; transform:none } }
-    @media(max-width:800px) { .hero { grid-template-columns:1fr; padding-top:55px; gap:15px }.hero-copy{max-width:540px}.visual{min-height:390px}.food,.blob{width:min(390px,84vw)}.float-card.top{left:8%}.float-card.bottom{right:5%}.meal-grid{grid-template-columns:repeat(2,1fr)}.plan-grid{grid-template-columns:repeat(4,1fr)} }
-    @media(max-width:700px) { .footer-inner { justify-content:center; text-align:center; gap:12px 18px }.footer-copy { flex:0 1 auto }.footer-controls { width:100%; justify-content:center; margin-left:0 } }
-    @media(max-width:540px) { .wrap{width:min(100% - 34px,1160px)} header{height:68px}.navlinks{display:none}.hero{padding:45px 0 48px}.hero-copy{font-size:15px}.visual{min-height:315px}.float-card.top{top:8px}.float-card.bottom{bottom:12px}.section-head{align-items:start;gap:12px;flex-direction:column}.section-head h2{font-size:31px}.meal-grid{gap:10px}.meal-image{height:125px}.meal-info{padding:12px}.meal-info h3{font-size:13px}.feature-grid{grid-template-columns:1fr;gap:27px}.features{padding:55px 0}.closing{padding:66px 0}.footer-inner{gap:8px;flex-wrap:wrap}.account-label{display:none}.account-actions{gap:5px}.account-actions .outline-button{padding:9px 11px}.plan-grid{grid-template-columns:repeat(2,1fr)}.dash-head{align-items:start;flex-direction:column}.auth-dialog{padding:21px} }
-    /* Daily's motion layer: depth and light live in the surfaces, not in outlines. */
-    .motion-progress { position:fixed; z-index:20; inset:0 0 auto; height:3px; pointer-events:none; background:transparent }
-    .motion-progress span { display:block; width:100%; height:100%; transform:scaleX(0); transform-origin:left; background:linear-gradient(90deg,#87a96e,#d2df9f,#e8b98c); will-change:transform }
-    .hero { perspective:1200px }
-    .visual { --hero-x:0px; --hero-y:0px; --hero-rx:0deg; --hero-ry:0deg; transform-style:preserve-3d }
-    .blob { transform:translate3d(calc(var(--hero-x) * -.32),calc(var(--hero-y) * -.32),-24px); transition:transform .45s cubic-bezier(.2,.7,.2,1) }
-    .food { transform:translate3d(var(--hero-x),var(--hero-y),26px) rotateX(var(--hero-rx)) rotateY(var(--hero-ry)); transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .45s; will-change:transform }
-    .food img { transition:transform .8s cubic-bezier(.2,.7,.2,1),filter .5s }
-    .visual:hover .food { box-shadow:0 40px 100px #33433135 }
-    .visual:hover .food img { transform:scale(1.055); filter:saturate(1.08) }
-    .float-card { transition:transform .45s cubic-bezier(.2,.7,.2,1),box-shadow .3s }
-    .visual:hover .float-card.top { transform:translate3d(-7px,-8px,40px) rotate(-2deg) }
-    .visual:hover .float-card.bottom { transform:translate3d(8px,7px,45px) rotate(2deg) }
-    .meal { --rx:0deg; --ry:0deg; --mx:50%; --my:50%; position:relative; border:0; border-radius:21px; box-shadow:0 10px 28px #26301d0c; transition:transform .42s cubic-bezier(.2,.8,.2,1),box-shadow .42s; transform-style:preserve-3d; will-change:transform }
-    .meal::after { content:''; position:absolute; inset:0; z-index:1; border-radius:inherit; pointer-events:none; opacity:0; background:radial-gradient(360px circle at var(--mx) var(--my),#fff6,transparent 55%); transition:opacity .3s }
-    .meal:hover { transform:perspective(900px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(-9px) scale(1.018); box-shadow:0 25px 55px #26301d2b }
-    .meal:hover::after { opacity:1 }
-    .meal-image { height:190px }
-    .meal-image img { transition:transform .75s cubic-bezier(.2,.7,.2,1),filter .5s }
-    .meal:hover .meal-image img { transform:scale(1.1); filter:saturate(1.14) }
-    .meal-info { position:relative; z-index:2 }
-    .features { position:relative; overflow:hidden; background:radial-gradient(ellipse at 15% 0%,#dde4cd 0,transparent 46%),#eeefe7; }
-    body.dark-mode .features { background:radial-gradient(ellipse at 15% 0%,#2b382c 0,transparent 46%),#202720 }
-    .feature-grid { gap:0; align-items:stretch }
-    .feature { --mx:50%; --my:50%; padding:30px 28px 32px; border:0; border-radius:0; background:radial-gradient(440px circle at var(--mx) var(--my),#fff9,transparent 58%),transparent; box-shadow:none; transition:transform .55s cubic-bezier(.2,.8,.2,1),background .35s; }
-    .feature:first-child { border-radius:24px 0 0 24px }
-    .feature:last-child { border-radius:0 24px 24px 0 }
-    .feature::before { content:none }
-    .feature::after { color:#dfe5d2; font-size:92px; right:20px; top:8px; transition:transform .55s cubic-bezier(.2,.8,.2,1),color .35s }
-    body.dark-mode .feature::after { color:#2b372d }
-    .feature:hover { transform:translateY(-9px) scale(1.025); background-color:#ffffff73; box-shadow:none }
-    body.dark-mode .feature:hover { background-color:#ffffff09; box-shadow:none }
-    .feature:hover::after { transform:translate(-3px,4px) scale(1.08); color:#d6dfc7 }
-    body.dark-mode .feature:hover::after { color:#344334 }
-    .feature-icon { box-shadow:none; transition:transform .5s cubic-bezier(.2,.8,.2,1),border-radius .4s,filter .4s }
-    .feature:hover .feature-icon { transform:translateY(-4px) rotate(-9deg) scale(1.13); filter:drop-shadow(0 9px 10px #26301d18) }
-    .feature h3,.feature p,.feature-more,.feature-icon { position:relative; z-index:1 }
-    .feature-more span { transition:transform .35s cubic-bezier(.2,.8,.2,1) }
-    .feature:hover .feature-more span { transform:translateX(7px) }
-    .section-head h2 { transition:letter-spacing .35s }
-    .section-head:hover h2 { letter-spacing:-1.5px }
-    .button,.nav-cta,.footer-control,.outline-button { transition:transform .28s cubic-bezier(.2,.8,.2,1),background .25s,color .25s,box-shadow .25s }
-    .button:hover,.nav-cta:hover { transform:translateY(-3px) scale(1.025); box-shadow:0 12px 24px #314a3935 }
-    .plan-day,.saved-item { transition:transform .25s,box-shadow .25s,background .25s }
-    .plan-day:hover,.saved-item:hover { transform:translateY(-3px); box-shadow:0 12px 28px #26301d12 }
-    @media(max-width:800px) { .meal-image { height:162px } }
-    @media(max-width:700px) { .feature-grid { gap:12px; grid-template-columns:1fr } .feature,.feature:first-child,.feature:last-child { border-radius:22px; background-color:#ffffff54 } body.dark-mode .feature,body.dark-mode .feature:first-child,body.dark-mode .feature:last-child { background-color:#ffffff06 } }
-    @media(max-width:540px) { .meal-image { height:125px } }
-    @media(pointer:coarse) { .meal:hover { transform:translateY(-4px) } .visual:hover .food img { transform:none } }
-    @media(prefers-reduced-motion:reduce) { .food,.blob,.meal,.feature,.feature-icon,.float-card,.motion-progress span { transition:none!important; transform:none!important } .meal:hover,.feature:hover { transform:none!important } }
-    /* Complete visual system: editorial food journal, warm paper, deep herb green. */
-    :root { --ink:#202b24; --muted:#788078; --paper:#f4f1e8; --white:#fffdf7; --green:#315f45; --lime:#d6ef9a; --line:#e7e1d3; --orange:#f0a15d; --icon-bg:#e8eedf; --icon-ink:#315f45; --display:'Playfair Display',serif }
-    body.dark-mode { --ink:#f5f1e7; --muted:#b6b9af; --paper:#101712; --white:#1c261f; --green:#a8ca84; --lime:#d6ef9a; --line:#344238; --icon-bg:#293b2e; --icon-ink:#c0df9c; background:var(--paper) }
-    body { background:var(--paper); font-family:'DM Sans',sans-serif; letter-spacing:-.01em }
-    .wrap { width:min(1240px,calc(100% - 72px)) }
-    header { position:sticky; top:0; z-index:15; height:76px; border:0; background:color-mix(in srgb,var(--paper) 88%,transparent); backdrop-filter:blur(18px); }
-    body.dark-mode header { background:color-mix(in srgb,var(--paper) 88%,transparent); border:0 }
-    nav { gap:30px }
-    .logo { font-size:27px; letter-spacing:-1.8px; font-weight:800 }
-    .logo span { color:#9ab66b }
-    .navlinks { gap:30px; color:var(--muted); font-size:13px; font-weight:600 }
-    .navlinks a { transition:color .2s,transform .2s }
-    .navlinks a:hover { color:var(--green); transform:translateY(-2px) }
-    .account-actions { gap:12px }
-    .account-actions .outline-button { border:0; background:transparent; color:var(--ink); padding:10px 14px }
-    .nav-cta,.button { background:#d7eea0; color:#1c3226; border-radius:999px; padding:14px 21px; font-size:13px; font-weight:800; letter-spacing:.01em }
-    .nav-cta:hover,.button:hover { background:#e5f5bd; color:#1c3226 }
-    body.dark-mode .nav-cta,body.dark-mode .button,body.dark-mode .recipe-search button { background:#d7eea0; color:#1c3226 }
-    .hero { isolation:isolate; position:relative; width:100%; max-width:none; margin:0; min-height:660px; padding:82px max(36px,calc((100vw - 1240px)/2)) 86px; gap:28px; overflow:hidden; color:#f5f0e3; background:radial-gradient(ellipse at 82% 15%,#39734c 0,transparent 38%),radial-gradient(ellipse at 5% 100%,#1e4837 0,transparent 40%),#173327 }
-    .hero::before { content:''; position:absolute; z-index:-1; width:580px; height:580px; border-radius:50%; right:25%; top:-57%; background:#c2d98a13; filter:blur(2px) }
-    .hero::after { content:'DAILY  ·  DAILY  ·  DAILY'; position:absolute; z-index:-1; right:-4%; bottom:-42px; color:#ffffff08; font-size:clamp(70px,13vw,190px); font-weight:800; letter-spacing:-.09em; white-space:nowrap; pointer-events:none }
-    .hero>div:first-child { position:relative; z-index:2; padding:20px 0 }
-    .hero .eyebrow { color:#d3eb9f; font-size:10px; letter-spacing:2.4px }
-    .hero .dot { background:#d3eb9f; box-shadow:0 0 18px #d3eb9f99 }
-    h1 { font:600 clamp(64px,8.2vw,112px)/.91 var(--display); letter-spacing:-.075em; margin:25px 0 25px; max-width:690px }
-    h1 em { color:#d6ef9a; font-style:italic; font-weight:600 }
-    .hero-copy { color:#e3e7d9bd; font-size:16px; max-width:430px; line-height:1.8; margin-bottom:31px }
-    .hero-actions { gap:23px }
-    .hero .text-link { color:#f6f0df; font-size:13px }
-    .hero-note { color:#e3e7d99e; margin-top:39px; letter-spacing:.01em }
-    .avatar { border:2px solid #173327; color:#223c2d }
-    .visual { min-height:510px; perspective:1200px }
-    .blob { width:76%; right:4%; top:8%; background:#d9e7ad; opacity:.22; filter:blur(1px) }
-    body.dark-mode .blob { background:#d9e7ad }
-    .food { width:79%; aspect-ratio: .81; border:0; border-radius:46% 46% 34% 34% / 40% 40% 27% 27%; overflow:hidden; box-shadow:0 35px 110px #07170e9c; background:#738557 }
-    .food img { filter:saturate(.9); transform:scale(1.04) }
-    .float-card { border:0; color:#203127; background:#f8f3e7; border-radius:17px; padding:15px 18px; box-shadow:0 16px 45px #06180e50 }
-    .float-card small { color:#758073; font-size:10px; letter-spacing:.07em; text-transform:uppercase }
-    .float-card strong { font-size:13px }
-    .float-card.top { top:44px; left:-1% }
-    .float-card.bottom { right:-1%; bottom:45px }
-    .cal-icon { background:#dcebbd; color:#315f45 }
-    .week { padding:104px 0 110px }
-    .section-head { margin-bottom:31px; align-items:end }
-    .section-head .eyebrow { font-size:10px; letter-spacing:1.8px }
-    .section-head h2,.dash-head h2 { font:600 clamp(40px,5vw,65px)/1 var(--display); letter-spacing:-.055em; margin:13px 0 0 }
-    .section-head p { font-size:14px; margin-bottom:6px }
-    .recipe-search { max-width:680px; margin:0 0 22px; padding:7px; border-radius:999px; background:var(--white); box-shadow:0 12px 35px #2333240c; }
-    .recipe-search input { border:0; background:transparent; padding:12px 18px; font-size:14px }
-    .recipe-search input:focus { border:0; box-shadow:none; outline:0 }
-    .recipe-search:focus-within { box-shadow:0 14px 40px #23332417,0 0 0 2px #86a96c }
-    .recipe-search button { border:0; border-radius:999px; background:#315f45; color:white; padding:0 24px; font-weight:700; font-size:13px }
-    .recipe-status { color:var(--muted); margin:0 0 20px; min-height:18px; font-size:12px }
-    .quick-searches { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:0 0 20px; color:var(--muted); font-size:11px }
-    .quick-searches button { border:0; border-radius:999px; background:#e8eadc; color:#385442; padding:8px 13px; font:700 11px 'DM Sans',sans-serif; transition:transform .2s,background .2s }
-    .quick-searches button:hover { transform:translateY(-2px); background:#dce8c8 }
-    body.dark-mode .quick-searches button { background:#293a2e; color:#dbe8c7 }
-    .meal-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:22px }
-    .meal { aspect-ratio:.91; overflow:hidden; background:#28382d; border-radius:24px; box-shadow:0 12px 32px #1d2b2010 }
-    .meal-image { position:absolute; inset:0; height:auto; background:#52664f }
-    .meal-image::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,#08120d20 0%,transparent 38%,#101b16c9 100%) }
-    .meal-image img { transform:scale(1.02); filter:saturate(.88) }
-    .meal:hover .meal-image img { transform:scale(1.09); filter:saturate(1.08) }
-    .meal .day { z-index:2; top:17px; left:17px; background:#f5f0e2e8; color:#314332; box-shadow:none; font-size:9px; letter-spacing:.09em; text-transform:uppercase; backdrop-filter:blur(8px) }
-    body.dark-mode .meal .day { border:0; background:#15231de8; color:#eff1e5 }
-    .meal-info { position:absolute; z-index:2; inset:auto 0 0; color:#fffdf5; padding:54px 21px 20px; background:linear-gradient(0deg,#111b16da,transparent); transform:translateZ(24px) }
-    .meal-info h3 { font:600 clamp(19px,2.2vw,26px)/1.08 var(--display); letter-spacing:-.035em; max-width:330px; margin-bottom:13px }
-    .meta { color:#f5f0dfb8; font-size:11px }
-    .recipe-dialog { border-radius:28px; overflow:hidden; box-shadow:0 35px 120px #07170e75 }
-    .recipe-dialog img { height:310px }
-    .dialog-content { padding:28px }
-    .dialog-content h3 { font-size:34px; letter-spacing:-.04em }
-    .dialog-actions button,.recipe-controls select,.outline-button { border:0; background:#edf0e5; border-radius:999px; color:#315f45 }
-    body.dark-mode .dialog-actions button,body.dark-mode .recipe-controls select,body.dark-mode .outline-button { background:#2c3a30; color:#e7ebdf }
-    .recipe-controls { border:0; padding-top:8px }
-    .features { padding:100px 0 110px; color:#f3f0e5; background:#18372b }
-    body.dark-mode .features { background:#142b21 }
-    .features .eyebrow { color:#d2e99b }
-    .features .dot { background:#d2e99b }
-    .feature-grid { margin-top:42px; gap:14px }
-    .feature,.feature:first-child,.feature:last-child { border-radius:24px; padding:28px; min-height:290px; background:radial-gradient(ellipse at 15% 0%,#ffffff13,transparent 62%),#ffffff08; }
-    .feature::after { color:#ffffff0b; font-size:110px; top:18px; right:24px }
-    .feature:hover,.feature:first-child:hover,.feature:last-child:hover { background:radial-gradient(ellipse at 15% 0%,#d6ef9a20,transparent 62%),#ffffff11; transform:translateY(-7px) }
-    .feature-icon { width:54px; height:54px; border-radius:18px; background:#d8e9b4; color:#254832; font-size:23px }
-    .feature:nth-child(2) .feature-icon { background:#f1d0a6; color:#66482c }
-    .feature:nth-child(3) .feature-icon { background:#eac0ae; color:#633e35 }
-    .feature h3 { font:600 23px/1.12 var(--display); letter-spacing:-.03em; color:#f6f1e5; max-width:280px; margin-bottom:12px }
-    .feature p { color:#d7dfd0b5; font-size:13px; max-width:310px }
-    .feature-more { color:#d5eb9d; margin-top:19px }
-    .closing { max-width:none; width:100%; padding:115px 24px; background:#d6ecaa; color:#1f3528; position:relative; overflow:hidden }
-    .closing::after { content:'EAT WELL'; position:absolute; right:-3%; bottom:-.23em; color:#23442d0b; font-size:clamp(100px,22vw,300px); font-weight:800; line-height:1; letter-spacing:-.09em; pointer-events:none }
-    .closing>* { position:relative; z-index:1 }
-    .closing .eyebrow { color:#406c4b }
-    .closing .dot { background:#406c4b }
-    .closing h2 { font:600 clamp(45px,7vw,86px)/.98 var(--display); letter-spacing:-.06em; max-width:880px }
-    .closing p { color:#4b604f; font-size:15px }
-    .closing .button { background:#1d3e2d; color:#f5f0e3 }
-    footer { border:0; padding:30px 0; color:#d7dfd0b5; background:#12271e }
-    .footer-inner .logo { color:#f3f0e5 }
-    .footer-control { border:0; background:#ffffff12; color:#f3f0e5; border-radius:999px; padding:9px 13px }
-    .footer-control:hover { border:0; background:#ffffff24 }
-    .dashboard { padding:70px 0 84px; border:0; background:#e9e8dc }
-    body.dark-mode .dashboard { background:#18221b }
-    .dash-head { margin-bottom:29px }
-    .dash-head h2 { font-size:48px }
-    .plan-grid { grid-template-columns:repeat(7,minmax(0,1fr)); gap:9px }
-    .plan-day { border:0; background:#faf8ef; border-radius:18px; padding:17px 14px; min-height:130px; box-shadow:0 8px 24px #26301d08 }
-    body.dark-mode .plan-day { background:#202b23 }
-    .plan-day strong { font-size:9px; letter-spacing:1px }
-    .plan-item { background:#e8efda; border-radius:10px; padding:8px; font-size:11px }
-    body.dark-mode .plan-item { background:#344536 }
-    .saved-heading { margin-top:32px; font:600 25px var(--display) }
-    .saved-item { border:0; background:#faf8ef; padding:8px 14px 8px 8px; box-shadow:0 5px 16px #26301d08 }
-    body.dark-mode .saved-item { background:#202b23 }
-    .auth-dialog { border-radius:28px; padding:31px; box-shadow:0 35px 120px #07170e75 }
-    .auth-top h2 { font-size:35px; letter-spacing:-.04em }
-    .auth-form { gap:13px }
-    .auth-form input { border:0; background:#f0f0e7; padding:15px 16px; border-radius:14px; font-size:14px }
-    body.dark-mode .auth-form input,body.dark-mode .google-button { background:#121a15; border:0 }
-    .google-button { border:0; background:#eef0e7; border-radius:999px; padding:14px }
-    .firebase-note { border:0; border-radius:15px; box-shadow:0 10px 25px #604a2110 }
-    .motion-progress { height:4px }
-    .reveal { transform:translateY(28px) scale(.985); transition:opacity .8s ease,transform .85s cubic-bezier(.16,1,.3,1); }
-    .reveal.is-visible { transform:translateY(0) scale(1) }
-    @keyframes hero-enter { from { opacity:0; transform:translateY(25px) scale(.97) } to { opacity:1; transform:translateY(0) scale(1) } }
-    .hero .eyebrow,.hero h1,.hero-copy,.hero-actions,.hero-note { animation:hero-enter .8s cubic-bezier(.16,1,.3,1) both }
-    .hero h1 { animation-delay:.08s }.hero-copy { animation-delay:.16s }.hero-actions { animation-delay:.23s }.hero-note { animation-delay:.3s }
-    @media(max-width:900px) { .wrap { width:min(100% - 48px,1240px) } .hero { padding-left:24px;padding-right:24px;min-height:590px } .meal-grid { grid-template-columns:repeat(2,minmax(0,1fr)) } .feature-grid { gap:8px } .feature,.feature:first-child,.feature:last-child { padding:23px 20px } .plan-grid { grid-template-columns:repeat(4,minmax(0,1fr)) } }
-    @media(max-width:700px) { header { height:68px } nav { gap:12px } .navlinks { display:none } .hero { grid-template-columns:1fr; padding:55px 24px 38px; gap:0 } .hero>div:first-child { padding:8px 0 0 } h1 { font-size:clamp(62px,15vw,94px); max-width:590px } .visual { min-height:390px } .food { width:min(350px,78vw); aspect-ratio:.9; border-radius:46% 46% 32% 32% / 40% 40% 26% 26% } .float-card.top { left:3%;top:25px }.float-card.bottom { right:0;bottom:22px } .week { padding:72px 0 78px }.section-head { align-items:start; flex-direction:column; gap:10px }.section-head h2 { font-size:48px }.meal-grid { gap:12px }.meal { aspect-ratio:.78;border-radius:18px }.meal-image { height:auto }.meal-info { padding:45px 14px 15px }.meal-info h3 { font-size:20px }.features { padding:70px 0 }.feature-grid { grid-template-columns:1fr;gap:8px }.feature,.feature:first-child,.feature:last-child { min-height:0;padding:23px;border-radius:20px }.feature h3 { font-size:24px }.closing { padding:84px 20px }.footer-inner { justify-content:center;text-align:center;gap:14px;flex-wrap:wrap }.footer-copy { flex:0 1 100% }.footer-controls { width:100%;justify-content:center;margin-left:0 }.dashboard { padding:55px 0 }.dash-head { align-items:start;flex-direction:column }.dash-head h2 { font-size:42px } }
-    @media(max-width:460px) { .wrap { width:calc(100% - 34px) } .account-actions .outline-button { padding:8px 7px;font-size:11px }.account-actions { gap:2px }.nav-cta { padding:11px 13px;font-size:11px }.hero { padding-left:17px;padding-right:17px }.hero-actions { gap:15px;flex-wrap:wrap }.hero-actions .button { padding:13px 15px }.visual { min-height:325px }.float-card { padding:11px 13px }.float-card strong { font-size:11px }.section-head h2 { font-size:42px }.meal-grid { gap:9px }.meal { aspect-ratio:.72 }.meal .day { top:10px;left:10px;padding:5px 8px;font-size:8px }.meal-info h3 { font-size:17px }.meta { font-size:9px }.plan-grid { grid-template-columns:repeat(2,minmax(0,1fr)) }.recipe-search { gap:0 }.recipe-search button { padding:0 17px }.auth-dialog { padding:23px } }
-    @media(prefers-reduced-motion:reduce) { .hero .eyebrow,.hero h1,.hero-copy,.hero-actions,.hero-note { animation:none!important } }
-  </style>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#3028cf"><meta name="description" content="Discover dinner ideas and plan your week with Daily.">
+<title>Daily — dinner is the main event</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#17181d;--paper:#f2f0e8;--surface:#fffdf6;--muted:#797b80;--blue:#3028cf;--acid:#e2fa57;--orange:#ff795e;--line:#dddcd3}
+body.dark-mode{--ink:#f5f3e9;--paper:#14151a;--surface:#202128;--muted:#b5b5bc;--line:#353640}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:86px}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;transition:background .3s,color .3s}
+button,input,select{font:inherit}button,a{touch-action:manipulation}button{cursor:pointer}a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--orange);outline-offset:4px}.wrap{width:min(1240px,calc(100% - 64px));margin-inline:auto}
+.motion-progress{position:fixed;z-index:50;inset:0 0 auto;height:4px;pointer-events:none}.motion-progress span{display:block;width:100%;height:100%;transform:scaleX(0);transform-origin:left;background:var(--acid)}
+header{position:sticky;z-index:40;top:0;height:76px;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(18px)}
+nav{height:100%;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.logo{display:flex;align-items:center;gap:8px;font:700 24px/1 'Space Grotesk',sans-serif;letter-spacing:-1.7px}
+.logo-symbol{display:grid;place-items:center;width:34px;height:34px;border-radius:12px;background:var(--blue);color:var(--acid);font-size:20px}
+.logo-word{color:var(--ink)}.logo-period{color:var(--orange)}.logo small{margin-left:2px;color:var(--muted);font:700 8px 'DM Sans',sans-serif;letter-spacing:1px}
+.navlinks,.account-actions{display:flex;align-items:center;gap:24px}.navlinks{color:var(--muted);font-size:12px;font-weight:700}
+.navlinks a{transition:color .2s,transform .2s}.navlinks a:hover{color:var(--blue);transform:translateY(-2px)}
+.account-actions{gap:8px}.account-label{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:12px}
+.pill,.nav-cta,.button,.outline-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:12px 17px;font-size:12px;font-weight:800;transition:transform .25s,background .2s,box-shadow .2s}
+.outline-button{background:#e6e5dc;color:var(--ink)}.nav-cta,.button{background:var(--acid);color:#1b1c20}
+.nav-cta:hover,.button:hover,.outline-button:hover{transform:translateY(-3px);box-shadow:0 12px 25px #090a1e22}
+.hero-scene{height:172svh;background:var(--blue);position:relative}
+.hero{--story-scale:1;--story-y:0px;--story-rotation:0deg;position:sticky;top:76px;height:calc(100svh - 76px);min-height:590px;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse at 76% 44%,#514ae8 0,transparent 36%),radial-gradient(ellipse at 0 100%,#211a9f 0,transparent 58%),var(--blue);color:#fffdf1}
+.hero:before{content:'';position:absolute;z-index:-1;inset:0;background-image:radial-gradient(#ffffff18 1px,transparent 1px);background-size:22px 22px;mask-image:linear-gradient(90deg,#0007,transparent 70%)}
+.hero:after{content:'DAILY';position:absolute;z-index:-1;left:30%;bottom:-.27em;color:#ffffff0b;font:700 clamp(200px,35vw,560px)/.8 'Space Grotesk',sans-serif;letter-spacing:-.12em;white-space:nowrap}
+.hero-copy-block{position:absolute;z-index:4;left:max(32px,calc((100vw - 1240px)/2));top:18%;width:min(54vw,700px);transform:translateY(var(--copy-y,0px));opacity:var(--copy-opacity,1)}
+.eyebrow{display:flex;align-items:center;gap:9px;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--blue)}.hero .eyebrow{color:var(--acid)}
+.dot{width:8px;height:8px;flex:none;border-radius:50%;background:currentColor;box-shadow:0 0 18px currentColor}h1,h2,h3,p{margin-top:0}
+h1{max-width:780px;margin:26px 0 24px;font:700 clamp(70px,10.3vw,150px)/.82 'Space Grotesk',sans-serif;letter-spacing:-.095em}
+h1 em{color:var(--acid);font-style:normal}.hero-copy{max-width:420px;color:#f5f3f4bd;font-size:15px;line-height:1.75;margin-bottom:27px}
+.hero-actions{display:flex;align-items:center;gap:20px;flex-wrap:wrap}.hero .button{background:var(--acid);padding:15px 21px}
+.text-link{font-size:12px;font-weight:800;color:white}.hero-note{display:flex;align-items:center;gap:10px;margin-top:30px;color:#fffdf1a8;font-size:11px}.hero-note-star{color:var(--acid);font-size:19px}
+.visual{position:absolute;z-index:2;right:4%;top:4%;width:52%;height:91%;display:grid;place-items:center;transform:translate3d(var(--visual-x,0px),var(--story-y),0) scale(var(--story-scale)) rotate(var(--story-rotation));transform-origin:50% 52%;transition:transform .12s linear;perspective:1100px}
+.blob{position:absolute;width:min(40vw,550px);aspect-ratio:1;border-radius:50%;right:4%;top:9%;background:var(--acid);opacity:.93;transform:translate3d(calc(var(--hero-x,0px)*-.25),calc(var(--hero-y,0px)*-.25),-30px) rotate(-12deg)}
+.food{position:relative;z-index:2;width:min(39vw,510px);aspect-ratio:1;border-radius:50% 44% 49% 42%/44% 50% 43% 52%;overflow:hidden;background:#ee886c;box-shadow:0 45px 100px #160e6e8c;transform:translate3d(var(--hero-x,0px),var(--hero-y,0px),25px) rotateX(var(--hero-rx,0deg)) rotateY(var(--hero-ry,0deg));transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.food img{width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform .8s,filter .6s;filter:saturate(1.1)}.visual:hover .food img{transform:scale(1.13);filter:saturate(1.28)}
+.float-card{position:absolute;z-index:5;padding:13px 16px;border-radius:16px;background:#fffdf1;color:#20202a;box-shadow:0 18px 50px #17126645;animation:bob 5.5s ease-in-out infinite}
+.float-card small{display:block;margin-bottom:4px;color:#82828c;font-size:8px;font-weight:800;letter-spacing:1px}.float-card strong{font:700 12px 'Space Grotesk',sans-serif}
+.float-card.top{top:15%;left:0}.float-card.bottom{right:0;bottom:13%;display:flex;align-items:center;gap:9px;animation-delay:-2.5s}
+.cal-icon{display:grid;place-items:center;width:31px;height:31px;border-radius:11px;background:var(--acid);color:var(--blue);font-size:20px}
+.orbit-label{position:absolute;z-index:3;right:-1%;top:39%;transform:rotate(90deg);color:#fff9;font-size:8px;font-weight:800;letter-spacing:2px}.orbit-label span{padding-inline:10px;color:var(--acid)}
+.hero-index{position:absolute;z-index:5;right:32px;bottom:25px;display:flex;align-items:center;gap:10px;color:#ffffff85;font-size:9px;font-weight:800}.hero-index span:first-child{color:var(--acid)}.hero-index i{width:60px;height:2px;background:#ffffff3c}
+.scroll-cue{position:absolute;z-index:5;left:max(32px,calc((100vw - 1240px)/2));bottom:26px;display:flex;align-items:center;gap:11px;color:#ffffff9c;font-size:8px;font-weight:800;letter-spacing:1.5px}.scroll-cue b{display:grid;place-items:center;width:25px;height:25px;border-radius:50%;background:var(--acid);color:#21212b;font-size:15px}
+.ticker{overflow:hidden;padding:17px 0;background:var(--acid);color:#18191d}.ticker-track{display:flex;align-items:center;gap:30px;width:max-content;animation:marquee 28s linear infinite;font:700 16px 'Space Grotesk',sans-serif;letter-spacing:.02em}.ticker-track b{font-size:19px;color:var(--orange)}
+.week{padding:110px 0 94px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:22px;margin-bottom:28px}
+.section-head h2,.dash-head h2{margin:12px 0 0;font:700 clamp(44px,6vw,78px)/.93 'Space Grotesk',sans-serif;letter-spacing:-.075em}
+.section-head p,.dash-head>p{max-width:250px;margin:0 0 6px;color:var(--muted);font-size:13px;line-height:1.7}
+.firebase-note{display:none;margin:0 0 18px;padding:13px 16px;border-radius:15px;background:#fff0d9;color:#674a2a;font-size:12px}
+body.dark-mode .firebase-note{background:#3c3022;color:#f4d8ae}
+.recipe-search{display:flex;gap:8px;width:min(700px,100%);margin-bottom:12px;padding:7px;border-radius:999px;background:var(--surface);box-shadow:0 10px 34px #15172a0d}
+.recipe-search input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:var(--ink);padding:12px 17px;font-size:13px}
+.recipe-search button{border:0;border-radius:999px;padding:0 23px;background:var(--blue);color:white;font-size:12px;font-weight:800}
+body.dark-mode .recipe-search button{background:var(--acid);color:#17181d}
+.quick-searches{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:0 0 20px;color:var(--muted);font-size:10px}
+.quick-searches button{border:0;border-radius:999px;padding:8px 13px;background:#e4e3da;color:var(--ink);font-size:10px;font-weight:800;transition:background .2s,transform .2s}
+.quick-searches button:hover{transform:translateY(-2px);background:var(--acid)}body.dark-mode .quick-searches button{background:#2c2d36;color:var(--ink)}
+.recipe-status{min-height:18px;margin:0 0 4px;color:var(--muted);font-size:11px}
+.rail-controls{display:flex;align-items:center;justify-content:space-between;margin:8px 0 6px}.rail-caption{color:var(--muted);font-size:8px;font-weight:800;letter-spacing:1.5px}.rail-caption span{padding-left:6px;color:var(--blue)}
+.rail-controls>div{display:flex;gap:7px}.rail-controls button{display:grid;place-items:center;width:39px;height:39px;border:0;border-radius:50%;background:var(--blue);color:white;font-size:17px;transition:transform .2s,background .2s}
+.rail-controls button:hover{transform:scale(1.08);background:var(--orange)}
+.meal-grid{display:flex;gap:16px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:none;padding:10px 4px 28px;margin:0 -4px}.meal-grid::-webkit-scrollbar{display:none}
+.meal{position:relative;flex:0 0 clamp(270px,30vw,370px);aspect-ratio:.82;overflow:hidden;scroll-snap-align:start;border-radius:22px;background:#36344f;cursor:pointer;box-shadow:0 12px 35px #15172a16;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .4s}
+.meal:hover{transform:translateY(-8px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));box-shadow:0 26px 60px #15172a2b}
+.meal-image{position:absolute;inset:0;background:#5b6257}.meal-image img{width:100%;height:100%;object-fit:cover;transform:scale(1.025);transition:transform .75s,filter .5s}
+.meal:hover .meal-image img{transform:scale(1.1);filter:saturate(1.15)}.meal-image:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#16152a30,transparent 36%,#14131bd9)}
+.day{position:absolute;z-index:2;top:15px;left:15px;border-radius:999px;padding:7px 10px;background:var(--acid);color:#1d1d20;font-size:8px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.meal-info{position:absolute;z-index:2;inset:auto 0 0;padding:48px 20px 19px;color:#fffdf4;transform:translateZ(22px)}
+.meal-info h3{margin:0 0 12px;font:700 26px/1.03 'Space Grotesk',sans-serif;letter-spacing:-.055em}.meta{display:flex;justify-content:space-between;gap:10px;color:#fffdf4b8;font-size:10px}
+body.dark-mode .meal .day{background:#dff65c;color:#1d1d20}.meal:focus-visible{outline:3px solid var(--orange);outline-offset:4px}
+.dashboard{display:none;padding:74px 0 88px;background:#e5e5d9}body.dark-mode .dashboard{background:#1a1b21}.dashboard.visible{display:block}
+.dash-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:25px}.dash-head .eyebrow{color:var(--blue)}.dash-head h2{font-size:clamp(40px,5vw,62px)}
+.plan-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}.plan-day{min-height:128px;padding:14px 12px;border-radius:17px;background:var(--surface);box-shadow:0 10px 25px #15172a09;transition:transform .22s}.plan-day:hover{transform:translateY(-4px)}
+.plan-day strong{display:block;margin-bottom:10px;color:var(--blue);font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.plan-item{display:flex;align-items:start;gap:5px;margin:7px 0;padding:8px;border-radius:10px;background:#edf0d9;font-size:10px;line-height:1.4}body.dark-mode .plan-item{background:#30333b}
+.plan-item button,.saved-item button{flex:none;margin-left:auto;border:0;background:transparent;color:var(--muted);font-size:15px;line-height:1}.plan-empty{color:#a2a59b;font-size:10px}
+.saved-heading{margin:29px 0 12px;font:700 24px 'Space Grotesk',sans-serif;letter-spacing:-.04em}.saved-list{display:flex;flex-wrap:wrap;gap:8px}
+.saved-item{display:flex;align-items:center;gap:9px;padding:7px 12px 7px 7px;border-radius:999px;background:var(--surface);font-size:10px}.saved-item img{width:32px;height:32px;border-radius:50%;object-fit:cover}
+.recipe-dialog,.auth-dialog{width:min(640px,calc(100% - 28px));max-height:min(90vh,850px);overflow:auto;border:0;border-radius:26px;padding:0;background:var(--surface);color:var(--ink);box-shadow:0 32px 120px #10101d70}
+.recipe-dialog::backdrop,.auth-dialog::backdrop{background:#14131ddd;backdrop-filter:blur(10px)}
+.recipe-dialog>img{display:block;width:100%;height:300px;object-fit:cover}.dialog-content{padding:24px}
+.dialog-content h3{margin:0 0 8px;font:700 34px/1.04 'Space Grotesk',sans-serif;letter-spacing:-.055em}.dialog-content>p{color:var(--muted);font-size:12px;line-height:1.7}
+.ingredient-list{display:flex;flex-wrap:wrap;gap:7px;padding:0;margin:15px 0;list-style:none}.ingredient-list li{padding:8px 11px;border-radius:999px;background:#ececdf;font-size:10px}body.dark-mode .ingredient-list li{background:#30313a}
+.dialog-actions{display:flex;align-items:center;justify-content:space-between;gap:10px}.dialog-actions a{color:var(--blue);font-size:11px;font-weight:800}
+.dialog-actions button,.close-icon{border:0;border-radius:999px;background:#e7e7dc;color:var(--ink);padding:9px 13px}
+body.dark-mode .dialog-actions button,body.dark-mode .close-icon{background:#34353e;color:var(--ink)}
+.recipe-controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:14px}.recipe-controls select{border:0;border-radius:999px;padding:10px 13px;background:#ececdf;color:var(--ink);font-size:10px}
+body.dark-mode .recipe-controls select{background:#30313a;color:var(--ink)}.recipe-controls .button{padding:11px 15px}
+.auth-dialog{width:min(440px,calc(100% - 28px));padding:27px}.auth-top{display:flex;align-items:start;justify-content:space-between;margin-bottom:18px}
+.auth-top h2{margin:0;font:700 32px 'Space Grotesk',sans-serif;letter-spacing:-.06em}.close-icon{padding:7px 12px;font-size:20px}
+.auth-form{display:grid;gap:11px}.auth-form input{width:100%;border:0;border-radius:13px;padding:14px 15px;background:#f0efe6;color:#17181d;font-size:13px}
+.auth-form input:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+.forgot-button,.auth-switch button{border:0;background:transparent;color:var(--blue);font-size:11px;font-weight:800}.forgot-button{justify-self:end;padding:0}
+.auth-message{min-height:18px;margin:0;color:#a34230;font-size:11px;line-height:1.5}
+.auth-divider{display:flex;align-items:center;gap:12px;margin:15px 0;color:var(--muted);font-size:10px}.auth-divider:before,.auth-divider:after{content:'';height:1px;flex:1;background:var(--line)}
+.google-button{width:100%;border:0;border-radius:999px;padding:13px;background:#e7e7dc;color:var(--ink);font-weight:800;font-size:11px}
+body.dark-mode .auth-form input{background:#30313a;color:var(--ink)}body.dark-mode .google-button{background:#34353e;color:var(--ink)}
+.auth-switch{margin:16px 0 0;text-align:center;color:var(--muted);font-size:11px}
+.features{position:relative;overflow:hidden;padding:100px 0 110px;background:var(--acid);color:#17181d}
+.features:before{content:'✳';position:absolute;right:-.12em;top:-.54em;color:#2020200c;font-size:clamp(230px,34vw,470px);line-height:1;animation:slowspin 60s linear infinite}
+.features .wrap{position:relative;z-index:1}.features .eyebrow{color:#494c33}.features .dot{background:var(--blue)}
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:38px}
+.feature{position:relative;isolation:isolate;overflow:hidden;min-height:300px;padding:25px;border-radius:24px;background:#ffffffb8;transition:transform .45s cubic-bezier(.2,.8,.2,1),background .3s}
+.feature:hover{transform:translateY(-9px) rotate(-1deg);background:#fffdf6}
+.feature:after{content:attr(data-number);position:absolute;z-index:-1;right:16px;bottom:-.15em;color:#3028cf12;font:700 110px/.9 'Space Grotesk',sans-serif;letter-spacing:-.1em}
+.feature-icon{display:grid;place-items:center;width:50px;height:50px;margin-bottom:30px;border-radius:17px;background:var(--blue);color:var(--acid);font-size:22px;transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.feature:nth-child(2) .feature-icon{background:var(--orange);color:#251e49}.feature:nth-child(3) .feature-icon{background:#b8aaff;color:#2820b5}
+.feature:hover .feature-icon{transform:rotate(-11deg) scale(1.14)}
+.feature h3{max-width:300px;margin-bottom:10px;font:700 24px/1.04 'Space Grotesk',sans-serif;letter-spacing:-.055em}
+.feature p{max-width:315px;color:#65666b;font-size:12px;line-height:1.7}
+.feature-more{display:inline-flex;align-items:center;gap:8px;margin-top:10px;color:var(--blue);font-size:10px;font-weight:800}
+.feature-more span{transition:transform .25s}.feature:hover .feature-more span:last-child{transform:translateX(6px)}
+.closing{position:relative;isolation:isolate;overflow:hidden;width:100%;padding:115px 24px;text-align:center;background:var(--orange);color:#211d20}
+.closing:after{content:'DINNER';position:absolute;z-index:-1;left:50%;bottom:-.33em;transform:translateX(-50%);color:#1b191b0b;font:700 clamp(150px,28vw,400px)/.8 'Space Grotesk',sans-serif;letter-spacing:-.12em;white-space:nowrap}
+.closing .eyebrow{justify-content:center;color:#53372e}.closing .dot{background:var(--blue)}
+.closing h2{max-width:950px;margin:20px auto;font:700 clamp(48px,8vw,100px)/.88 'Space Grotesk',sans-serif;letter-spacing:-.09em}
+.closing p{color:#533f3b;font-size:13px}.closing .button{background:#211c9e;color:white}
+footer{padding:28px 0;background:#17181d;color:#d8d8d0a6}.footer-inner{display:flex;align-items:center;justify-content:space-between;gap:15px}
+footer .logo-word{color:#fffdf1}.footer-copy{font-size:10px}.footer-controls{display:flex;align-items:center;gap:8px}
+.footer-control{display:inline-flex;align-items:center;gap:7px;border:0;border-radius:999px;padding:9px 12px;background:#ffffff13;color:#fffdf1;font-size:10px;font-weight:800;transition:background .2s,transform .2s}
+.footer-control:hover{transform:translateY(-2px);background:#ffffff25}
+.reveal{opacity:0;transform:translateY(25px) scale(.985);transition:opacity .7s ease,transform .8s cubic-bezier(.16,1,.3,1)}.reveal.is-visible{opacity:1;transform:translateY(0) scale(1)}
+@keyframes bob{0%,100%{translate:0 0}50%{translate:0 -9px}}@keyframes marquee{to{transform:translateX(-50%)}}@keyframes slowspin{to{transform:rotate(360deg)}}
+@keyframes arrive{from{opacity:0;translate:0 25px}to{opacity:1;translate:0 0}}
+.hero-copy-block .eyebrow,.hero-copy-block h1,.hero-copy-block .hero-copy,.hero-copy-block .hero-actions,.hero-copy-block .hero-note{animation:arrive .8s cubic-bezier(.16,1,.3,1) both}
+.hero-copy-block h1{animation-delay:.08s}.hero-copy-block .hero-copy{animation-delay:.16s}.hero-copy-block .hero-actions{animation-delay:.23s}.hero-copy-block .hero-note{animation-delay:.3s}
+@media(max-width:950px){.wrap{width:calc(100% - 44px)}.navlinks{gap:15px}.hero-copy-block{left:30px;top:17%;width:55vw}.visual{right:1%;width:51%}.food{width:min(43vw,470px)}.plan-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:700px){header{height:66px}.navlinks{display:none}.logo small{display:none}.account-actions{gap:4px}.account-actions .outline-button{padding:9px 10px;font-size:10px}.nav-cta{padding:10px 12px;font-size:10px}
+.hero-scene{height:145svh}.hero{top:66px;height:calc(100svh - 66px);min-height:650px}.hero-copy-block{left:22px;right:22px;top:8%;width:auto}.hero h1{font-size:clamp(68px,15vw,104px);margin:19px 0 15px}.hero-copy{max-width:390px;font-size:12px}.hero-actions{gap:14px}.hero-note{margin-top:18px}
+.visual{top:37%;right:3%;width:94%;height:58%}.food{width:min(61vw,390px)}.blob{width:min(67vw,440px);right:11%;top:9%}.float-card.top{top:6%;left:0}.float-card.bottom{right:1%;bottom:1%}.orbit-label{right:-4%;top:34%;font-size:7px}
+.hero-index{right:20px;bottom:17px}.scroll-cue{left:20px;bottom:17px;font-size:7px}.week{padding:76px 0 66px}.section-head{align-items:start;flex-direction:column;gap:10px}.section-head h2{font-size:clamp(44px,12vw,65px)}.section-head p{margin:0}
+.meal{flex-basis:min(78vw,340px);aspect-ratio:.77}.meal-info h3{font-size:23px}.feature-grid{grid-template-columns:1fr;gap:9px}.feature{min-height:0;padding:23px}.feature-icon{margin-bottom:19px}.features{padding:72px 0 80px}
+.closing{padding:85px 18px}.closing h2{font-size:clamp(48px,13vw,78px)}.dash-head{align-items:start;flex-direction:column}.plan-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard{padding:55px 0}
+.footer-inner{justify-content:center;flex-wrap:wrap;text-align:center}.footer-copy{flex-basis:100%}.footer-controls{width:100%;justify-content:center}.footer-inner>span:nth-child(3){font-size:9px}}
+@media(max-width:400px){.wrap{width:calc(100% - 32px)}.account-label{display:none}.nav-cta{padding:10px}.hero-copy-block{left:16px;right:16px}.hero h1{font-size:67px}.hero .button{padding:12px 14px;font-size:10px}.visual{top:41%;height:53%}.meal{flex-basis:82vw}.recipe-search button{padding-inline:15px}.footer-control{font-size:9px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero-scene{height:auto}.hero{position:relative;top:auto;height:auto;min-height:850px}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
+</style>
 </head>
 <body>
-  <div class="motion-progress" aria-hidden="true"><span id="scroll-progress"></span></div>
-  <header>
-    <nav class="wrap" aria-label="Main navigation">
-      <a class="logo" href="#home" aria-label="Daily home">daily<span>.</span></a>
-      <div class="navlinks"><a href="#how-it-works">How it works</a><a href="#this-week">This week</a><a href="#about">About</a></div>
-      <div class="account-actions"><span class="account-label" id="account-label" hidden></span><button class="outline-button" id="auth-open" type="button">Log in</button><button class="outline-button" id="logout-button" type="button" hidden>Log out</button><a class="nav-cta" href="#this-week">Explore meals <span aria-hidden="true">↗</span></a></div>
-    </nav>
-  </header>
-  <main>
-    <section class="hero wrap" id="home">
-      <div>
-        <div class="eyebrow"><span class="dot"></span> A calmer kind of meal planning</div>
-        <h1>Good food.<br><em>Less thinking.</em></h1>
-        <p class="hero-copy">Meet Daily: your friendly little helper for figuring out what’s for dinner. Find fresh ideas, plan your week, and make mealtimes feel easy again.</p>
-        <div class="hero-actions"><a class="button" href="#this-week">See this week’s menu <span aria-hidden="true">→</span></a><a class="text-link" href="#how-it-works">How it works <span aria-hidden="true">↗</span></a></div>
-        <div class="hero-note"><div class="avatars" aria-hidden="true"><span class="avatar">☺</span><span class="avatar">☺</span><span class="avatar">☺</span></div><span>Made for real life, one meal at a time</span></div>
-      </div>
-      <div class="visual" aria-label="A colorful bowl of fresh food">
-        <div class="blob"></div>
-        <div class="food"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1000&q=85" alt="Fresh salad bowl with vegetables and grains"></div>
-        <div class="float-card top"><small>Your week, sorted</small><strong>5 dinners planned ✓</strong></div>
-        <div class="float-card bottom"><div class="cal-icon">🥑</div><div><small>Today’s little win</small><strong>Ready in 25 minutes</strong></div></div>
-      </div>
-    </section>
-    <section class="week wrap" id="this-week">
-      <div class="section-head"><div><div class="eyebrow"><span class="dot"></span> A taste of the week</div><h2>What’s cooking?</h2></div><p>Fresh ideas for the days ahead.</p></div>
-      <div class="firebase-note" id="firebase-note">Add your Firebase web app settings to <strong>firebase-config.js</strong>, then enable Google and Email/Password sign-in in Firebase Console to activate accounts, meal plans, and saved recipes.</div>
-      <form class="recipe-search" id="recipe-search"><input id="recipe-query" type="search" placeholder="Search recipes, like pasta…" aria-label="Search recipes"><button type="submit">Search</button></form>
-      <div class="quick-searches" aria-label="Quick recipe searches"><span class="quick-search-label" id="quick-search-label">Try a craving</span><button type="button" data-search="pizza">Pizza</button><button type="button" data-search="pasta">Pasta</button><button type="button" data-search="soup">Soup</button></div>
-      <p class="recipe-status" id="recipe-status" aria-live="polite">Loading a few recipe ideas…</p>
-      <div class="meal-grid" id="meal-grid">
-        <article class="meal"><div class="meal-image"><img src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=700&q=80" alt="Roasted vegetables served with grains" loading="lazy"><span class="day">MONDAY</span></div><div class="meal-info"><h3>Roasty veggie bowls</h3><div class="meta"><span>30 min</span><span>Easy</span></div></div></article>
-        <article class="meal"><div class="meal-image"><img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=700&q=80" alt="Pasta with fresh herbs and tomatoes" loading="lazy"><span class="day">TUESDAY</span></div><div class="meal-info"><h3>Lemony garden pasta</h3><div class="meta"><span>20 min</span><span>Easy</span></div></div></article>
-        <article class="meal"><div class="meal-image"><img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=700&q=80" alt="Colorful fresh meal with greens" loading="lazy"><span class="day">WEDNESDAY</span></div><div class="meal-info"><h3>Crunchy green tacos</h3><div class="meta"><span>25 min</span><span>Easy</span></div></div></article>
-        <article class="meal"><div class="meal-image"><img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=700&q=80" alt="A comforting bowl with fresh toppings" loading="lazy"><span class="day">THURSDAY</span></div><div class="meal-info"><h3>Cozy tomato bowls</h3><div class="meta"><span>35 min</span><span>Easy</span></div></div></article>
-      </div>
-    </section>
-    <section class="dashboard" id="dashboard"><div class="wrap"><div class="dash-head"><div><div class="eyebrow"><span class="dot"></span> Your Daily space</div><h2>Your meal plan</h2></div><p id="dashboard-message">Saved to your account</p></div><div class="plan-grid" id="plan-grid"></div><h3 class="saved-heading">Saved recipes</h3><div class="saved-list" id="saved-list"></div></div></section>
-    <dialog class="recipe-dialog" id="recipe-dialog" aria-labelledby="dialog-title"><img id="dialog-image" alt=""><div class="dialog-content"><h3 id="dialog-title"></h3><p id="dialog-description"></p><div class="dialog-actions"><a id="dialog-source" href="#" target="_blank" rel="noreferrer">See full recipe ↗</a><button id="dialog-close" type="button">Close</button></div><div class="recipe-controls"><select id="plan-day" aria-label="Choose a day"><option value="Monday">Monday</option><option value="Tuesday">Tuesday</option><option value="Wednesday">Wednesday</option><option value="Thursday">Thursday</option><option value="Friday">Friday</option><option value="Saturday">Saturday</option><option value="Sunday">Sunday</option></select><button class="button" id="add-to-plan" type="button">Add to my week</button><button class="outline-button" id="save-recipe" type="button">♡ Save recipe</button></div></div></dialog>
-    <dialog class="auth-dialog" id="auth-dialog" aria-labelledby="auth-title"><div class="auth-top"><h2 id="auth-title">Welcome to Daily</h2><button class="close-icon" id="auth-close" type="button" aria-label="Close">×</button></div><form class="auth-form" id="auth-form"><input id="auth-name" type="text" autocomplete="name" placeholder="Your name" hidden><input id="auth-email" type="email" autocomplete="email" placeholder="Email address" required><input id="auth-password" type="password" autocomplete="current-password" placeholder="Password (at least 6 characters)" minlength="6" required><button class="forgot-button" id="forgot-password" type="button">Forgot password?</button><p class="auth-message" id="auth-message" aria-live="polite"></p><button class="button" id="email-submit" type="submit">Log in with email</button></form><div class="auth-divider">or</div><button class="google-button" id="google-signin" type="button">Continue with Google</button><p class="auth-switch" id="auth-switch">New to Daily? <button type="button">Create an account</button></p></dialog>
-    <section class="features" id="how-it-works"><div class="wrap"><div class="eyebrow"><span class="dot"></span> A little help, right when you need it</div><div class="feature-grid">
-      <div class="feature" data-number="01"><div class="feature-icon" aria-hidden="true">✦</div><h3>Find your next favorite</h3><p>Search a world of recipes, open the ingredients, and spot something delicious for tonight.</p><a class="feature-more" href="#this-week">Explore recipes <span aria-hidden="true">→</span></a></div>
-      <div class="feature" data-number="02"><div class="feature-icon" aria-hidden="true">▦</div><h3>Make a plan that fits</h3><p>Choose a recipe, pick a day, and build a week that works for your real schedule.</p><a class="feature-more" href="#this-week">Plan your week <span aria-hidden="true">→</span></a></div>
-      <div class="feature" data-number="03"><div class="feature-icon" aria-hidden="true">♡</div><h3>Keep the good ones close</h3><p>Save the recipes you love, find them again later, and make your own collection.</p><a class="feature-more" href="#this-week">Save a favorite <span aria-hidden="true">→</span></a></div>
-    </div></div></section>
-    <section class="closing wrap" id="about"><div class="eyebrow" style="justify-content:center"><span class="dot"></span> Your week starts here</div><h2>A little more joy at the dinner table.</h2><p>Good meals don’t have to be complicated. Let’s make them Daily.</p><a class="button" href="#this-week">Get a little inspiration <span aria-hidden="true">→</span></a></section>
-  </main>
-  <footer><div class="wrap footer-inner"><a class="logo" href="#home">daily<span>.</span></a><span class="footer-copy" data-i18n="footerNote">A school project made with a love for good food.</span><span>© 2026 Daily</span><div class="footer-controls" aria-label="Display preferences"><button class="footer-control" id="language-toggle" type="button" aria-label="Switch language">DE · Deutsch</button><button class="footer-control" id="theme-toggle" type="button" aria-pressed="false"><span aria-hidden="true">☾</span><span data-i18n="darkMode">Dark mode</span></button></div></div></footer>
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js';
-    import { getAuth, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js';
-    import { getFirestore, collection, addDoc, deleteDoc, doc, setDoc, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js';
-    import { firebaseConfig } from './firebase-config.js';
+<div class="motion-progress" aria-hidden="true"><span id="scroll-progress"></span></div>
+<header><nav class="wrap" aria-label="Main navigation">
+<a class="logo" href="#home" aria-label="Daily home"><span class="logo-symbol" aria-hidden="true">✳</span><span class="logo-word">daily<span class="logo-period">.</span></span><small>FOOD, FIGURED OUT.</small></a>
+<div class="navlinks"><a href="#how-it-works" data-i18n="navHow">The Daily way</a><a href="#this-week" data-i18n="navWeek">Recipes</a><a href="#about" data-i18n="navAbout">The vibe</a></div>
+<div class="account-actions"><span class="account-label" id="account-label" hidden></span><button class="outline-button" id="auth-open" data-i18n="login" type="button">Log in</button><button class="outline-button" id="logout-button" data-i18n="logout" type="button" hidden>Log out</button><a class="nav-cta" href="#this-week"><span data-i18n="navCta">Find a recipe</span><span aria-hidden="true">↗</span></a></div>
+</nav></header>
+<main>
+<section class="hero-scene" id="home-scene"><div class="hero" id="home">
+<div class="hero-copy-block">
+<div class="eyebrow" data-i18n-html="heroEyebrow"><span class="dot"></span> A fresh take on the everyday</div>
+<h1 data-i18n-html="heroTitle">Dinner is<br>the <em>main event.</em></h1>
+<p class="hero-copy" data-i18n="heroCopy">Find what you are craving. Give it a place in your week. Make an ordinary Tuesday taste like something.</p>
+<div class="hero-actions"><a class="button" href="#this-week"><span data-i18n="heroCta">Find your next favorite</span><span aria-hidden="true">↗</span></a><a class="text-link" href="#how-it-works"><span data-i18n="howLink">Meet Daily</span><span aria-hidden="true">↓</span></a></div>
+<div class="hero-note"><span class="hero-note-star" aria-hidden="true">✳</span><span data-i18n="heroNote">A little less planning. A lot more living.</span></div>
+</div>
+<div class="visual" aria-label="A colorful bowl of fresh food"><div class="blob"></div><div class="food"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1200&q=88" alt="Fresh salad bowl with vegetables and grains"></div>
+<div class="float-card top"><small>THIS WEEK'S MOOD</small><strong>Fresh, fun, figured out.</strong></div><div class="float-card bottom"><div class="cal-icon">✳</div><div><small>THE DAILY PROMISE</small><strong>Good food. No spiral.</strong></div></div><div class="orbit-label" aria-hidden="true">PLAN A LITTLE <span>✳</span> LIVE A LOT</div></div>
+<div class="hero-index" aria-hidden="true"><span>01</span><i></i><span>04</span></div><div class="scroll-cue"><span data-i18n="scrollCue">SCROLL TO GET HUNGRY</span><b aria-hidden="true">↓</b></div>
+</div></section>
+<div class="ticker" aria-hidden="true"><div class="ticker-track"><span>GOOD FOOD, GOOD MOOD</span><b>✳</b><span>MAKE ROOM FOR DINNER</span><b>✳</b><span>GOOD FOOD, GOOD MOOD</span><b>✳</b><span>MAKE ROOM FOR DINNER</span><b>✳</b><span>GOOD FOOD, GOOD MOOD</span><b>✳</b></div></div>
+<section class="week wrap" id="this-week">
+<div class="section-head"><div><div class="eyebrow" data-i18n-html="weekEyebrow"><span class="dot"></span> THE RECIPE RUNWAY</div><h2 data-i18n="weekTitle">Follow your appetite.</h2></div><p data-i18n="weekIntro">Little ideas. Big dinner energy.</p></div>
+<div class="firebase-note" id="firebase-note">Add Firebase settings to firebase-config.js to turn on accounts, meal plans and saved recipes.</div>
+<form class="recipe-search" id="recipe-search"><input id="recipe-query" type="search" placeholder="Search a craving — pasta, pizza…" aria-label="Search recipes"><button data-i18n="searchButton" type="submit">Search</button></form>
+<div class="quick-searches"><span id="quick-search-label" data-i18n="quickLabel">IN THE MOOD FOR</span><button type="button" data-search="pizza">Pizza</button><button type="button" data-search="pasta">Pasta</button><button type="button" data-search="soup" data-i18n="soup">Soup</button></div>
+<p class="recipe-status" id="recipe-status" aria-live="polite">Loading recipes…</p>
+<div class="rail-controls"><span class="rail-caption" data-i18n="railLabel">DRAG YOUR CRAVINGS <span aria-hidden="true">→</span></span><div><button type="button" data-rail="back" data-i18n-aria="previous" aria-label="Previous recipes">←</button><button type="button" data-rail="forward" data-i18n-aria="next" aria-label="Next recipes">→</button></div></div>
+<div class="meal-grid" id="meal-grid">
+<article class="meal"><div class="meal-image"><img src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=700&q=80" alt="Roasted vegetables served with grains" loading="lazy"><span class="day">MONDAY</span></div><div class="meal-info"><h3>Roasty veggie bowls</h3><div class="meta"><span>30 min</span><span>Easy</span></div></div></article>
+<article class="meal"><div class="meal-image"><img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=700&q=80" alt="Pasta with fresh herbs and tomatoes" loading="lazy"><span class="day">TUESDAY</span></div><div class="meal-info"><h3>Lemony garden pasta</h3><div class="meta"><span>20 min</span><span>Easy</span></div></div></article>
+<article class="meal"><div class="meal-image"><img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=700&q=80" alt="Colorful fresh meal with greens" loading="lazy"><span class="day">WEDNESDAY</span></div><div class="meal-info"><h3>Crunchy green tacos</h3><div class="meta"><span>25 min</span><span>Easy</span></div></div></article>
+</div></section>
+<section class="dashboard" id="dashboard"><div class="wrap"><div class="dash-head"><div><div class="eyebrow"><span class="dot"></span><span data-i18n="yourSpace">YOUR DAILY SPACE</span></div><h2 data-i18n="mealPlan">Your meal plan</h2></div><p id="dashboard-message">Saved in your account</p></div><div class="plan-grid" id="plan-grid"></div><h3 class="saved-heading" data-i18n="savedRecipes">Saved recipes</h3><div class="saved-list" id="saved-list"></div></div></section>
+<section class="features" id="how-it-works"><div class="wrap"><div class="eyebrow" data-i18n-html="featureEyebrow"><span class="dot"></span> THE DAILY DIFFERENCE</div><div class="feature-grid">
+<article class="feature" data-number="01"><div class="feature-icon">✳</div><h3 data-i18n="feature1Title">Cravings, meet your calendar.</h3><p data-i18n="feature1">Find a meal you cannot stop thinking about, then give it a place in your week.</p><a class="feature-more" href="#this-week"><span data-i18n="featureLink1">Find a craving</span><span>↗</span></a></article>
+<article class="feature" data-number="02"><div class="feature-icon">▦</div><h3 data-i18n="feature2Title">A week with a little rhythm.</h3><p data-i18n="feature2">Build a flexible plan that keeps good food in the picture and guesswork out of it.</p><a class="feature-more" href="#this-week"><span data-i18n="featureLink2">Plan the week</span><span>↗</span></a></article>
+<article class="feature" data-number="03"><div class="feature-icon">♡</div><h3 data-i18n="feature3Title">Keep your greatest hits.</h3><p data-i18n="feature3">Save recipes you love and make a collection that feels like your own kitchen.</p><a class="feature-more" href="#this-week"><span data-i18n="featureLink3">Save a favorite</span><span>↗</span></a></article>
+</div></div></section>
+<section class="closing" id="about"><div class="eyebrow" data-i18n-html="closingEyebrow"><span class="dot"></span> YOUR NEXT GREAT MEAL</div><h2 data-i18n="closingTitle">The best part of the day is closer than you think.</h2><p data-i18n="closingCopy">Pick a craving. Make a plan. Let dinner be the good part.</p><a class="button" href="#this-week"><span data-i18n="closingCta">Find dinner</span><span>↗</span></a></section>
+</main>
+<footer><div class="wrap footer-inner"><a class="logo" href="#home" aria-label="Daily home"><span class="logo-symbol">✳</span><span class="logo-word">daily<span class="logo-period">.</span></span></a><span class="footer-copy" data-i18n="footerNote">A school project with a big appetite.</span><span>© 2026 Daily</span><div class="footer-controls"><button class="footer-control" id="language-toggle" type="button" aria-label="Switch language">DE · Deutsch</button><button class="footer-control" id="theme-toggle" type="button" aria-pressed="false"><span aria-hidden="true">◐</span><span id="theme-label">Dark mode</span></button></div></div></footer>
+<dialog class="recipe-dialog" id="recipe-dialog" aria-labelledby="dialog-title"><img id="dialog-image" alt=""><div class="dialog-content"><h3 id="dialog-title"></h3><p id="dialog-description"></p><ul class="ingredient-list" id="ingredient-list"></ul><div class="dialog-actions"><a id="dialog-source" href="#" target="_blank" rel="noreferrer">See full recipe ↗</a><button id="dialog-close" type="button" data-i18n="close">Close</button></div><div class="recipe-controls"><select id="plan-day" aria-label="Choose a day"><option value="Monday">Monday</option><option value="Tuesday">Tuesday</option><option value="Wednesday">Wednesday</option><option value="Thursday">Thursday</option><option value="Friday">Friday</option><option value="Saturday">Saturday</option><option value="Sunday">Sunday</option></select><button class="button" id="add-to-plan" type="button" data-i18n="addToPlan">Add to my week</button><button class="outline-button" id="save-recipe" type="button" data-i18n="saveRecipe">♡ Save recipe</button></div></div></dialog>
+<dialog class="auth-dialog" id="auth-dialog" aria-labelledby="auth-title"><div class="auth-top"><h2 id="auth-title">Welcome to Daily</h2><button class="close-icon" id="auth-close" type="button" aria-label="Close">×</button></div><form class="auth-form" id="auth-form"><input id="auth-name" type="text" autocomplete="name" placeholder="Your name" hidden><input id="auth-email" type="email" autocomplete="email" placeholder="Email address" required><input id="auth-password" type="password" autocomplete="current-password" placeholder="Password (at least 6 characters)" minlength="6" required><button class="forgot-button" id="forgot-password" type="button" data-i18n="forgot">Forgot password?</button><p class="auth-message" id="auth-message" aria-live="polite"></p><button class="button" id="email-submit" type="submit">Log in with email</button></form><div class="auth-divider" data-i18n="or">OR</div><button class="google-button" id="google-signin" type="button">Continue with Google</button><p class="auth-switch" id="auth-switch">New to Daily? <button type="button" data-mode-switch>Create account</button></p></dialog>
+<script type="module">
+import{initializeApp}from'https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js';
+import{getAuth,GoogleAuthProvider,createUserWithEmailAndPassword,signInWithEmailAndPassword,signInWithPopup,sendPasswordResetEmail,signOut,onAuthStateChanged,updateProfile}from'https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js';
+import{getFirestore,collection,addDoc,deleteDoc,doc,setDoc,onSnapshot,serverTimestamp}from'https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js';
+import{firebaseConfig}from'./firebase-config.js';
+const words={
+en:{navHow:'The Daily way',navWeek:'Recipes',navAbout:'The vibe',navCta:'Find a recipe',login:'Log in',logout:'Log out',
+heroEyebrow:'<span class="dot"></span> A fresh take on the everyday',heroTitle:'Dinner is<br>the <em>main event.</em>',heroCopy:'Find the thing you are craving. Give it a place in your week. Make an ordinary Tuesday taste like something.',heroCta:'Find your next favorite',howLink:'Meet Daily',heroNote:'A little less planning. A lot more living.',scrollCue:'SCROLL TO GET HUNGRY',
+weekEyebrow:'<span class="dot"></span> THE RECIPE RUNWAY',weekTitle:'Follow your appetite.',weekIntro:'Little ideas. Big dinner energy.',searchPlaceholder:'Search a craving — pasta, pizza…',searchButton:'Search',quickLabel:'IN THE MOOD FOR',soup:'Soup',railLabel:'DRAG YOUR CRAVINGS',previous:'Previous recipes',next:'Next recipes',
+yourSpace:'YOUR DAILY SPACE',mealPlan:'Your meal plan',savedRecipes:'Saved recipes',featureEyebrow:'<span class="dot"></span> THE DAILY DIFFERENCE',feature1Title:'Cravings, meet your calendar.',feature1:'Find the meal you cannot stop thinking about, then give it a spot in your week.',feature2Title:'A week with a little rhythm.',feature2:'Build a flexible plan that keeps good food in the picture and guesswork out of it.',feature3Title:'Keep your greatest hits.',feature3:'Save recipes you love and make a collection that feels like your own kitchen.',featureLink1:'Find a craving',featureLink2:'Plan the week',featureLink3:'Save a favorite',
+closingEyebrow:'<span class="dot"></span> YOUR NEXT GREAT MEAL',closingTitle:'The best part of the day is closer than you think.',closingCopy:'Pick a craving. Make a plan. Let dinner be the good part.',closingCta:'Find dinner',footerNote:'A school project with a big appetite.',
+searchStatus:'Finding something delicious…',searchFound:'{count} recipes to make your day.',searchNone:'No recipes found. Try another craving.',searchError:'The recipe kitchen is taking a breather. Try again in a bit.',recipeLoading:'Getting the details…',recipeSource:'Get the full recipe ↗',close:'Close',chooseDay:'Choose a day',addToPlan:'Add to my week',saveRecipe:'♡ Save recipe',ingredients:'Ingredients',emptyPlan:'Nothing on the menu yet.',savedEmpty:'Save a recipe and it will live here.',needLogin:'Log in to save your plan and favorites.',firebaseMissing:'Add Firebase settings to firebase-config.js to enable accounts and saving.',dashboardConfig:'Firebase settings are needed to activate your meal plan.',statusReady:'Pick a recipe and make it yours.',statusRecipeError:'Could not load recipe details. Try again.',
+loginTitle:'Welcome to Daily',signupTitle:'Make your Daily account',emailPlaceholder:'Email address',passwordPlaceholder:'Password (at least 6 characters)',namePlaceholder:'Your name',forgot:'Forgot password?',emailLogin:'Log in with email',emailSignup:'Create account',or:'OR',google:'Continue with Google',newToDaily:'New to Daily?',haveAccount:'Already have an account?',createAccount:'Create account',loginInstead:'Log in instead',wait:'One sec…',googleOpening:'Opening Google sign-in…',enterEmail:'Add your email address first.',resetSent:'Password reset sent. Check your inbox.',added:'{title} added to {day}.',saved:'Saved {title} to your favorites.',saveError:'Could not save this: {error}',planError:'Could not load your plan: {error}',savedError:'Could not load favorites: {error}',
+mon:'Monday',tue:'Tuesday',wed:'Wednesday',thu:'Thursday',fri:'Friday',sat:'Saturday',sun:'Sunday',remove:'Remove {title}',authEmailUsed:'That email already has an account. Try logging in.',authInvalid:'Email or password is incorrect.',authWeak:'Use a password with at least 6 characters.',authBadEmail:'Enter a valid email address.',authPopup:'Google sign-in was closed.',authDomain:'Add this site domain to Firebase authorized domains.',authGeneric:'Something went wrong. Please try again.',darkMode:'Dark mode',lightMode:'Light mode',heroImage:'Fresh food for the week',recipeReady:'Select a recipe to see details.',viewRecipe:'Open {title} recipe'},
+de:{navHow:'So geht Daily',navWeek:'Rezepte',navAbout:'Das ist Daily',navCta:'Rezept finden',login:'Anmelden',logout:'Abmelden',
+heroEyebrow:'<span class="dot"></span> Jeden Tag ein bisschen anders',heroTitle:'Heute wird<br><em>lecker.</em>',heroCopy:'Finde, worauf du Lust hast. Plane es in deine Woche ein. Mach aus einem ganz normalen Dienstag etwas Besonderes.',heroCta:'Finde dein nächstes Lieblingsessen',howLink:'Lern Daily kennen',heroNote:'Weniger planen. Mehr genießen.',scrollCue:'SCROLLE ZUM GENUSS',
+weekEyebrow:'<span class="dot"></span> DIE REZEPT-RUNWAY',weekTitle:'Folge deinem Appetit.',weekIntro:'Kleine Ideen. Große Dinner-Energie.',searchPlaceholder:'Suche nach Pasta, Pizza …',searchButton:'Suchen',quickLabel:'WORAUF HAST DU LUST?',soup:'Suppe',railLabel:'DEINE REZEPTE ENTDECKEN',previous:'Vorherige Rezepte',next:'Weitere Rezepte',
+yourSpace:'DEIN DAILY-BEREICH',mealPlan:'Dein Essensplan',savedRecipes:'Gespeicherte Rezepte',featureEyebrow:'<span class="dot"></span> DAS MACHT DAILY BESONDERS',feature1Title:'Dein Appetit trifft den Kalender.',feature1:'Finde das Essen, an das du ständig denken musst, und plane es für deine Woche ein.',feature2Title:'Eine Woche mit gutem Rhythmus.',feature2:'Plane flexibel und bring gutes Essen in deinen Alltag – ganz ohne tägliches Grübeln.',feature3Title:'Deine größten Hits bleiben.',feature3:'Speichere Lieblingsrezepte und sammle sie für deine persönliche Küche.',featureLink1:'Rezept finden',featureLink2:'Woche planen',featureLink3:'Favorit speichern',
+closingEyebrow:'<span class="dot"></span> DEIN NÄCHSTES LIEBLINGSESSEN',closingTitle:'Der beste Teil des Tages ist näher, als du denkst.',closingCopy:'Such dir etwas aus. Plane deine Woche. Mach das Abendessen zum Highlight.',closingCta:'Finde dein Abendessen',footerNote:'Ein Schulprojekt mit großem Appetit.',
+searchStatus:'Wir suchen etwas Leckeres…',searchFound:'{count} Rezepte für deinen Tag.',searchNone:'Keine Rezepte gefunden. Versuch es mit einer anderen Suche.',searchError:'Die Rezeptküche macht kurz Pause. Versuch es gleich noch einmal.',recipeLoading:'Rezeptdetails werden geladen…',recipeSource:'Zum ganzen Rezept ↗',close:'Schließen',chooseDay:'Tag auswählen',addToPlan:'Zur Wochenplanung',saveRecipe:'♡ Rezept speichern',emptyPlan:'Noch nichts geplant.',savedEmpty:'Speichere ein Rezept – es erscheint dann hier.',needLogin:'Melde dich an, um Pläne und Favoriten zu speichern.',firebaseMissing:'Füge Firebase-Einstellungen in firebase-config.js ein, um Konten und Speichern zu aktivieren.',dashboardConfig:'Für deinen Essensplan fehlen die Firebase-Einstellungen.',statusReady:'Wähle ein Rezept und mach es zu deinem.',statusRecipeError:'Rezeptdetails konnten nicht geladen werden.',
+loginTitle:'Willkommen bei Daily',signupTitle:'Erstelle dein Daily-Konto',emailPlaceholder:'E-Mail-Adresse',passwordPlaceholder:'Passwort (mindestens 6 Zeichen)',namePlaceholder:'Dein Name',forgot:'Passwort vergessen?',emailLogin:'Mit E-Mail anmelden',emailSignup:'Konto erstellen',or:'ODER',google:'Mit Google fortfahren',newToDaily:'Neu bei Daily?',haveAccount:'Schon ein Konto?',createAccount:'Konto erstellen',loginInstead:'Jetzt anmelden',wait:'Einen Moment…',googleOpening:'Google-Anmeldung wird geöffnet…',enterEmail:'Gib zuerst deine E-Mail-Adresse ein.',resetSent:'E-Mail zum Zurücksetzen gesendet. Bitte prüfe deinen Posteingang.',added:'{title} wurde für {day} eingeplant.',saved:'{title} wurde gespeichert.',saveError:'Speichern fehlgeschlagen: {error}',planError:'Essensplan konnte nicht geladen werden: {error}',savedError:'Favoriten konnten nicht geladen werden:',
+mon:'Montag',tue:'Dienstag',wed:'Mittwoch',thu:'Donnerstag',fri:'Freitag',sat:'Samstag',sun:'Sonntag',remove:'{title} entfernen',authEmailUsed:'Für diese E-Mail gibt es schon ein Konto. Melde dich an.',authInvalid:'E-Mail-Adresse oder Passwort ist falsch.',authWeak:'Das Passwort muss mindestens 6 Zeichen haben.',authBadEmail:'Gib eine gültige E-Mail-Adresse ein.',authPopup:'Die Google-Anmeldung wurde geschlossen.',authDomain:'Füge die Website-Domain zu den autorisierten Firebase-Domains hinzu.',authGeneric:'Etwas ist schiefgelaufen. Bitte versuche es erneut.',darkMode:'Dunkelmodus',lightMode:'Hellmodus',heroImage:'Frische Ideen für die Woche',recipeReady:'Wähle ein Rezept für die Details.',viewRecipe:'Rezept {title} öffnen'}
+};
+let language=localStorage.getItem('daily-language')==='de'?'de':'en',darkMode=localStorage.getItem('daily-theme')==='dark';
+const t=(key,values={})=>Object.entries(values).reduce((s,[k,v])=>s.replaceAll('{'+k+'}',String(v)),words[language][key]||words.en[key]||key);
+const api='https://forkify-api.jonas.io/api/v2/recipes',grid=document.querySelector('#meal-grid'),status=document.querySelector('#recipe-status');
+const authDialog=document.querySelector('#auth-dialog'),recipeDialog=document.querySelector('#recipe-dialog'),authMessage=document.querySelector('#auth-message');
+let auth=null,db=null,currentUser=null,currentRecipe=null,authMode='login',planItems=[],savedItems=[],stopPlan=null,stopSaved=null,searchSeq=0;
+function esc(v=''){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function imageUrl(v=''){const u=String(v).replace(/^http:/,'https:');return /^https:\/\//.test(u)?u:''}
+function setStatus(value){status.textContent=value}
+function renderMeals(recipes){
+grid.replaceChildren();
+if(!recipes.length){grid.innerHTML='<p class="plan-empty">'+esc(t('searchNone'))+'</p>';return}
+recipes.slice(0,20).forEach(recipe=>{
+const card=document.createElement('article');card.className='meal';card.tabIndex=0;card.setAttribute('role','button');card.setAttribute('aria-label',t('viewRecipe',{title:recipe.title}));
+card.innerHTML='<div class="meal-image"><img src="'+esc(imageUrl(recipe.image_url))+'" alt="'+esc(recipe.title)+'" loading="lazy"><span class="day">'+esc(recipe.publisher||'DAILY PICK')+'</span></div><div class="meal-info"><h3>'+esc(recipe.title)+'</h3><div class="meta"><span>'+esc(recipe.publisher||'Forkify')+'</span><span>↗ '+esc(t('recipeReady'))+'</span></div></div>';
+card.addEventListener('click',()=>showRecipe(recipe));card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();showRecipe(recipe)}});
+grid.append(card);reveal(card);
+});
+}
+async function searchRecipes(query){
+const seq=++searchSeq;setStatus(t('searchStatus'));
+try{const res=await fetch(api+'?search='+encodeURIComponent(query));if(!res.ok)throw new Error('Search failed');const json=await res.json();if(seq!==searchSeq)return;
+const list=json.data?.recipes||[];renderMeals(list);setStatus(list.length?t('searchFound',{count:list.length}):t('searchNone'));
+}catch{if(seq===searchSeq){renderMeals([]);setStatus(t('searchError'))}}
+}
+async function showRecipe(recipe){
+currentRecipe=recipe;recipeDialog.showModal();setStatus(t('recipeLoading'));
+document.querySelector('#dialog-title').textContent=recipe.title;document.querySelector('#dialog-image').src=imageUrl(recipe.image_url);document.querySelector('#dialog-image').alt=recipe.title;
+document.querySelector('#dialog-description').textContent=(recipe.publisher||'Forkify')+' · '+(recipe.cooking_time||'?')+' min · '+(recipe.servings||'?')+' servings';
+const source=document.querySelector('#dialog-source');source.href=recipe.source_url||'#';source.textContent=t('recipeSource');
+const list=document.querySelector('#ingredient-list');list.innerHTML='<li>'+esc(t('recipeLoading'))+'</li>';
+try{const res=await fetch(api+'/'+encodeURIComponent(recipe.id));if(!res.ok)throw new Error('Details unavailable');const json=await res.json();currentRecipe=json.data?.recipe||recipe;
+list.innerHTML=(currentRecipe.ingredients||[]).map(item=>'<li>'+esc([item.quantity,item.unit,item.description].filter(Boolean).join(' '))+'</li>').join('')||'<li>'+esc(t('statusRecipeError'))+'</li>';
+document.querySelector('#dialog-description').textContent=(currentRecipe.publisher||'Forkify')+' · '+(currentRecipe.cooking_time||'?')+' min · '+(currentRecipe.servings||'?')+' servings';source.href=currentRecipe.source_url||'#';
+}catch{list.innerHTML='<li>'+esc(t('statusRecipeError'))+'</li>'}
+setStatus(t('statusReady'));
+}
+const days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],dayKey={Monday:'mon',Tuesday:'tue',Wednesday:'wed',Thursday:'thu',Friday:'fri',Saturday:'sat',Sunday:'sun'};
+function renderDashboard(){
+const plan=document.querySelector('#plan-grid'),saved=document.querySelector('#saved-list');plan.replaceChildren();saved.replaceChildren();
+if(!currentUser){document.querySelector('#dashboard').classList.remove('visible');return}
+document.querySelector('#dashboard').classList.add('visible');
+days.forEach(day=>{const box=document.createElement('div');box.className='plan-day';const entries=planItems.filter(x=>x.day===day);
+box.innerHTML='<strong>'+esc(t(dayKey[day]))+'</strong>'+(entries.length?entries.map(x=>'<div class="plan-item"><span>'+esc(x.title)+'</span><button type="button" data-delete-plan="'+esc(x.id)+'" aria-label="'+esc(t('remove',{title:x.title}))+'">×</button></div>').join(''):'<span class="plan-empty">'+esc(t('emptyPlan'))+'</span>');plan.append(box)});
+if(!savedItems.length)saved.innerHTML='<span class="plan-empty">'+esc(t('savedEmpty'))+'</span>';
+savedItems.forEach(x=>{const row=document.createElement('div');row.className='saved-item';row.innerHTML='<img src="'+esc(imageUrl(x.image_url))+'" alt=""><span>'+esc(x.title)+'</span><button type="button" data-delete-saved="'+esc(x.id)+'" aria-label="'+esc(t('remove',{title:x.title}))+'">×</button>';saved.append(row)});
+}
+function listenToUser(user){
+stopPlan?.();stopSaved?.();planItems=[];savedItems=[];if(!user||!db){renderDashboard();return}
+stopPlan=onSnapshot(collection(db,'users',user.uid,'plannedMeals'),snap=>{planItems=snap.docs.map(d=>({id:d.id,...d.data()}));renderDashboard()},err=>document.querySelector('#dashboard-message').textContent=t('planError',{error:err.message}));
+stopSaved=onSnapshot(collection(db,'users',user.uid,'savedRecipes'),snap=>{savedItems=snap.docs.map(d=>({id:d.id,...d.data()}));renderDashboard()},err=>document.querySelector('#dashboard-message').textContent=t('savedError',{error:err.message}));
+}
+function authError(error){
+const map={'auth/email-already-in-use':'authEmailUsed','auth/invalid-credential':'authInvalid','auth/wrong-password':'authInvalid','auth/user-not-found':'authInvalid','auth/weak-password':'authWeak','auth/invalid-email':'authBadEmail','auth/popup-closed-by-user':'authPopup','auth/unauthorized-domain':'authDomain'};
+return t(map[error.code]||'authGeneric');
+}
+function openAuth(message=''){authMessage.textContent=message;if(!authDialog.open)authDialog.showModal()}
+async function requireAccount(){if(!currentUser){openAuth(t('needLogin'));return false}if(!db){openAuth(t('firebaseMissing'));return false}return true}
+document.querySelector('#recipe-search').addEventListener('submit',e=>{e.preventDefault();const q=document.querySelector('#recipe-query').value.trim();if(q)searchRecipes(q)});
+document.querySelector('.quick-searches').addEventListener('click',e=>{const b=e.target.closest('[data-search]');if(b){document.querySelector('#recipe-query').value=b.dataset.search;searchRecipes(b.dataset.search)}});
+document.querySelector('.rail-controls').addEventListener('click',e=>{const b=e.target.closest('[data-rail]');if(b)grid.scrollBy({left:(b.dataset.rail==='forward'?1:-1)*grid.clientWidth*.78,behavior:'smooth'})});
+grid.addEventListener('pointermove',e=>{if(!matchMedia('(hover:hover) and (pointer:fine)').matches)return;const card=e.target.closest('.meal');if(!card)return;const r=card.getBoundingClientRect();card.style.setProperty('--ry',((e.clientX-r.left)/r.width-.5)*7+'deg');card.style.setProperty('--rx',(.5-(e.clientY-r.top)/r.height)*5+'deg')});
+grid.addEventListener('pointerout',e=>{const c=e.target.closest('.meal');if(c&&!c.contains(e.relatedTarget)){c.style.setProperty('--rx','0deg');c.style.setProperty('--ry','0deg')}});
+const visual=document.querySelector('.visual');
+visual.addEventListener('pointermove',e=>{if(!matchMedia('(hover:hover) and (pointer:fine)').matches)return;const r=visual.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;visual.style.setProperty('--hero-x',x*15+'px');visual.style.setProperty('--hero-y',y*15+'px');visual.style.setProperty('--hero-rx',-y*5+'deg');visual.style.setProperty('--hero-ry',x*6+'deg')});
+visual.addEventListener('pointerleave',()=>['--hero-x','--hero-y','--hero-rx','--hero-ry'].forEach(k=>visual.style.removeProperty(k)));
+const scene=document.querySelector('#home-scene'),hero=document.querySelector('.hero'),progress=document.querySelector('#scroll-progress');let queued=false;
+window.addEventListener('scroll',()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{
+const max=document.documentElement.scrollHeight-innerHeight;progress.style.transform='scaleX('+(max>0?scrollY/max:0)+')';
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches){const p=Math.max(0,Math.min(1,-scene.getBoundingClientRect().top/Math.max(1,scene.offsetHeight-innerHeight)));
+visual.style.setProperty('--story-scale',1+p*.2);visual.style.setProperty('--story-y',p*-35+'px');visual.style.setProperty('--story-rotation',p*5+'deg');
+document.querySelector('.hero-copy-block').style.setProperty('--copy-y',p*-42+'px');document.querySelector('.hero-copy-block').style.setProperty('--copy-opacity',1-p*.22)}
+queued=false})},{passive:true});
+const io='IntersectionObserver'in window?new IntersectionObserver((entries,obs)=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-visible');obs.unobserve(e.target)}}),{threshold:.12}):null;
+function reveal(el){el.classList.add('reveal');if(io)io.observe(el);else el.classList.add('is-visible')}
+document.querySelectorAll('.section-head,.feature,.closing>*').forEach(reveal);
 
-    const translations = {
-      en: {
-        navHow:'How it works', navWeek:'This week', navAbout:'About', navCta:'Explore meals <span aria-hidden="true">↗</span>', navLabel:'Main navigation', heroImage:'A colorful bowl of fresh food', heroImageAlt:'Fresh salad bowl with vegetables and grains', openRecipe:'Open recipe', viewRecipe:'View {title} recipe',
-        heroEyebrow:'<span class="dot"></span> A calmer kind of meal planning', heroTitle:'Good food.<br><em>Less thinking.</em>', heroCopy:'Meet Daily: your friendly little helper for figuring out what’s for dinner. Find fresh ideas, plan your week, and make mealtimes feel easy again.', heroCta:'See this week’s menu <span aria-hidden="true">→</span>', howLink:'How it works <span aria-hidden="true">↗</span>', heroNote:'Made for real life, one meal at a time', weekSorted:'Your week, sorted', dinners:'5 dinners planned ✓', todayWin:'Today’s little win', ready:'Ready in 25 minutes',
-        weekEyebrow:'<span class="dot"></span> A taste of the week', weekTitle:'What’s cooking?', weekIntro:'Fresh ideas for the days ahead.', firebaseNote:'Add your Firebase web app settings to <strong>firebase-config.js</strong>, then enable Google and Email/Password sign-in in Firebase Console to activate accounts, meal plans, and saved recipes.', searchPlaceholder:'Search recipes, like pasta…', searchLabel:'Search recipes', searchButton:'Search', quickSearchLabel:'Try a craving', searchPizza:'Pizza', searchPasta:'Pasta', searchSoup:'Soup',
-        yourSpace:'<span class="dot"></span> Your Daily space', mealPlan:'Your meal plan', savedToAccount:'Saved to your account', savedRecipes:'Saved recipes',
-        featureEyebrow:'<span class="dot"></span> A little help, right when you need it', feature1Title:'Find your next favorite', feature1:'Search a world of recipes, open the ingredients, and spot something delicious for tonight.', feature2Title:'Make a plan that fits', feature2:'Choose a recipe, pick a day, and build a week that works for your real schedule.', feature3Title:'Keep the good ones close', feature3:'Save the recipes you love, find them again later, and make your own collection.', featureLink1:'Explore recipes <span aria-hidden="true">→</span>', featureLink2:'Plan your week <span aria-hidden="true">→</span>', featureLink3:'Save a favorite <span aria-hidden="true">→</span>',
-        closingEyebrow:'<span class="dot"></span> Your week starts here', closingTitle:'A little more joy at the dinner table.', closingCopy:'Good meals don’t have to be complicated. Let’s make them Daily.', closingCta:'Get a little inspiration <span aria-hidden="true">→</span>', footerNote:'A school project made with a love for good food.',
-        login:'Log in', logout:'Log out', authWelcome:'Welcome to Daily', signupTitle:'Create your account', authClose:'Close', namePlaceholder:'Your name', emailPlaceholder:'Email address', passwordPlaceholder:'Password (at least 6 characters)', forgot:'Forgot password?', emailLogin:'Log in with email', emailSignup:'Create account with email', or:'or', google:'Continue with Google', newToDaily:'New to Daily? <button type="button">Create an account</button>', haveAccount:'Already have an account? <button type="button">Log in</button>',
-        recipeSource:'See full recipe ↗', dialogClose:'Close', chooseDay:'Choose a day', addMeal:'Add to my week', saveRecipe:'♡ Save recipe', removePlan:'Remove {title} from {day}', removeSaved:'Remove {title} from saved recipes', nothingPlanned:'Nothing planned', saveToShow:'Save a recipe and it will show up here.', ingredients:'Ingredients',
-        darkMode:'Dark mode', lightMode:'Light mode', languageName:'DE · Deutsch', languageAria:'Switch language to German', themeAria:'Toggle dark mode',
-        statusLoading:'Loading a few recipe ideas…', statusSearching:'Looking for “{query}”…', statusFound:'Showing {shown} of {count} recipes found.', statusNone:'No recipes found. Try another search.', statusSearchError:'Could not load recipes right now. Please try again in a moment.', statusRecipeLoading:'Loading {title}…', statusRecipeReady:'Select a recipe to see its ingredients.', statusRecipeError:'Could not load that recipe. Please try again.',
-        firebaseMissing:'Add your Firebase web app settings in firebase-config.js first.', needLogin:'Log in or create an account to save your meals.', addedMeal:'{title} added to {day}.', savedMeal:'{title} saved to your recipes.', saveError:'Could not save: {error}', dashboardConfig:'Add Firebase config to enable accounts and saving.', firestorePlanError:'Could not load your plan: {error}', firestoreSavedError:'Could not load saved recipes: {error}',
-        wait:'Please wait…', googleOpening:'Opening Google sign-in…', resetSent:'Password reset email sent. Check your inbox.', enterEmail:'Enter your email address first.',
-        authEmailUsed:'That email already has an account. Try logging in.', authInvalid:'Email or password is incorrect.', authWeak:'Choose a stronger password with at least 6 characters.', authBadEmail:'Enter a valid email address.', authPopup:'Google sign-in was closed before it finished.', authDomain:'Add this site’s domain to Firebase Authentication’s authorized domains.', authGeneric:'Something went wrong. Please try again.',
-        monday:'Monday', tuesday:'Tuesday', wednesday:'Wednesday', thursday:'Thursday', friday:'Friday', saturday:'Saturday', sunday:'Sunday'
-      },
-      de: {
-        navHow:'So funktioniert’s', navWeek:'Diese Woche', navAbout:'Über Daily', navCta:'Rezepte entdecken <span aria-hidden="true">↗</span>', navLabel:'Hauptnavigation', heroImage:'Eine bunte Schüssel mit frischen Zutaten', heroImageAlt:'Frischer Salat mit Gemüse und Getreide', openRecipe:'Rezept ansehen', viewRecipe:'Rezept „{title}“ ansehen',
-        heroEyebrow:'<span class="dot"></span> Entspannt planen, lecker essen', heroTitle:'Gutes Essen.<br><em>Weniger Grübeln.</em>', heroCopy:'Das ist Daily: deine kleine Hilfe bei der Frage, was es heute gibt. Entdecke neue Ideen, plane deine Woche und mach die Mahlzeiten ganz entspannt.', heroCta:'Menü für diese Woche <span aria-hidden="true">→</span>', howLink:'So funktioniert’s <span aria-hidden="true">↗</span>', heroNote:'Für den Alltag – eine Mahlzeit nach der anderen', weekSorted:'Deine Woche ist geplant', dinners:'5 Abendessen geplant ✓', todayWin:'Das klappt heute schon', ready:'In 25 Minuten fertig',
-        weekEyebrow:'<span class="dot"></span> Ein Vorgeschmack auf die Woche', weekTitle:'Was gibt’s heute?', weekIntro:'Frische Ideen für die nächsten Tage.', firebaseNote:'Füge deine Firebase-Web-App-Einstellungen in <strong>firebase-config.js</strong> ein und aktiviere anschließend Google- sowie E-Mail/Passwort-Anmeldung in der Firebase Console, um Konten, Essenspläne und gespeicherte Rezepte zu nutzen.', searchPlaceholder:'Rezepte suchen, zum Beispiel Pasta…', searchLabel:'Rezepte suchen', searchButton:'Suchen', quickSearchLabel:'Worauf hast du Lust?', searchPizza:'Pizza', searchPasta:'Pasta', searchSoup:'Suppe',
-        yourSpace:'<span class="dot"></span> Dein Daily-Bereich', mealPlan:'Dein Essensplan', savedToAccount:'In deinem Konto gespeichert', savedRecipes:'Gespeicherte Rezepte',
-        featureEyebrow:'<span class="dot"></span> Kleine Hilfe, genau wenn du sie brauchst', feature1Title:'Finde dein neues Lieblingsgericht', feature1:'Durchsuche viele Rezepte, schau dir die Zutaten an und finde etwas Leckeres für heute Abend.', feature2Title:'Plane passend zu deiner Woche', feature2:'Wähle ein Rezept und einen Tag – so entsteht ein Plan, der in deinen Alltag passt.', feature3Title:'Deine Lieblingsrezepte immer dabei', feature3:'Speichere gute Rezepte, finde sie später wieder und sammle deine persönlichen Favoriten.', featureLink1:'Rezepte entdecken <span aria-hidden="true">→</span>', featureLink2:'Woche planen <span aria-hidden="true">→</span>', featureLink3:'Favorit speichern <span aria-hidden="true">→</span>',
-        closingEyebrow:'<span class="dot"></span> Deine Woche beginnt hier', closingTitle:'Mehr Freude am gemeinsamen Essen.', closingCopy:'Gutes Essen muss nicht kompliziert sein. Mach es dir Daily.', closingCta:'Lass dich inspirieren <span aria-hidden="true">→</span>', footerNote:'Ein Schulprojekt mit viel Liebe zu gutem Essen.',
-        login:'Anmelden', logout:'Abmelden', authWelcome:'Willkommen bei Daily', signupTitle:'Konto erstellen', authClose:'Schließen', namePlaceholder:'Dein Name', emailPlaceholder:'E-Mail-Adresse', passwordPlaceholder:'Passwort (mindestens 6 Zeichen)', forgot:'Passwort vergessen?', emailLogin:'Mit E-Mail anmelden', emailSignup:'Konto mit E-Mail erstellen', or:'oder', google:'Mit Google fortfahren', newToDaily:'Neu bei Daily? <button type="button">Konto erstellen</button>', haveAccount:'Du hast schon ein Konto? <button type="button">Anmelden</button>',
-        recipeSource:'Zum vollständigen Rezept ↗', dialogClose:'Schließen', chooseDay:'Tag auswählen', addMeal:'Zur Wochenplanung', saveRecipe:'♡ Rezept speichern', removePlan:'{title} am {day} entfernen', removeSaved:'{title} aus gespeicherten Rezepten entfernen', nothingPlanned:'Noch nichts geplant', saveToShow:'Speichere ein Rezept – dann erscheint es hier.', ingredients:'Zutaten',
-        darkMode:'Dunkelmodus', lightMode:'Hellmodus', languageName:'EN · English', languageAria:'Sprache auf Englisch umstellen', themeAria:'Dunkelmodus umschalten',
-        statusLoading:'Ein paar Rezeptideen werden geladen…', statusSearching:'Suche nach „{query}“…', statusFound:'{shown} von {count} Rezepten werden angezeigt.', statusNone:'Keine Rezepte gefunden. Versuch es mit einer anderen Suche.', statusSearchError:'Rezepte können gerade nicht geladen werden. Bitte versuche es gleich noch einmal.', statusRecipeLoading:'{title} wird geladen…', statusRecipeReady:'Wähle ein Rezept, um die Zutaten zu sehen.', statusRecipeError:'Das Rezept konnte nicht geladen werden. Bitte versuche es erneut.',
-        firebaseMissing:'Füge zuerst deine Firebase-Web-App-Einstellungen in firebase-config.js ein.', needLogin:'Melde dich an oder erstelle ein Konto, um Mahlzeiten zu speichern.', addedMeal:'{title} wurde für {day} eingeplant.', savedMeal:'{title} wurde gespeichert.', saveError:'Speichern fehlgeschlagen: {error}', dashboardConfig:'Firebase einrichten, um Konten und Speichern zu aktivieren.', firestorePlanError:'Essensplan konnte nicht geladen werden: {error}', firestoreSavedError:'Gespeicherte Rezepte konnten nicht geladen werden: {error}',
-        wait:'Einen Moment…', googleOpening:'Google-Anmeldung wird geöffnet…', resetSent:'E-Mail zum Zurücksetzen des Passworts wurde gesendet. Bitte prüfe deinen Posteingang.', enterEmail:'Gib zuerst deine E-Mail-Adresse ein.',
-        authEmailUsed:'Für diese E-Mail gibt es schon ein Konto. Melde dich an.', authInvalid:'E-Mail-Adresse oder Passwort ist falsch.', authWeak:'Wähle ein stärkeres Passwort mit mindestens 6 Zeichen.', authBadEmail:'Gib eine gültige E-Mail-Adresse ein.', authPopup:'Die Google-Anmeldung wurde vorzeitig geschlossen.', authDomain:'Füge die Domain dieser Website zu den autorisierten Domains in Firebase Authentication hinzu.', authGeneric:'Etwas ist schiefgelaufen. Bitte versuche es erneut.',
-        monday:'Montag', tuesday:'Dienstag', wednesday:'Mittwoch', thursday:'Donnerstag', friday:'Freitag', saturday:'Samstag', sunday:'Sonntag'
-      }
-    };
-    let language = localStorage.getItem('daily-language') === 'de' ? 'de' : 'en';
-    let darkMode = localStorage.getItem('daily-theme') === 'dark';
-    const t = (key, values = {}) => Object.entries(values).reduce((text, [name, value]) => text.replaceAll(`{${name}}`, String(value)), translations[language][key] || translations.en[key] || key);
-    const localizedDays = { Monday:'monday', Tuesday:'tuesday', Wednesday:'wednesday', Thursday:'thursday', Friday:'friday', Saturday:'saturday', Sunday:'sunday' };
-    function applyPreferences() {
-      const copy = translations[language];
-      const content = {
-        '.navlinks a:nth-child(1)':copy.navHow, '.navlinks a:nth-child(2)':copy.navWeek, '.navlinks a:nth-child(3)':copy.navAbout, '.nav-cta':copy.navCta,
-        '.hero .eyebrow':copy.heroEyebrow, '.hero h1':copy.heroTitle, '.hero-copy':copy.heroCopy, '.hero-actions .button':copy.heroCta, '.hero-actions .text-link':copy.howLink, '.hero-note>span':copy.heroNote,
-        '.float-card.top small':copy.weekSorted, '.float-card.top strong':copy.dinners, '.float-card.bottom small':copy.todayWin, '.float-card.bottom strong':copy.ready,
-        '.week .section-head .eyebrow':copy.weekEyebrow, '.week .section-head h2':copy.weekTitle, '.week .section-head p':copy.weekIntro, '#firebase-note':copy.firebaseNote, '#recipe-search button':copy.searchButton, '#quick-search-label':copy.quickSearchLabel, '.quick-searches [data-search="pizza"]':copy.searchPizza, '.quick-searches [data-search="pasta"]':copy.searchPasta, '.quick-searches [data-search="soup"]':copy.searchSoup,
-        '#dashboard .dash-head .eyebrow':copy.yourSpace, '#dashboard .dash-head h2':copy.mealPlan, '#dashboard-message':copy.savedToAccount, '#dashboard .saved-heading':copy.savedRecipes,
-        '#how-it-works>.wrap>.eyebrow':copy.featureEyebrow, '.feature:nth-child(1) h3':copy.feature1Title, '.feature:nth-child(1) p':copy.feature1, '.feature:nth-child(1) .feature-more':copy.featureLink1, '.feature:nth-child(2) h3':copy.feature2Title, '.feature:nth-child(2) p':copy.feature2, '.feature:nth-child(2) .feature-more':copy.featureLink2, '.feature:nth-child(3) h3':copy.feature3Title, '.feature:nth-child(3) p':copy.feature3, '.feature:nth-child(3) .feature-more':copy.featureLink3,
-        '.closing .eyebrow':copy.closingEyebrow, '.closing h2':copy.closingTitle, '.closing p':copy.closingCopy, '.closing .button':copy.closingCta, '.footer-copy':copy.footerNote,
-        '#auth-open':copy.login, '#logout-button':copy.logout, '#auth-title':authMode === 'signup' ? copy.signupTitle : copy.authWelcome, '#auth-close':copy.authClose,
-        '#forgot-password':copy.forgot, '#email-submit':authMode === 'signup' ? copy.emailSignup : copy.emailLogin, '.auth-divider':copy.or, '#google-signin':copy.google, '#auth-switch':authMode === 'signup' ? copy.haveAccount : copy.newToDaily,
-        '#dialog-source':copy.recipeSource, '#dialog-close':copy.dialogClose, '#add-to-plan':copy.addMeal, '#save-recipe':copy.saveRecipe
-      };
-      Object.entries(content).forEach(([selector, value]) => { const element = document.querySelector(selector); if (element) element.innerHTML = value; });
-      document.querySelector('#recipe-query').placeholder = copy.searchPlaceholder;
-      document.querySelector('#recipe-query').setAttribute('aria-label', copy.searchLabel);
-      document.querySelector('#plan-day').setAttribute('aria-label', copy.chooseDay);
-      document.querySelector('#auth-name').placeholder = copy.namePlaceholder;
-      document.querySelector('#auth-email').placeholder = copy.emailPlaceholder;
-      document.querySelector('#auth-password').placeholder = copy.passwordPlaceholder;
-      document.querySelector('#auth-email').setAttribute('aria-label', copy.emailPlaceholder);
-      document.querySelector('#auth-password').setAttribute('aria-label', copy.passwordPlaceholder);
-      document.querySelector('#auth-close').setAttribute('aria-label', copy.authClose);
-      document.querySelector('nav[aria-label]').setAttribute('aria-label', copy.navLabel);
-      document.querySelector('.visual').setAttribute('aria-label', copy.heroImage);
-      document.querySelector('.food img').alt = copy.heroImageAlt;
-      document.querySelector('#plan-day').querySelectorAll('option').forEach((option) => { option.textContent = t(localizedDays[option.value]); });
-      document.querySelector('#language-toggle').textContent = copy.languageName;
-      document.querySelector('#language-toggle').setAttribute('aria-label', copy.languageAria);
-      document.querySelector('#theme-toggle').setAttribute('aria-label', copy.themeAria);
-      document.querySelector('#theme-toggle span:last-child').textContent = darkMode ? copy.lightMode : copy.darkMode;
-      document.querySelector('#theme-toggle span:first-child').textContent = darkMode ? '☀' : '☾';
-      document.querySelector('#theme-toggle').setAttribute('aria-pressed', String(darkMode));
-      document.querySelector('.footer-controls').setAttribute('aria-label', language === 'de' ? 'Anzeigeoptionen' : 'Display preferences');
-      document.body.classList.toggle('dark-mode', darkMode);
-      document.querySelector('meta[name="theme-color"]').content = darkMode ? '#171b18' : '#f7f6f1';
-      document.documentElement.lang = language;
-      document.title = language === 'de' ? 'Daily — jeden Tag ein bisschen leichter' : 'Daily — a little easier, every day';
-      renderDashboard();
-    }
-
-    const apiBase = 'https://forkify-api.jonas.io/api/v2/recipes';
-    const grid = document.querySelector('#meal-grid');
-    const status = document.querySelector('#recipe-status');
-    const recipeDialog = document.querySelector('#recipe-dialog');
-    const authDialog = document.querySelector('#auth-dialog');
-    const authMessage = document.querySelector('#auth-message');
-    const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-    const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-    let currentRecipe = null;
-    let currentUser = null;
-    let plannedMeals = [];
-    let savedRecipes = [];
-    let stopPlanListener = null;
-    let stopSavedListener = null;
-    let authMode = 'login';
-    const appIsConfigured = Boolean(firebaseConfig.apiKey && firebaseConfig.apiKey !== 'YOUR_API_KEY' && firebaseConfig.projectId && firebaseConfig.projectId !== 'YOUR_PROJECT_ID');
-    let auth = null;
-    let db = null;
-    if (appIsConfigured) {
-      const app = initializeApp(firebaseConfig);
-      auth = getAuth(app);
-      db = getFirestore(app);
-    }
-
-    function openAuth(message = '') {
-      authMessage.textContent = message;
-      if (!authDialog.open) authDialog.showModal();
-    }
-
-    function authError(error) {
-      const messages = {
-        'auth/email-already-in-use':'authEmailUsed',
-        'auth/invalid-credential':'authInvalid',
-        'auth/weak-password':'authWeak',
-        'auth/invalid-email':'authBadEmail',
-        'auth/popup-closed-by-user':'authPopup',
-        'auth/unauthorized-domain':'authDomain'
-      };
-      return messages[error.code] ? t(messages[error.code]) : (error.message || t('authGeneric'));
-    }
-
-    const revealObserver = 'IntersectionObserver' in window ? new IntersectionObserver((entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold:0.12 }) : null;
-    function reveal(element, index = 0) {
-      element.classList.add('reveal');
-      element.style.setProperty('--reveal-delay', `${Math.min(index % 4, 3) * 85}ms`);
-      if (revealObserver) revealObserver.observe(element);
-      else element.classList.add('is-visible');
-    }
-    document.querySelectorAll('.hero>div,.section-head,.meal,.feature,.closing>*').forEach((element, index) => reveal(element, index));
-
-    // Tiny, responsive motion cues make the page feel tactile without taking over.
-    const visual = document.querySelector('.visual');
-    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
-    if (visual && finePointer.matches) {
-      visual.addEventListener('pointermove', (event) => {
-        const bounds = visual.getBoundingClientRect();
-        const x = (event.clientX - bounds.left) / bounds.width - .5;
-        const y = (event.clientY - bounds.top) / bounds.height - .5;
-        visual.style.setProperty('--hero-x', `${x * 16}px`);
-        visual.style.setProperty('--hero-y', `${y * 16}px`);
-        visual.style.setProperty('--hero-rx', `${-y * 5}deg`);
-        visual.style.setProperty('--hero-ry', `${x * 6}deg`);
-      });
-      visual.addEventListener('pointerleave', () => {
-        ['--hero-x','--hero-y','--hero-rx','--hero-ry'].forEach((key) => visual.style.removeProperty(key));
-      });
-      document.querySelector('#meal-grid').addEventListener('pointermove', (event) => {
-        const card = event.target.closest('.meal');
-        if (!card) return;
-        const bounds = card.getBoundingClientRect();
-        const x = (event.clientX - bounds.left) / bounds.width;
-        const y = (event.clientY - bounds.top) / bounds.height;
-        card.style.setProperty('--mx', `${x * 100}%`);
-        card.style.setProperty('--my', `${y * 100}%`);
-        card.style.setProperty('--ry', `${(x - .5) * 9}deg`);
-        card.style.setProperty('--rx', `${(.5 - y) * 7}deg`);
-      });
-      document.querySelector('#meal-grid').addEventListener('pointerout', (event) => {
-        const card = event.target.closest('.meal');
-        if (card && !card.contains(event.relatedTarget)) {
-          card.style.setProperty('--rx','0deg');
-          card.style.setProperty('--ry','0deg');
-          card.style.setProperty('--mx','50%');
-          card.style.setProperty('--my','50%');
-        }
-      });
-      document.querySelectorAll('.feature').forEach((card) => card.addEventListener('pointermove', (event) => {
-        const bounds = card.getBoundingClientRect();
-        card.style.setProperty('--mx', `${event.clientX - bounds.left}px`);
-        card.style.setProperty('--my', `${event.clientY - bounds.top}px`);
-      }));
-    }
-    const progress = document.querySelector('#scroll-progress');
-    let scrollQueued = false;
-    window.addEventListener('scroll', () => {
-      if (scrollQueued) return;
-      scrollQueued = true;
-      requestAnimationFrame(() => {
-        const range = document.documentElement.scrollHeight - window.innerHeight;
-        progress.style.transform = `scaleX(${range > 0 ? window.scrollY / range : 0})`;
-        scrollQueued = false;
-      });
-    }, { passive:true });
-
-    function renderMeals(meals) {
-      grid.replaceChildren();
-      meals.slice(0, 12).forEach((meal) => {
-        const card = document.createElement('article');
-        card.className = 'meal';
-        card.tabIndex = 0;
-        card.setAttribute('role', 'button');
-        card.setAttribute('aria-label', t('viewRecipe',{title:meal.title}));
-        const imageUrl = String(meal.image_url || '').replace(/^http:/, 'https:');
-        card.innerHTML = `<div class="meal-image"><img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(meal.title)}" loading="lazy"><span class="day">${escapeHtml(meal.publisher || 'RECIPE')}</span></div><div class="meal-info"><h3>${escapeHtml(meal.title)}</h3><div class="meta"><span>${t('openRecipe')}</span><span>Forkify</span></div></div>`;
-        const open = () => showRecipe(meal);
-        card.addEventListener('click', open);
-        card.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); open(); } });
-        grid.append(card);
-        reveal(card, grid.children.length - 1);
-      });
-    }
-
-    async function showRecipe(meal) {
-      status.textContent = t('statusRecipeLoading',{title:meal.title});
-      try {
-        const response = await fetch(`${apiBase}/${encodeURIComponent(meal.id)}`);
-        if (!response.ok) throw new Error('Recipe details unavailable');
-        const data = await response.json();
-        currentRecipe = data.data.recipe;
-        const imageUrl = String(currentRecipe.image_url || meal.image_url || '').replace(/^http:/, 'https:');
-        document.querySelector('#dialog-image').src = imageUrl;
-        document.querySelector('#dialog-image').alt = currentRecipe.title;
-        document.querySelector('#dialog-title').textContent = currentRecipe.title;
-        const ingredients = (currentRecipe.ingredients || []).map((item) => `${item.quantity || ''} ${item.unit || ''} ${item.description || ''}`.trim());
-        document.querySelector('#dialog-description').textContent = ingredients.length ? `${t('ingredients')}: ${ingredients.join(' · ')}` : `Recipe by ${currentRecipe.publisher}.`;
-        document.querySelector('#dialog-source').href = currentRecipe.source_url || '#';
-        status.textContent = t('statusRecipeReady');
-        recipeDialog.showModal();
-      } catch {
-        status.textContent = t('statusRecipeError');
-      }
-    }
-
-    function renderDashboard() {
-      const planGrid = document.querySelector('#plan-grid');
-      planGrid.replaceChildren();
-      days.forEach((day) => {
-        const box = document.createElement('div');
-        box.className = 'plan-day';
-        const entries = plannedMeals.filter((meal) => meal.day === day);
-        box.innerHTML = `<strong>${t(localizedDays[day])}</strong>${entries.length ? entries.map((meal) => `<div class="plan-item"><span>${escapeHtml(meal.title)}</span><button type="button" data-delete-plan="${escapeHtml(meal.id)}" aria-label="${escapeHtml(t('removePlan',{title:meal.title,day:t(localizedDays[day])}))}">×</button></div>`).join('') : `<span class="plan-empty">${t('nothingPlanned')}</span>`}`;
-        planGrid.append(box);
-      });
-      const savedList = document.querySelector('#saved-list');
-      savedList.replaceChildren();
-      if (!savedRecipes.length) savedList.innerHTML = `<span class="plan-empty">${t('saveToShow')}</span>`;
-      savedRecipes.forEach((recipe) => {
-        const item = document.createElement('div');
-        item.className = 'saved-item';
-        const imageUrl = String(recipe.image_url || '').replace(/^http:/, 'https:');
-        item.innerHTML = `<img src="${escapeHtml(imageUrl)}" alt=""><span>${escapeHtml(recipe.title)}</span><button type="button" data-delete-saved="${escapeHtml(recipe.id)}" aria-label="${escapeHtml(t('removeSaved',{title:recipe.title}))}">×</button>`;
-        savedList.append(item);
-      });
-      document.querySelector('#dashboard').classList.toggle('visible', Boolean(currentUser));
-    }
-
-    function watchUserData(user) {
-      stopPlanListener?.();
-      stopSavedListener?.();
-      plannedMeals = [];
-      savedRecipes = [];
-      if (!user || !db) { renderDashboard(); return; }
-      const planRef = collection(db, 'users', user.uid, 'plannedMeals');
-      const savedRef = collection(db, 'users', user.uid, 'savedRecipes');
-      stopPlanListener = onSnapshot(planRef, (snapshot) => {
-        plannedMeals = snapshot.docs.map((entry) => ({ id: entry.id, ...entry.data() }));
-        renderDashboard();
-      }, (error) => { document.querySelector('#dashboard-message').textContent = t('firestorePlanError',{error:error.message}); });
-      stopSavedListener = onSnapshot(savedRef, (snapshot) => {
-        savedRecipes = snapshot.docs.map((entry) => ({ id: entry.id, ...entry.data() }));
-        renderDashboard();
-      }, (error) => { document.querySelector('#dashboard-message').textContent = t('firestoreSavedError',{error:error.message}); });
-    }
-
-    async function requireLogin() {
-      if (!currentUser) { openAuth(t('needLogin')); return false; }
-      if (!db) { openAuth(t('firebaseMissing')); return false; }
-      return true;
-    }
-
-    document.querySelector('#recipe-search').addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const query = document.querySelector('#recipe-query').value.trim();
-      if (!query) return;
-      status.textContent = t('statusSearching',{query});
-      try {
-        const response = await fetch(`${apiBase}?search=${encodeURIComponent(query)}`);
-        if (!response.ok) throw new Error('Recipe service unavailable');
-        const data = await response.json();
-        const meals = data.data?.recipes || [];
-        renderMeals(meals);
-        status.textContent = meals.length ? t('statusFound',{shown:Math.min(meals.length,12),count:meals.length}) : t('statusNone');
-      } catch {
-        status.textContent = t('statusSearchError');
-      }
-    });
-    document.querySelector('.quick-searches').addEventListener('click', (event) => {
-      const button = event.target.closest('[data-search]');
-      if (!button) return;
-      document.querySelector('#recipe-query').value = button.dataset.search;
-      document.querySelector('#recipe-search').requestSubmit();
-    });
-    document.querySelector('#recipe-query').value = 'pizza';
-    document.querySelector('#language-toggle').addEventListener('click', () => {
-      language = language === 'en' ? 'de' : 'en';
-      localStorage.setItem('daily-language', language);
-      applyPreferences();
-      status.textContent = t('statusRecipeReady');
-      authMessage.textContent = '';
-    });
-    document.querySelector('#theme-toggle').addEventListener('click', () => {
-      darkMode = !darkMode;
-      localStorage.setItem('daily-theme', darkMode ? 'dark' : 'light');
-      applyPreferences();
-    });
-    applyPreferences();
-    document.querySelector('#recipe-search').requestSubmit();
-    document.querySelector('#dialog-close').addEventListener('click', () => recipeDialog.close());
-    document.querySelector('#auth-open').addEventListener('click', () => openAuth());
-    document.querySelector('#auth-close').addEventListener('click', () => authDialog.close());
-    document.querySelector('#logout-button').addEventListener('click', async () => { if (auth) await signOut(auth); });
-    document.querySelector('#auth-switch').addEventListener('click', () => {
-      authMode = authMode === 'login' ? 'signup' : 'login';
-      document.querySelector('#auth-title').textContent = t(authMode === 'signup' ? 'signupTitle' : 'authWelcome');
-      document.querySelector('#auth-name').hidden = authMode !== 'signup';
-      document.querySelector('#auth-password').autocomplete = authMode === 'signup' ? 'new-password' : 'current-password';
-      document.querySelector('#forgot-password').hidden = authMode === 'signup';
-      document.querySelector('#email-submit').textContent = t(authMode === 'signup' ? 'emailSignup' : 'emailLogin');
-      document.querySelector('#auth-switch').innerHTML = t(authMode === 'signup' ? 'haveAccount' : 'newToDaily');
-      document.querySelector('#forgot-password').hidden = authMode === 'signup';
-      authMessage.textContent = '';
-    });
-    document.querySelector('#auth-form').addEventListener('submit', async (event) => {
-      event.preventDefault();
-      if (!appIsConfigured) { authMessage.textContent = t('firebaseMissing'); return; }
-      const email = document.querySelector('#auth-email').value.trim();
-      const password = document.querySelector('#auth-password').value;
-      authMessage.textContent = t('wait');
-      try {
-        if (authMode === 'signup') {
-          const credential = await createUserWithEmailAndPassword(auth, email, password);
-          const name = document.querySelector('#auth-name').value.trim();
-          if (name) await updateProfile(credential.user, { displayName: name });
-        } else {
-          await signInWithEmailAndPassword(auth, email, password);
-        }
-        authDialog.close();
-        event.currentTarget.reset();
-      } catch (error) { authMessage.textContent = authError(error); }
-    });
-    document.querySelector('#google-signin').addEventListener('click', async () => {
-      if (!appIsConfigured) { authMessage.textContent = t('firebaseMissing'); return; }
-      authMessage.textContent = t('googleOpening');
-      try { await signInWithPopup(auth, new GoogleAuthProvider()); authDialog.close(); }
-      catch (error) { authMessage.textContent = authError(error); }
-    });
-    document.querySelector('#forgot-password').addEventListener('click', async () => {
-      if (!appIsConfigured) { authMessage.textContent = t('firebaseMissing'); return; }
-      const email = document.querySelector('#auth-email').value.trim();
-      if (!email) { authMessage.textContent = t('enterEmail'); return; }
-      try { await sendPasswordResetEmail(auth, email); authMessage.textContent = t('resetSent'); }
-      catch (error) { authMessage.textContent = authError(error); }
-    });
-    document.querySelector('#add-to-plan').addEventListener('click', async () => {
-      if (!(await requireLogin()) || !currentRecipe) return;
-      const day = document.querySelector('#plan-day').value;
-      try {
-        await addDoc(collection(db, 'users', currentUser.uid, 'plannedMeals'), { day, recipeId: currentRecipe.id, title: currentRecipe.title, image_url: currentRecipe.image_url || '', publisher: currentRecipe.publisher || '', createdAt: serverTimestamp() });
-        status.textContent = t('addedMeal',{title:currentRecipe.title,day:t(localizedDays[day])});
-        recipeDialog.close();
-      } catch (error) { status.textContent = t('saveError',{error:error.message}); }
-    });
-    document.querySelector('#save-recipe').addEventListener('click', async () => {
-      if (!(await requireLogin()) || !currentRecipe) return;
-      try {
-        await setDoc(doc(db, 'users', currentUser.uid, 'savedRecipes', currentRecipe.id), { id: currentRecipe.id, title: currentRecipe.title, image_url: currentRecipe.image_url || '', publisher: currentRecipe.publisher || '', source_url: currentRecipe.source_url || '' });
-        status.textContent = t('savedMeal',{title:currentRecipe.title});
-        recipeDialog.close();
-      } catch (error) { status.textContent = t('saveError',{error:error.message}); }
-    });
-    document.querySelector('#plan-grid').addEventListener('click', async (event) => {
-      const button = event.target.closest('[data-delete-plan]');
-      if (button && db && currentUser) await deleteDoc(doc(db, 'users', currentUser.uid, 'plannedMeals', button.dataset.deletePlan));
-    });
-    document.querySelector('#saved-list').addEventListener('click', async (event) => {
-      const button = event.target.closest('[data-delete-saved]');
-      if (button && db && currentUser) await deleteDoc(doc(db, 'users', currentUser.uid, 'savedRecipes', button.dataset.deleteSaved));
-    });
-    document.querySelector('#account-label').hidden = true;
-    applyPreferences();
-    if (auth) onAuthStateChanged(auth, (user) => {
-      currentUser = user;
-      const loginButton = document.querySelector('#auth-open');
-      const logoutButton = document.querySelector('#logout-button');
-      const accountLabel = document.querySelector('#account-label');
-      loginButton.hidden = Boolean(user);
-      logoutButton.hidden = !user;
-      accountLabel.hidden = !user;
-      accountLabel.textContent = user?.displayName || user?.email || '';
-      watchUserData(user);
-    });
-    else {
-      document.querySelector('#dashboard-message').textContent = t('dashboardConfig');
-      document.querySelector('#firebase-note').style.display = 'block';
-    }
-  </script>
-</body>
-</html>
+if(firebaseConfig.apiKey&&firebaseConfig.apiKey!=='YOUR_API_KEY'&&firebaseConfig.projectId&&firebaseConfig.projectId!=='YOUR_PROJECT_ID'){
+try{const app=initializeApp(firebaseConfig);auth=getAuth(app);db=getFirestore(app)}catch{document.querySelector('#firebase-note').style.display='block';document.querySelector('#firebase-note').textContent=t('firebaseMissing')}
+}
+if(auth){onAuthStateChanged(auth,user=>{currentUser=user;document.querySelector('#auth-open').hidden=Boolean(user);document.querySelector('#logout-button').hidden=!user;document.querySelector('#account-label').hidden=!user;document.querySelector('#account-label').textContent=user?.displayName||user?.email||'';listenToUser(user)})}
+else{document.querySelector('#firebase-note').style.display='block';document.querySelector('#firebase-note').textContent=t('firebaseMissing');document.querySelector('#dashboard-message').textContent=t('dashboardConfig')}
+document.querySelector('#auth-open').addEventListener('click',()=>openAuth());
+document.querySelector('#auth-close').addEventListener('click',()=>authDialog.close());
+document.querySelector('#logout-button').addEventListener('click',async()=>{if(auth)await signOut(auth)});
+document.querySelector('#auth-switch').addEventListener('click',()=>{authMode=authMode==='login'?'signup':'login';authMessage.textContent='';applyPreferences()});
+document.querySelector('#auth-form').addEventListener('submit',async e=>{
+e.preventDefault();if(!auth){authMessage.textContent=t('firebaseMissing');return}
+const email=document.querySelector('#auth-email').value.trim(),password=document.querySelector('#auth-password').value;authMessage.textContent=t('wait');
+try{if(authMode==='signup'){const c=await createUserWithEmailAndPassword(auth,email,password),name=document.querySelector('#auth-name').value.trim();if(name)await updateProfile(c.user,{displayName:name})}
+else await signInWithEmailAndPassword(auth,email,password);authDialog.close();e.currentTarget.reset()
+}catch(error){authMessage.textContent=authError(error)}
+});
+document.querySelector('#google-signin').addEventListener('click',async()=>{if(!auth){authMessage.textContent=t('firebaseMissing');return}authMessage.textContent=t('googleOpening');try{await signInWithPopup(auth,new GoogleAuthProvider());authDialog.close()}catch(error){authMessage.textContent=authError(error)}});
+document.querySelector('#forgot-password').addEventListener('click',async()=>{if(!auth){authMessage.textContent=t('firebaseMissing');return}const email=document.querySelector('#auth-email').value.trim();if(!email){authMessage.textContent=t('enterEmail');return}try{await sendPasswordResetEmail(auth,email);authMessage.textContent=t('resetSent')}catch(error){authMessage.textContent=authError(error)}});
+document.querySelector('#add-to-plan').addEventListener('click',async()=>{if(!await requireAccount()||!currentRecipe)return;const day=document.querySelector('#plan-day').value;try{
+await addDoc(collection(db,'users',currentUser.uid,'plannedMeals'),{day,recipeId:currentRecipe.id,title:currentRecipe.title,image_url:currentRecipe.image_url||'',publisher:currentRecipe.publisher||'',createdAt:serverTimestamp()});
+setStatus(t('added',{title:currentRecipe.title,day:t(dayKey[day])}));recipeDialog.close()
+}catch(error){setStatus(t('saveError',{error:error.message}))}});
+document.querySelector('#save-recipe').addEventListener('click',async()=>{if(!await requireAccount()||!currentRecipe)return;try{
+await setDoc(doc(db,'users',currentUser.uid,'savedRecipes',currentRecipe.id),{id:currentRecipe.id,title:currentRecipe.title,image_url:currentRecipe.image_url||'',publisher:currentRecipe.publisher||'',source_url:currentRecipe.source_url||''});
+setStatus(t('saved',{title:currentRecipe.title}));recipeDialog.close()
+}catch(error){setStatus(t('saveError',{error:error.message}))}});
+document.querySelector('#plan-grid').addEventListener('click',async e=>{const b=e.target.closest('[data-delete-plan]');if(b&&db&&currentUser)await deleteDoc(doc(db,'users',currentUser.uid,'plannedMeals',b.dataset.deletePlan))});
+document.querySelector('#saved-list').addEventListener('click',async e=>{const b=e.target.closest('[data-delete-saved]');if(b&&db&&currentUser)await deleteDoc(doc(db,'users',currentUser.uid,'savedRecipes',b.dataset.deleteSaved))});
+document.querySelector('#dialog-close').addEventListener('click',()=>recipeDialog.close());
+document.querySelector('#language-toggle').addEventListener('click',()=>{language=language==='en'?'de':'en';localStorage.setItem('daily-language',language);applyPreferences();setStatus(t('recipeReady'));authMessage.textContent=''});
+document.querySelector('#theme-toggle').addEventListener('click',()=>{darkMode=!darkMode;localStorage.setItem('daily-theme',darkMode?'dark':'light');applyPreferences()});
+function applyPreferences(){
+document.body.classList.toggle('dark-mode',darkMode);document.documentElement.lang=language;
+const lang=document.querySelector('#language-toggle');lang.textContent=language==='en'?'DE · Deutsch':'EN · English';lang.setAttribute('aria-label',language==='en'?'Switch language to German':'Sprache auf Englisch umstellen');
+document.querySelector('#theme-toggle').setAttribute('aria-pressed',String(darkMode));document.querySelector('#theme-label').textContent=t(darkMode?'lightMode':'darkMode');
+document.querySelectorAll('[data-i18n]').forEach(el=>{const key=el.dataset.i18n;if(words[language][key])el.textContent=words[language][key]});
+document.querySelectorAll('[data-i18n-html]').forEach(el=>{const key=el.dataset.i18nHtml;if(words[language][key])el.innerHTML=words[language][key]});
+document.querySelectorAll('[data-i18n-aria]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.i18nAria)));
+document.querySelector('#recipe-query').placeholder=t('searchPlaceholder');document.querySelector('#recipe-query').setAttribute('aria-label',t('searchPlaceholder'));
+document.querySelector('#auth-name').placeholder=t('namePlaceholder');document.querySelector('#auth-email').placeholder=t('emailPlaceholder');document.querySelector('#auth-password').placeholder=t('passwordPlaceholder');
+document.querySelector('#auth-title').textContent=t(authMode==='signup'?'signupTitle':'loginTitle');document.querySelector('#email-submit').textContent=t(authMode==='signup'?'emailSignup':'emailLogin');
+document.querySelector('#google-signin').textContent=t('google');document.querySelector('#auth-switch').firstChild.textContent=t(authMode==='signup'?'haveAccount':'newToDaily')+' ';
+document.querySelector('#auth-switch [data-mode-switch]').textContent=t(authMode==='signup'?'loginInstead':'createAccount');
+document.querySelector('#auth-name').hidden=authMode!=='signup';document.querySelector('#auth-password').autocomplete=authMode==='signup'?'new-password':'current-password';
+document.querySelector('#plan-day').setAttribute('aria-label',t('chooseDay'));document.querySelector('.visual').setAttribute('aria-label',t('heroImage'));
+document.querySelector('#dialog-source').textContent=t('recipeSource');document.querySelector('#dialog-close').textContent=t('close');renderDashboard()
+}
+applyPreferences();document.querySelector('#recipe-query').value='pizza';searchRecipes('pizza');
+</script></body></html>
