@@ -5,12 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f7f6f1">
   <meta name="description" content="Daily makes planning simple: find a little inspiration, plan your week, and make a shopping list." />
-  <title>Daily - a little easier, every day</title>
+  <title>Daily — a little easier, every day</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <style>
     :root { --ink:#252923; --muted:#72776e; --paper:#f7f6f1; --white:#fffefa; --green:#43634d; --lime:#d8e6a8; --line:#e7e6dd; --orange:#f1bd8c; }
+    body.dark-mode { --ink:#eff0e8; --muted:#b6b9ae; --paper:#171b18; --white:#222823; --green:#8dbb86; --line:#394139; --lime:#d8e6a8; }
+    body.dark-mode .nav-cta,body.dark-mode .button,body.dark-mode .recipe-search button { background:#43634d; color:#fff }
     * { box-sizing:border-box }
     html { scroll-behavior:smooth }
     body { margin:0; background:var(--paper); color:var(--ink); font-family:'DM Sans',sans-serif; }
@@ -22,6 +24,7 @@
     .logo { font-size:25px; font-weight:700; letter-spacing:-1.5px }
     .logo span { color:var(--green) }
     .navlinks { display:flex; gap:34px; color:#5d625a; font-size:14px }
+    body.dark-mode .navlinks { color:#c6c9bf }
     .navlinks a:hover { color:var(--green) }
     .nav-cta,.button { border:0; background:var(--green); color:white; padding:12px 19px; border-radius:999px; font-weight:600; font-size:14px; transition:.2s; display:inline-flex; align-items:center; justify-content:center; gap:8px }
     .nav-cta:hover,.button:hover { background:#314a39; transform:translateY(-1px) }
@@ -106,7 +109,7 @@
     .auth-switch button,.forgot-button { border:0; padding:0; color:var(--green); background:transparent; font-weight:700 }
     .forgot-button { justify-self:end; font-size:12px }
     .meal-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:15px }
-    .meal { background:var(--white); border:1px solid #ecebe4; border-radius:18px; overflow:hidden; transition:.2s }
+    .meal { background:var(--white); border:1px solid var(--line); border-radius:18px; overflow:hidden; transition:.2s }
     .meal:hover { transform:translateY(-4px); box-shadow:0 12px 28px #26301d0c }
     .meal-image { height:162px; position:relative; background:#e7e3d5; overflow:hidden }
     .meal-image img { width:100%; height:100%; object-fit:cover; transition:transform .35s }
@@ -117,6 +120,11 @@
     .meta { color:var(--muted); font-size:11px; display:flex; justify-content:space-between }
     .meta span:first-child:before { content:'◷'; margin-right:5px }
     .features { background:#eeefe7; padding:70px 0 }
+    body.dark-mode .features { background:#202720 }
+    body.dark-mode header { border-bottom-color:var(--line) }
+    body.dark-mode .food { border-color:var(--paper) }
+    body.dark-mode .recipe-controls select,body.dark-mode .auth-form input,body.dark-mode .google-button { background:#171b18; color:var(--ink); border-color:var(--line) }
+    body.dark-mode .firebase-note { background:#3b3021; border-color:#645033; color:#f1d6ad }
     .feature-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:44px; margin-top:34px }
     .feature-icon { width:44px; height:44px; border-radius:14px; background:#fffefa; display:grid; place-items:center; font-size:21px; margin-bottom:17px }
     .feature h3 { font-size:16px; margin-bottom:8px }
@@ -125,9 +133,14 @@
     .closing h2 { font:600 clamp(34px,5vw,52px)/1.12 'Playfair Display',serif; letter-spacing:-1px; margin:14px auto 15px; max-width:650px }
     .closing p { color:var(--muted); font-size:15px; margin-bottom:24px }
     footer { border-top:1px solid var(--line); padding:22px 0; color:var(--muted); font-size:12px }
-    .footer-inner { display:flex; justify-content:space-between; align-items:center }
+    .footer-inner { display:flex; justify-content:space-between; align-items:center; gap:18px }
     .footer-inner .logo { font-size:20px; color:var(--ink) }
+    .footer-copy { flex:1 }
+    .footer-controls { display:flex; align-items:center; gap:8px; margin-left:auto }
+    .footer-control { display:inline-flex; align-items:center; gap:7px; border:1px solid var(--line); color:var(--ink); background:var(--white); border-radius:999px; padding:8px 12px; font-size:12px; font-weight:600; white-space:nowrap; transition:background .2s,border-color .2s }
+    .footer-control:hover { border-color:var(--green); background:var(--paper) }
     @media(max-width:800px) { .hero { grid-template-columns:1fr; padding-top:55px; gap:15px }.hero-copy{max-width:540px}.visual{min-height:390px}.food,.blob{width:min(390px,84vw)}.float-card.top{left:8%}.float-card.bottom{right:5%}.meal-grid{grid-template-columns:repeat(2,1fr)}.plan-grid{grid-template-columns:repeat(4,1fr)} }
+    @media(max-width:700px) { .footer-inner { justify-content:center; text-align:center; gap:12px 18px }.footer-copy { flex:0 1 auto }.footer-controls { width:100%; justify-content:center; margin-left:0 } }
     @media(max-width:540px) { .wrap{width:min(100% - 34px,1160px)} header{height:68px}.navlinks{display:none}.hero{padding:45px 0 48px}.hero-copy{font-size:15px}.visual{min-height:315px}.float-card.top{top:8px}.float-card.bottom{bottom:12px}.section-head{align-items:start;gap:12px;flex-direction:column}.section-head h2{font-size:31px}.meal-grid{gap:10px}.meal-image{height:125px}.meal-info{padding:12px}.meal-info h3{font-size:13px}.feature-grid{grid-template-columns:1fr;gap:27px}.features{padding:55px 0}.closing{padding:66px 0}.footer-inner{gap:8px;flex-wrap:wrap}.account-label{display:none}.account-actions{gap:5px}.account-actions .outline-button{padding:9px 11px}.plan-grid{grid-template-columns:repeat(2,1fr)}.dash-head{align-items:start;flex-direction:column}.auth-dialog{padding:21px} }
   </style>
 </head>
@@ -177,12 +190,92 @@
     </div></div></section>
     <section class="closing wrap" id="about"><div class="eyebrow" style="justify-content:center"><span class="dot"></span> Your week starts here</div><h2>A little more joy at the dinner table.</h2><p>Good meals don’t have to be complicated. Let’s make them Daily.</p><a class="button" href="#this-week">Get a little inspiration <span aria-hidden="true">→</span></a></section>
   </main>
-  <footer><div class="wrap footer-inner"><a class="logo" href="#home">daily<span>.</span></a><span>A school project made with a love for good food.</span><span>© 2026 Daily</span></div></footer>
+  <footer><div class="wrap footer-inner"><a class="logo" href="#home">daily<span>.</span></a><span class="footer-copy" data-i18n="footerNote">A school project made with a love for good food.</span><span>© 2026 Daily</span><div class="footer-controls" aria-label="Display preferences"><button class="footer-control" id="language-toggle" type="button" aria-label="Switch language">DE · Deutsch</button><button class="footer-control" id="theme-toggle" type="button" aria-pressed="false"><span aria-hidden="true">☾</span><span data-i18n="darkMode">Dark mode</span></button></div></div></footer>
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js';
     import { getAuth, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js';
     import { getFirestore, collection, addDoc, deleteDoc, doc, setDoc, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js';
     import { firebaseConfig } from './firebase-config.js';
+
+    const translations = {
+      en: {
+        navHow:'How it works', navWeek:'This week', navAbout:'About', navCta:'Explore meals <span aria-hidden="true">↗</span>', navLabel:'Main navigation', heroImage:'A colorful bowl of fresh food', heroImageAlt:'Fresh salad bowl with vegetables and grains', openRecipe:'Open recipe', viewRecipe:'View {title} recipe',
+        heroEyebrow:'<span class="dot"></span> A calmer kind of meal planning', heroTitle:'Good food.<br><em>Less thinking.</em>', heroCopy:'Meet Daily: your friendly little helper for figuring out what’s for dinner. Find fresh ideas, plan your week, and make mealtimes feel easy again.', heroCta:'See this week’s menu <span aria-hidden="true">→</span>', howLink:'How it works <span aria-hidden="true">↗</span>', heroNote:'Made for real life, one meal at a time', weekSorted:'Your week, sorted', dinners:'5 dinners planned ✓', todayWin:'Today’s little win', ready:'Ready in 25 minutes',
+        weekEyebrow:'<span class="dot"></span> A taste of the week', weekTitle:'What’s cooking?', weekIntro:'Fresh ideas for the days ahead.', firebaseNote:'Add your Firebase web app settings to <strong>firebase-config.js</strong>, then enable Google and Email/Password sign-in in Firebase Console to activate accounts, meal plans, and saved recipes.', searchPlaceholder:'Search recipes, like pasta…', searchLabel:'Search recipes', searchButton:'Search',
+        yourSpace:'<span class="dot"></span> Your Daily space', mealPlan:'Your meal plan', savedToAccount:'Saved to your account', savedRecipes:'Saved recipes',
+        featureEyebrow:'<span class="dot"></span> A little help, right when you need it', feature1Title:'Find your next favorite', feature1:'Discover simple, tasty recipes that make the everyday feel a little more special.', feature2Title:'Make a plan that fits', feature2:'Pick meals for your week and keep all your dinner ideas in one happy place.', feature3Title:'Enjoy the little things', feature3:'Spend less time wondering what to cook and more time enjoying what’s on your plate.',
+        closingEyebrow:'<span class="dot"></span> Your week starts here', closingTitle:'A little more joy at the dinner table.', closingCopy:'Good meals don’t have to be complicated. Let’s make them Daily.', closingCta:'Get a little inspiration <span aria-hidden="true">→</span>', footerNote:'A school project made with a love for good food.',
+        login:'Log in', logout:'Log out', authWelcome:'Welcome to Daily', signupTitle:'Create your account', authClose:'Close', namePlaceholder:'Your name', emailPlaceholder:'Email address', passwordPlaceholder:'Password (at least 6 characters)', forgot:'Forgot password?', emailLogin:'Log in with email', emailSignup:'Create account with email', or:'or', google:'Continue with Google', newToDaily:'New to Daily? <button type="button">Create an account</button>', haveAccount:'Already have an account? <button type="button">Log in</button>',
+        recipeSource:'See full recipe ↗', dialogClose:'Close', chooseDay:'Choose a day', addMeal:'Add to my week', saveRecipe:'♡ Save recipe', removePlan:'Remove {title} from {day}', removeSaved:'Remove {title} from saved recipes', nothingPlanned:'Nothing planned', saveToShow:'Save a recipe and it will show up here.', ingredients:'Ingredients',
+        darkMode:'Dark mode', lightMode:'Light mode', languageName:'DE · Deutsch', languageAria:'Switch language to German', themeAria:'Toggle dark mode',
+        statusLoading:'Loading a few recipe ideas…', statusSearching:'Looking for “{query}”…', statusFound:'Showing {shown} of {count} recipes found.', statusNone:'No recipes found. Try another search.', statusSearchError:'Could not load recipes right now. Please try again in a moment.', statusRecipeLoading:'Loading {title}…', statusRecipeReady:'Select a recipe to see its ingredients.', statusRecipeError:'Could not load that recipe. Please try again.',
+        firebaseMissing:'Add your Firebase web app settings in firebase-config.js first.', needLogin:'Log in or create an account to save your meals.', addedMeal:'{title} added to {day}.', savedMeal:'{title} saved to your recipes.', saveError:'Could not save: {error}', dashboardConfig:'Add Firebase config to enable accounts and saving.', firestorePlanError:'Could not load your plan: {error}', firestoreSavedError:'Could not load saved recipes: {error}',
+        wait:'Please wait…', googleOpening:'Opening Google sign-in…', resetSent:'Password reset email sent. Check your inbox.', enterEmail:'Enter your email address first.',
+        authEmailUsed:'That email already has an account. Try logging in.', authInvalid:'Email or password is incorrect.', authWeak:'Choose a stronger password with at least 6 characters.', authBadEmail:'Enter a valid email address.', authPopup:'Google sign-in was closed before it finished.', authDomain:'Add this site’s domain to Firebase Authentication’s authorized domains.', authGeneric:'Something went wrong. Please try again.',
+        monday:'Monday', tuesday:'Tuesday', wednesday:'Wednesday', thursday:'Thursday', friday:'Friday', saturday:'Saturday', sunday:'Sunday'
+      },
+      de: {
+        navHow:'So funktioniert’s', navWeek:'Diese Woche', navAbout:'Über Daily', navCta:'Rezepte entdecken <span aria-hidden="true">↗</span>', navLabel:'Hauptnavigation', heroImage:'Eine bunte Schüssel mit frischen Zutaten', heroImageAlt:'Frischer Salat mit Gemüse und Getreide', openRecipe:'Rezept ansehen', viewRecipe:'Rezept „{title}“ ansehen',
+        heroEyebrow:'<span class="dot"></span> Entspannt planen, lecker essen', heroTitle:'Gutes Essen.<br><em>Weniger Grübeln.</em>', heroCopy:'Das ist Daily: deine kleine Hilfe bei der Frage, was es heute gibt. Entdecke neue Ideen, plane deine Woche und mach die Mahlzeiten ganz entspannt.', heroCta:'Menü für diese Woche <span aria-hidden="true">→</span>', howLink:'So funktioniert’s <span aria-hidden="true">↗</span>', heroNote:'Für den Alltag – eine Mahlzeit nach der anderen', weekSorted:'Deine Woche ist geplant', dinners:'5 Abendessen geplant ✓', todayWin:'Das klappt heute schon', ready:'In 25 Minuten fertig',
+        weekEyebrow:'<span class="dot"></span> Ein Vorgeschmack auf die Woche', weekTitle:'Was gibt’s heute?', weekIntro:'Frische Ideen für die nächsten Tage.', firebaseNote:'Füge deine Firebase-Web-App-Einstellungen in <strong>firebase-config.js</strong> ein und aktiviere anschließend Google- sowie E-Mail/Passwort-Anmeldung in der Firebase Console, um Konten, Essenspläne und gespeicherte Rezepte zu nutzen.', searchPlaceholder:'Rezepte suchen, zum Beispiel Pasta…', searchLabel:'Rezepte suchen', searchButton:'Suchen',
+        yourSpace:'<span class="dot"></span> Dein Daily-Bereich', mealPlan:'Dein Essensplan', savedToAccount:'In deinem Konto gespeichert', savedRecipes:'Gespeicherte Rezepte',
+        featureEyebrow:'<span class="dot"></span> Kleine Hilfe, genau wenn du sie brauchst', feature1Title:'Finde dein neues Lieblingsgericht', feature1:'Entdecke einfache, leckere Rezepte, die den Alltag besonders machen.', feature2Title:'Plane passend zu deiner Woche', feature2:'Wähle deine Mahlzeiten und sammle alle Ideen an einem Ort.', feature3Title:'Genieße die kleinen Dinge', feature3:'Weniger überlegen, was du kochst – mehr Zeit zum Genießen.',
+        closingEyebrow:'<span class="dot"></span> Deine Woche beginnt hier', closingTitle:'Mehr Freude am gemeinsamen Essen.', closingCopy:'Gutes Essen muss nicht kompliziert sein. Mach es dir Daily.', closingCta:'Lass dich inspirieren <span aria-hidden="true">→</span>', footerNote:'Ein Schulprojekt mit viel Liebe zu gutem Essen.',
+        login:'Anmelden', logout:'Abmelden', authWelcome:'Willkommen bei Daily', signupTitle:'Konto erstellen', authClose:'Schließen', namePlaceholder:'Dein Name', emailPlaceholder:'E-Mail-Adresse', passwordPlaceholder:'Passwort (mindestens 6 Zeichen)', forgot:'Passwort vergessen?', emailLogin:'Mit E-Mail anmelden', emailSignup:'Konto mit E-Mail erstellen', or:'oder', google:'Mit Google fortfahren', newToDaily:'Neu bei Daily? <button type="button">Konto erstellen</button>', haveAccount:'Du hast schon ein Konto? <button type="button">Anmelden</button>',
+        recipeSource:'Zum vollständigen Rezept ↗', dialogClose:'Schließen', chooseDay:'Tag auswählen', addMeal:'Zur Wochenplanung', saveRecipe:'♡ Rezept speichern', removePlan:'{title} am {day} entfernen', removeSaved:'{title} aus gespeicherten Rezepten entfernen', nothingPlanned:'Noch nichts geplant', saveToShow:'Speichere ein Rezept – dann erscheint es hier.', ingredients:'Zutaten',
+        darkMode:'Dunkelmodus', lightMode:'Hellmodus', languageName:'EN · English', languageAria:'Sprache auf Englisch umstellen', themeAria:'Dunkelmodus umschalten',
+        statusLoading:'Ein paar Rezeptideen werden geladen…', statusSearching:'Suche nach „{query}“…', statusFound:'{shown} von {count} Rezepten werden angezeigt.', statusNone:'Keine Rezepte gefunden. Versuch es mit einer anderen Suche.', statusSearchError:'Rezepte können gerade nicht geladen werden. Bitte versuche es gleich noch einmal.', statusRecipeLoading:'{title} wird geladen…', statusRecipeReady:'Wähle ein Rezept, um die Zutaten zu sehen.', statusRecipeError:'Das Rezept konnte nicht geladen werden. Bitte versuche es erneut.',
+        firebaseMissing:'Füge zuerst deine Firebase-Web-App-Einstellungen in firebase-config.js ein.', needLogin:'Melde dich an oder erstelle ein Konto, um Mahlzeiten zu speichern.', addedMeal:'{title} wurde für {day} eingeplant.', savedMeal:'{title} wurde gespeichert.', saveError:'Speichern fehlgeschlagen: {error}', dashboardConfig:'Firebase einrichten, um Konten und Speichern zu aktivieren.', firestorePlanError:'Essensplan konnte nicht geladen werden: {error}', firestoreSavedError:'Gespeicherte Rezepte konnten nicht geladen werden: {error}',
+        wait:'Einen Moment…', googleOpening:'Google-Anmeldung wird geöffnet…', resetSent:'E-Mail zum Zurücksetzen des Passworts wurde gesendet. Bitte prüfe deinen Posteingang.', enterEmail:'Gib zuerst deine E-Mail-Adresse ein.',
+        authEmailUsed:'Für diese E-Mail gibt es schon ein Konto. Melde dich an.', authInvalid:'E-Mail-Adresse oder Passwort ist falsch.', authWeak:'Wähle ein stärkeres Passwort mit mindestens 6 Zeichen.', authBadEmail:'Gib eine gültige E-Mail-Adresse ein.', authPopup:'Die Google-Anmeldung wurde vorzeitig geschlossen.', authDomain:'Füge die Domain dieser Website zu den autorisierten Domains in Firebase Authentication hinzu.', authGeneric:'Etwas ist schiefgelaufen. Bitte versuche es erneut.',
+        monday:'Montag', tuesday:'Dienstag', wednesday:'Mittwoch', thursday:'Donnerstag', friday:'Freitag', saturday:'Samstag', sunday:'Sonntag'
+      }
+    };
+    let language = localStorage.getItem('daily-language') === 'de' ? 'de' : 'en';
+    let darkMode = localStorage.getItem('daily-theme') === 'dark';
+    const t = (key, values = {}) => Object.entries(values).reduce((text, [name, value]) => text.replaceAll(`{${name}}`, String(value)), translations[language][key] || translations.en[key] || key);
+    const localizedDays = { Monday:'monday', Tuesday:'tuesday', Wednesday:'wednesday', Thursday:'thursday', Friday:'friday', Saturday:'saturday', Sunday:'sunday' };
+    function applyPreferences() {
+      const copy = translations[language];
+      const content = {
+        '.navlinks a:nth-child(1)':copy.navHow, '.navlinks a:nth-child(2)':copy.navWeek, '.navlinks a:nth-child(3)':copy.navAbout, '.nav-cta':copy.navCta,
+        '.hero .eyebrow':copy.heroEyebrow, '.hero h1':copy.heroTitle, '.hero-copy':copy.heroCopy, '.hero-actions .button':copy.heroCta, '.hero-actions .text-link':copy.howLink, '.hero-note>span':copy.heroNote,
+        '.float-card.top small':copy.weekSorted, '.float-card.top strong':copy.dinners, '.float-card.bottom small':copy.todayWin, '.float-card.bottom strong':copy.ready,
+        '.week .section-head .eyebrow':copy.weekEyebrow, '.week .section-head h2':copy.weekTitle, '.week .section-head p':copy.weekIntro, '#firebase-note':copy.firebaseNote, '#recipe-search button':copy.searchButton,
+        '#dashboard .dash-head .eyebrow':copy.yourSpace, '#dashboard .dash-head h2':copy.mealPlan, '#dashboard-message':copy.savedToAccount, '#dashboard .saved-heading':copy.savedRecipes,
+        '#how-it-works>.wrap>.eyebrow':copy.featureEyebrow, '.feature:nth-child(1) h3':copy.feature1Title, '.feature:nth-child(1) p':copy.feature1, '.feature:nth-child(2) h3':copy.feature2Title, '.feature:nth-child(2) p':copy.feature2, '.feature:nth-child(3) h3':copy.feature3Title, '.feature:nth-child(3) p':copy.feature3,
+        '.closing .eyebrow':copy.closingEyebrow, '.closing h2':copy.closingTitle, '.closing p':copy.closingCopy, '.closing .button':copy.closingCta, '.footer-copy':copy.footerNote,
+        '#auth-open':copy.login, '#logout-button':copy.logout, '#auth-title':authMode === 'signup' ? copy.signupTitle : copy.authWelcome, '#auth-close':copy.authClose,
+        '#forgot-password':copy.forgot, '#email-submit':authMode === 'signup' ? copy.emailSignup : copy.emailLogin, '.auth-divider':copy.or, '#google-signin':copy.google, '#auth-switch':authMode === 'signup' ? copy.haveAccount : copy.newToDaily,
+        '#dialog-source':copy.recipeSource, '#dialog-close':copy.dialogClose, '#add-to-plan':copy.addMeal, '#save-recipe':copy.saveRecipe
+      };
+      Object.entries(content).forEach(([selector, value]) => { const element = document.querySelector(selector); if (element) element.innerHTML = value; });
+      document.querySelector('#recipe-query').placeholder = copy.searchPlaceholder;
+      document.querySelector('#recipe-query').setAttribute('aria-label', copy.searchLabel);
+      document.querySelector('#plan-day').setAttribute('aria-label', copy.chooseDay);
+      document.querySelector('#auth-name').placeholder = copy.namePlaceholder;
+      document.querySelector('#auth-email').placeholder = copy.emailPlaceholder;
+      document.querySelector('#auth-password').placeholder = copy.passwordPlaceholder;
+      document.querySelector('#auth-email').setAttribute('aria-label', copy.emailPlaceholder);
+      document.querySelector('#auth-password').setAttribute('aria-label', copy.passwordPlaceholder);
+      document.querySelector('#auth-close').setAttribute('aria-label', copy.authClose);
+      document.querySelector('nav[aria-label]').setAttribute('aria-label', copy.navLabel);
+      document.querySelector('.visual').setAttribute('aria-label', copy.heroImage);
+      document.querySelector('.food img').alt = copy.heroImageAlt;
+      document.querySelector('#plan-day').querySelectorAll('option').forEach((option) => { option.textContent = t(localizedDays[option.value]); });
+      document.querySelector('#language-toggle').textContent = copy.languageName;
+      document.querySelector('#language-toggle').setAttribute('aria-label', copy.languageAria);
+      document.querySelector('#theme-toggle').setAttribute('aria-label', copy.themeAria);
+      document.querySelector('#theme-toggle span:last-child').textContent = darkMode ? copy.lightMode : copy.darkMode;
+      document.querySelector('#theme-toggle span:first-child').textContent = darkMode ? '☀' : '☾';
+      document.querySelector('#theme-toggle').setAttribute('aria-pressed', String(darkMode));
+      document.querySelector('.footer-controls').setAttribute('aria-label', language === 'de' ? 'Anzeigeoptionen' : 'Display preferences');
+      document.body.classList.toggle('dark-mode', darkMode);
+      document.querySelector('meta[name="theme-color"]').content = darkMode ? '#171b18' : '#f7f6f1';
+      document.documentElement.lang = language;
+      document.title = language === 'de' ? 'Daily — jeden Tag ein bisschen leichter' : 'Daily — a little easier, every day';
+      renderDashboard();
+    }
 
     const apiBase = 'https://forkify-api.jonas.io/api/v2/recipes';
     const grid = document.querySelector('#meal-grid');
@@ -215,14 +308,14 @@
 
     function authError(error) {
       const messages = {
-        'auth/email-already-in-use':'That email already has an account. Try logging in.',
-        'auth/invalid-credential':'Email or password is incorrect.',
-        'auth/weak-password':'Choose a stronger password with at least 6 characters.',
-        'auth/invalid-email':'Enter a valid email address.',
-        'auth/popup-closed-by-user':'Google sign-in was closed before it finished.',
-        'auth/unauthorized-domain':'Add this site’s domain to Firebase Authentication’s authorized domains.'
+        'auth/email-already-in-use':'authEmailUsed',
+        'auth/invalid-credential':'authInvalid',
+        'auth/weak-password':'authWeak',
+        'auth/invalid-email':'authBadEmail',
+        'auth/popup-closed-by-user':'authPopup',
+        'auth/unauthorized-domain':'authDomain'
       };
-      return messages[error.code] || error.message || 'Something went wrong. Please try again.';
+      return messages[error.code] ? t(messages[error.code]) : (error.message || t('authGeneric'));
     }
 
     function renderMeals(meals) {
@@ -232,9 +325,9 @@
         card.className = 'meal';
         card.tabIndex = 0;
         card.setAttribute('role', 'button');
-        card.setAttribute('aria-label', `View ${meal.title} recipe`);
+        card.setAttribute('aria-label', t('viewRecipe',{title:meal.title}));
         const imageUrl = String(meal.image_url || '').replace(/^http:/, 'https:');
-        card.innerHTML = `<div class="meal-image"><img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(meal.title)}" loading="lazy"><span class="day">${escapeHtml(meal.publisher || 'RECIPE')}</span></div><div class="meal-info"><h3>${escapeHtml(meal.title)}</h3><div class="meta"><span>Open recipe</span><span>Forkify</span></div></div>`;
+        card.innerHTML = `<div class="meal-image"><img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(meal.title)}" loading="lazy"><span class="day">${escapeHtml(meal.publisher || 'RECIPE')}</span></div><div class="meal-info"><h3>${escapeHtml(meal.title)}</h3><div class="meta"><span>${t('openRecipe')}</span><span>Forkify</span></div></div>`;
         const open = () => showRecipe(meal);
         card.addEventListener('click', open);
         card.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); open(); } });
@@ -243,7 +336,7 @@
     }
 
     async function showRecipe(meal) {
-      status.textContent = `Loading ${meal.title}…`;
+      status.textContent = t('statusRecipeLoading',{title:meal.title});
       try {
         const response = await fetch(`${apiBase}/${encodeURIComponent(meal.id)}`);
         if (!response.ok) throw new Error('Recipe details unavailable');
@@ -254,12 +347,12 @@
         document.querySelector('#dialog-image').alt = currentRecipe.title;
         document.querySelector('#dialog-title').textContent = currentRecipe.title;
         const ingredients = (currentRecipe.ingredients || []).map((item) => `${item.quantity || ''} ${item.unit || ''} ${item.description || ''}`.trim());
-        document.querySelector('#dialog-description').textContent = ingredients.length ? `Ingredients: ${ingredients.join(' · ')}` : `Recipe by ${currentRecipe.publisher}. Open the original recipe for ingredients and instructions.`;
+        document.querySelector('#dialog-description').textContent = ingredients.length ? `${t('ingredients')}: ${ingredients.join(' · ')}` : `Recipe by ${currentRecipe.publisher}.`;
         document.querySelector('#dialog-source').href = currentRecipe.source_url || '#';
-        status.textContent = 'Select a recipe to see its ingredients.';
+        status.textContent = t('statusRecipeReady');
         recipeDialog.showModal();
       } catch {
-        status.textContent = 'Could not load that recipe. Please try again.';
+        status.textContent = t('statusRecipeError');
       }
     }
 
@@ -270,17 +363,17 @@
         const box = document.createElement('div');
         box.className = 'plan-day';
         const entries = plannedMeals.filter((meal) => meal.day === day);
-        box.innerHTML = `<strong>${day}</strong>${entries.length ? entries.map((meal) => `<div class="plan-item"><span>${escapeHtml(meal.title)}</span><button type="button" data-delete-plan="${escapeHtml(meal.id)}" aria-label="Remove ${escapeHtml(meal.title)} from ${day}">×</button></div>`).join('') : '<span class="plan-empty">Nothing planned</span>'}`;
+        box.innerHTML = `<strong>${t(localizedDays[day])}</strong>${entries.length ? entries.map((meal) => `<div class="plan-item"><span>${escapeHtml(meal.title)}</span><button type="button" data-delete-plan="${escapeHtml(meal.id)}" aria-label="${escapeHtml(t('removePlan',{title:meal.title,day:t(localizedDays[day])}))}">×</button></div>`).join('') : `<span class="plan-empty">${t('nothingPlanned')}</span>`}`;
         planGrid.append(box);
       });
       const savedList = document.querySelector('#saved-list');
       savedList.replaceChildren();
-      if (!savedRecipes.length) savedList.innerHTML = '<span class="plan-empty">Save a recipe and it will show up here.</span>';
+      if (!savedRecipes.length) savedList.innerHTML = `<span class="plan-empty">${t('saveToShow')}</span>`;
       savedRecipes.forEach((recipe) => {
         const item = document.createElement('div');
         item.className = 'saved-item';
         const imageUrl = String(recipe.image_url || '').replace(/^http:/, 'https:');
-        item.innerHTML = `<img src="${escapeHtml(imageUrl)}" alt=""><span>${escapeHtml(recipe.title)}</span><button type="button" data-delete-saved="${escapeHtml(recipe.id)}" aria-label="Remove ${escapeHtml(recipe.title)} from saved recipes">×</button>`;
+        item.innerHTML = `<img src="${escapeHtml(imageUrl)}" alt=""><span>${escapeHtml(recipe.title)}</span><button type="button" data-delete-saved="${escapeHtml(recipe.id)}" aria-label="${escapeHtml(t('removeSaved',{title:recipe.title}))}">×</button>`;
         savedList.append(item);
       });
       document.querySelector('#dashboard').classList.toggle('visible', Boolean(currentUser));
@@ -297,16 +390,16 @@
       stopPlanListener = onSnapshot(planRef, (snapshot) => {
         plannedMeals = snapshot.docs.map((entry) => ({ id: entry.id, ...entry.data() }));
         renderDashboard();
-      }, (error) => { document.querySelector('#dashboard-message').textContent = `Could not load your plan: ${error.message}`; });
+      }, (error) => { document.querySelector('#dashboard-message').textContent = t('firestorePlanError',{error:error.message}); });
       stopSavedListener = onSnapshot(savedRef, (snapshot) => {
         savedRecipes = snapshot.docs.map((entry) => ({ id: entry.id, ...entry.data() }));
         renderDashboard();
-      }, (error) => { document.querySelector('#dashboard-message').textContent = `Could not load saved recipes: ${error.message}`; });
+      }, (error) => { document.querySelector('#dashboard-message').textContent = t('firestoreSavedError',{error:error.message}); });
     }
 
     async function requireLogin() {
-      if (!currentUser) { openAuth('Log in or create an account to save your meals.'); return false; }
-      if (!db) { openAuth('Firebase is not configured yet. Add your project settings in firebase-config.js.'); return false; }
+      if (!currentUser) { openAuth(t('needLogin')); return false; }
+      if (!db) { openAuth(t('firebaseMissing')); return false; }
       return true;
     }
 
@@ -314,19 +407,32 @@
       event.preventDefault();
       const query = document.querySelector('#recipe-query').value.trim();
       if (!query) return;
-      status.textContent = `Looking for “${query}”…`;
+      status.textContent = t('statusSearching',{query});
       try {
         const response = await fetch(`${apiBase}?search=${encodeURIComponent(query)}`);
         if (!response.ok) throw new Error('Recipe service unavailable');
         const data = await response.json();
         const meals = data.data?.recipes || [];
         renderMeals(meals);
-        status.textContent = meals.length ? `Showing ${Math.min(meals.length, 12)} of ${meals.length} recipe${meals.length === 1 ? '' : 's'} found.` : 'No recipes found. Try another search.';
+        status.textContent = meals.length ? t('statusFound',{shown:Math.min(meals.length,12),count:meals.length}) : t('statusNone');
       } catch {
-        status.textContent = 'Could not load recipes right now. Please try again in a moment.';
+        status.textContent = t('statusSearchError');
       }
     });
     document.querySelector('#recipe-query').value = 'pizza';
+    document.querySelector('#language-toggle').addEventListener('click', () => {
+      language = language === 'en' ? 'de' : 'en';
+      localStorage.setItem('daily-language', language);
+      applyPreferences();
+      status.textContent = t('statusRecipeReady');
+      authMessage.textContent = '';
+    });
+    document.querySelector('#theme-toggle').addEventListener('click', () => {
+      darkMode = !darkMode;
+      localStorage.setItem('daily-theme', darkMode ? 'dark' : 'light');
+      applyPreferences();
+    });
+    applyPreferences();
     document.querySelector('#recipe-search').requestSubmit();
     document.querySelector('#dialog-close').addEventListener('click', () => recipeDialog.close());
     document.querySelector('#auth-open').addEventListener('click', () => openAuth());
@@ -334,20 +440,21 @@
     document.querySelector('#logout-button').addEventListener('click', async () => { if (auth) await signOut(auth); });
     document.querySelector('#auth-switch').addEventListener('click', () => {
       authMode = authMode === 'login' ? 'signup' : 'login';
-      document.querySelector('#auth-title').textContent = authMode === 'signup' ? 'Create your account' : 'Welcome to Daily';
+      document.querySelector('#auth-title').textContent = t(authMode === 'signup' ? 'signupTitle' : 'authWelcome');
       document.querySelector('#auth-name').hidden = authMode !== 'signup';
       document.querySelector('#auth-password').autocomplete = authMode === 'signup' ? 'new-password' : 'current-password';
       document.querySelector('#forgot-password').hidden = authMode === 'signup';
-      document.querySelector('#email-submit').textContent = authMode === 'signup' ? 'Create account with email' : 'Log in with email';
-      document.querySelector('#auth-switch').innerHTML = authMode === 'signup' ? 'Already have an account? <button type="button">Log in</button>' : 'New to Daily? <button type="button">Create an account</button>';
+      document.querySelector('#email-submit').textContent = t(authMode === 'signup' ? 'emailSignup' : 'emailLogin');
+      document.querySelector('#auth-switch').innerHTML = t(authMode === 'signup' ? 'haveAccount' : 'newToDaily');
+      document.querySelector('#forgot-password').hidden = authMode === 'signup';
       authMessage.textContent = '';
     });
     document.querySelector('#auth-form').addEventListener('submit', async (event) => {
       event.preventDefault();
-      if (!appIsConfigured) { authMessage.textContent = 'Add your Firebase web app settings in firebase-config.js first.'; return; }
+      if (!appIsConfigured) { authMessage.textContent = t('firebaseMissing'); return; }
       const email = document.querySelector('#auth-email').value.trim();
       const password = document.querySelector('#auth-password').value;
-      authMessage.textContent = 'Please wait…';
+      authMessage.textContent = t('wait');
       try {
         if (authMode === 'signup') {
           const credential = await createUserWithEmailAndPassword(auth, email, password);
@@ -361,16 +468,16 @@
       } catch (error) { authMessage.textContent = authError(error); }
     });
     document.querySelector('#google-signin').addEventListener('click', async () => {
-      if (!appIsConfigured) { authMessage.textContent = 'Add your Firebase web app settings in firebase-config.js first.'; return; }
-      authMessage.textContent = 'Opening Google sign-in…';
+      if (!appIsConfigured) { authMessage.textContent = t('firebaseMissing'); return; }
+      authMessage.textContent = t('googleOpening');
       try { await signInWithPopup(auth, new GoogleAuthProvider()); authDialog.close(); }
       catch (error) { authMessage.textContent = authError(error); }
     });
     document.querySelector('#forgot-password').addEventListener('click', async () => {
-      if (!appIsConfigured) { authMessage.textContent = 'Add your Firebase web app settings in firebase-config.js first.'; return; }
+      if (!appIsConfigured) { authMessage.textContent = t('firebaseMissing'); return; }
       const email = document.querySelector('#auth-email').value.trim();
-      if (!email) { authMessage.textContent = 'Enter your email address first.'; return; }
-      try { await sendPasswordResetEmail(auth, email); authMessage.textContent = 'Password reset email sent. Check your inbox.'; }
+      if (!email) { authMessage.textContent = t('enterEmail'); return; }
+      try { await sendPasswordResetEmail(auth, email); authMessage.textContent = t('resetSent'); }
       catch (error) { authMessage.textContent = authError(error); }
     });
     document.querySelector('#add-to-plan').addEventListener('click', async () => {
@@ -378,17 +485,17 @@
       const day = document.querySelector('#plan-day').value;
       try {
         await addDoc(collection(db, 'users', currentUser.uid, 'plannedMeals'), { day, recipeId: currentRecipe.id, title: currentRecipe.title, image_url: currentRecipe.image_url || '', publisher: currentRecipe.publisher || '', createdAt: serverTimestamp() });
-        status.textContent = `${currentRecipe.title} added to ${day}.`;
+        status.textContent = t('addedMeal',{title:currentRecipe.title,day:t(localizedDays[day])});
         recipeDialog.close();
-      } catch (error) { status.textContent = `Could not save meal: ${error.message}`; }
+      } catch (error) { status.textContent = t('saveError',{error:error.message}); }
     });
     document.querySelector('#save-recipe').addEventListener('click', async () => {
       if (!(await requireLogin()) || !currentRecipe) return;
       try {
         await setDoc(doc(db, 'users', currentUser.uid, 'savedRecipes', currentRecipe.id), { id: currentRecipe.id, title: currentRecipe.title, image_url: currentRecipe.image_url || '', publisher: currentRecipe.publisher || '', source_url: currentRecipe.source_url || '' });
-        status.textContent = `${currentRecipe.title} saved to your recipes.`;
+        status.textContent = t('savedMeal',{title:currentRecipe.title});
         recipeDialog.close();
-      } catch (error) { status.textContent = `Could not save recipe: ${error.message}`; }
+      } catch (error) { status.textContent = t('saveError',{error:error.message}); }
     });
     document.querySelector('#plan-grid').addEventListener('click', async (event) => {
       const button = event.target.closest('[data-delete-plan]');
@@ -399,6 +506,7 @@
       if (button && db && currentUser) await deleteDoc(doc(db, 'users', currentUser.uid, 'savedRecipes', button.dataset.deleteSaved));
     });
     document.querySelector('#account-label').hidden = true;
+    applyPreferences();
     if (auth) onAuthStateChanged(auth, (user) => {
       currentUser = user;
       const loginButton = document.querySelector('#auth-open');
@@ -411,7 +519,7 @@
       watchUserData(user);
     });
     else {
-      document.querySelector('#dashboard-message').textContent = 'Add Firebase config to enable accounts and saving.';
+      document.querySelector('#dashboard-message').textContent = t('dashboardConfig');
       document.querySelector('#firebase-note').style.display = 'block';
     }
   </script>
