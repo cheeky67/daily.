@@ -1,156 +1,419 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Harvest — Plan your week, eat well</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css" />
-<link rel="manifest" href="manifest.json" />
-<meta name="theme-color" content="#33502F" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f6f1">
+  <meta name="description" content="Daily makes planning simple: find a little inspiration, plan your week, and make a shopping list." />
+  <title>Daily — a little easier, every day</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --ink:#252923; --muted:#72776e; --paper:#f7f6f1; --white:#fffefa; --green:#43634d; --lime:#d8e6a8; --line:#e7e6dd; --orange:#f1bd8c; }
+    * { box-sizing:border-box }
+    html { scroll-behavior:smooth }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:'DM Sans',sans-serif; }
+    a { color:inherit; text-decoration:none }
+    button { font:inherit; cursor:pointer }
+    .wrap { width:min(1160px, calc(100% - 48px)); margin:auto }
+    header { height:78px; display:flex; align-items:center; border-bottom:1px solid rgba(37,41,35,.08) }
+    nav { display:flex; align-items:center; justify-content:space-between; width:100% }
+    .logo { font-size:25px; font-weight:700; letter-spacing:-1.5px }
+    .logo span { color:var(--green) }
+    .navlinks { display:flex; gap:34px; color:#5d625a; font-size:14px }
+    .navlinks a:hover { color:var(--green) }
+    .nav-cta,.button { border:0; background:var(--green); color:white; padding:12px 19px; border-radius:999px; font-weight:600; font-size:14px; transition:.2s; display:inline-flex; align-items:center; justify-content:center; gap:8px }
+    .nav-cta:hover,.button:hover { background:#314a39; transform:translateY(-1px) }
+    .hero { display:grid; grid-template-columns:1.04fr .96fr; align-items:center; gap:44px; padding:72px 0 82px }
+    .eyebrow { display:flex; align-items:center; gap:9px; color:var(--green); font-weight:700; text-transform:uppercase; letter-spacing:1.5px; font-size:11px }
+    .dot { width:8px; height:8px; border-radius:50%; background:#91a96d }
+    h1,h2,h3,p { margin-top:0 }
+    h1 { font-family:'Playfair Display',serif; font-size:clamp(46px,6.3vw,78px); line-height:1.04; letter-spacing:-2.4px; font-weight:600; margin:20px 0 21px; max-width:580px }
+    h1 em { color:var(--green); font-weight:600 }
+    .hero-copy { color:var(--muted); font-size:17px; line-height:1.75; max-width:460px; margin-bottom:29px }
+    .hero-actions { display:flex; align-items:center; gap:20px }
+    .text-link { font-size:14px; font-weight:600; color:var(--green) }
+    .text-link span { margin-left:5px }
+    .hero-note { display:flex; align-items:center; gap:10px; color:var(--muted); font-size:12px; margin-top:28px }
+    .avatars { display:flex; padding-left:4px }
+    .avatar { display:grid; place-items:center; width:25px; height:25px; margin-left:-4px; border:2px solid var(--paper); border-radius:50%; background:#ebbd91; font-size:11px }
+    .avatar:nth-child(2) { background:#b9c9a1 }.avatar:nth-child(3) { background:#dfab9d }
+    .visual { position:relative; min-height:450px; display:grid; place-items:center }
+    .blob { position:absolute; width:min(440px,95%); aspect-ratio:1; border-radius:50%; background:#e6ead9; right:1%; top:5% }
+    .food { z-index:1; width:min(440px,95%); aspect-ratio:1; border-radius:50%; overflow:hidden; box-shadow:0 26px 70px #33433124; border:9px solid #f7f6f1; background:#d8ae73; }
+    .food img { width:100%; height:100%; object-fit:cover }
+    .float-card { position:absolute; z-index:2; background:var(--white); border-radius:16px; padding:14px 17px; box-shadow:0 12px 35px #26301d18; }
+    .float-card small { display:block; color:var(--muted); font-size:11px; margin-bottom:5px }
+    .float-card strong { font-size:14px }
+    .float-card.top { top:48px; left:0 }
+    .float-card.bottom { bottom:48px; right:-4px; display:flex; gap:11px; align-items:center }
+    .cal-icon { display:grid; place-items:center; background:#eff2e6; width:36px; height:36px; border-radius:11px; font-size:18px }
+    .section-head { display:flex; justify-content:space-between; align-items:end; margin-bottom:23px }
+    .section-head h2 { font:600 36px/1.15 'Playfair Display',serif; letter-spacing:-.8px; margin:8px 0 0 }
+    .section-head p { margin:0 0 3px; color:var(--muted); font-size:13px }
+    .week { padding:0 0 87px }
+    .recipe-search { display:flex; gap:10px; margin:0 0 20px; max-width:560px }
+    .recipe-search input { flex:1; min-width:0; border:1px solid var(--line); background:var(--white); border-radius:999px; padding:12px 17px; color:var(--ink); font:inherit; outline:none }
+    .recipe-search input:focus { border-color:var(--green); box-shadow:0 0 0 3px #43634d18 }
+    .recipe-search button { border:0; border-radius:999px; background:var(--green); color:white; padding:0 20px; font-weight:600 }
+    .recipe-status { min-height:22px; color:var(--muted); font-size:13px; margin:-8px 0 15px }
+    .meal { cursor:pointer }
+    .recipe-dialog { border:0; border-radius:20px; width:min(620px,calc(100% - 30px)); padding:0; background:var(--white); color:var(--ink); box-shadow:0 20px 80px #0003 }
+    .recipe-dialog::backdrop { background:#20261fcc; backdrop-filter:blur(3px) }
+    .recipe-dialog img { display:block; width:100%; height:260px; object-fit:cover }
+    .dialog-content { padding:23px }
+    .dialog-content h3 { font:600 28px 'Playfair Display',serif; margin:0 0 8px }
+    .dialog-content p { color:var(--muted); line-height:1.7; font-size:14px }
+    .dialog-actions { display:flex; justify-content:space-between; align-items:center; gap:12px }
+    .dialog-actions a { color:var(--green); font-weight:600; font-size:13px }
+    .dialog-actions button { border:1px solid var(--line); background:transparent; border-radius:999px; padding:9px 15px; color:var(--ink) }
+    .account-actions { display:flex; gap:9px; align-items:center }
+    .account-label { color:var(--muted); font-size:13px; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+    .firebase-note { display:none; background:#fff5e8; color:#674a2a; border:1px solid #f0dfc8; border-radius:12px; padding:12px 15px; margin:0 auto 18px; font-size:13px }
+    .outline-button { border:1px solid var(--line); background:var(--white); color:var(--green); padding:11px 16px; border-radius:999px; font-weight:600; font-size:13px }
+    .dashboard { display:none; padding:34px 0 70px; border-top:1px solid var(--line) }
+    .dashboard.visible { display:block }
+    .dash-head { display:flex; justify-content:space-between; align-items:end; margin-bottom:22px; gap:12px }
+    .dash-head h2 { font:600 34px 'Playfair Display',serif; margin:6px 0 0 }
+    .dash-head p { margin:0; color:var(--muted); font-size:13px }
+    .plan-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:10px }
+    .plan-day { background:var(--white); border:1px solid var(--line); border-radius:15px; padding:13px 12px; min-height:118px }
+    .plan-day strong { display:block; text-transform:uppercase; letter-spacing:.8px; color:var(--green); font-size:10px; margin-bottom:10px }
+    .plan-item { display:flex; gap:6px; align-items:start; font-size:12px; line-height:1.4; margin:7px 0 }
+    .plan-item button,.saved-item button { border:0; background:transparent; color:#8a8d84; padding:0; margin-left:auto; font-size:15px; line-height:1 }
+    .plan-empty { color:#a2a59b; font-size:11px }
+    .saved-heading { margin:29px 0 12px; font-size:15px }
+    .saved-list { display:flex; flex-wrap:wrap; gap:9px }
+    .saved-item { display:flex; align-items:center; gap:9px; background:var(--white); border:1px solid var(--line); border-radius:999px; padding:7px 11px 7px 7px; font-size:12px }
+    .saved-item img { width:30px; height:30px; object-fit:cover; border-radius:50% }
+    .recipe-controls { display:flex; flex-wrap:wrap; gap:9px; margin-top:17px; padding-top:15px; border-top:1px solid var(--line) }
+    .recipe-controls select { border:1px solid var(--line); border-radius:999px; background:white; padding:9px 12px; color:var(--ink) }
+    .recipe-controls .button { padding:10px 15px; font-size:12px }
+    .auth-dialog { border:0; border-radius:20px; width:min(430px,calc(100% - 30px)); padding:27px; color:var(--ink); background:var(--white); box-shadow:0 20px 80px #0003 }
+    .auth-dialog::backdrop { background:#20261fcc; backdrop-filter:blur(3px) }
+    .auth-top { display:flex; justify-content:space-between; align-items:start; margin-bottom:19px }
+    .auth-top h2 { font:600 30px 'Playfair Display',serif; margin:0 }
+    .close-icon { border:0; background:transparent; font-size:24px; color:var(--muted) }
+    .auth-form { display:grid; gap:12px }
+    .auth-form input { width:100%; border:1px solid var(--line); border-radius:10px; padding:12px 13px; font:inherit; background:white }
+    .auth-form input:focus { outline:2px solid #43634d55; border-color:var(--green) }
+    .auth-message { min-height:19px; margin:0; color:#9a4b31; font-size:12px; line-height:1.5 }
+    .auth-divider { display:flex; align-items:center; gap:10px; color:var(--muted); font-size:11px; margin:15px 0 }
+    .auth-divider::before,.auth-divider::after { content:''; height:1px; background:var(--line); flex:1 }
+    .google-button { width:100%; border:1px solid var(--line); background:white; border-radius:999px; padding:11px; font-weight:600; color:var(--ink) }
+    .auth-switch { color:var(--muted); font-size:12px; text-align:center; margin:17px 0 0 }
+    .auth-switch button,.forgot-button { border:0; padding:0; color:var(--green); background:transparent; font-weight:700 }
+    .forgot-button { justify-self:end; font-size:12px }
+    .meal-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:15px }
+    .meal { background:var(--white); border:1px solid #ecebe4; border-radius:18px; overflow:hidden; transition:.2s }
+    .meal:hover { transform:translateY(-4px); box-shadow:0 12px 28px #26301d0c }
+    .meal-image { height:162px; position:relative; background:#e7e3d5; overflow:hidden }
+    .meal-image img { width:100%; height:100%; object-fit:cover; transition:transform .35s }
+    .meal:hover .meal-image img { transform:scale(1.04) }
+    .day { position:absolute; top:12px; left:12px; background:#fffef3ed; border-radius:999px; padding:6px 10px; font-size:10px; font-weight:700; letter-spacing:.4px }
+    .meal-info { padding:15px 16px 17px }
+    .meal-info h3 { font-size:15px; margin:0 0 8px; letter-spacing:-.25px }
+    .meta { color:var(--muted); font-size:11px; display:flex; justify-content:space-between }
+    .meta span:first-child:before { content:'◷'; margin-right:5px }
+    .features { background:#eeefe7; padding:70px 0 }
+    .feature-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:44px; margin-top:34px }
+    .feature-icon { width:44px; height:44px; border-radius:14px; background:#fffefa; display:grid; place-items:center; font-size:21px; margin-bottom:17px }
+    .feature h3 { font-size:16px; margin-bottom:8px }
+    .feature p { color:var(--muted); font-size:13px; line-height:1.7; max-width:270px; margin-bottom:0 }
+    .closing { text-align:center; padding:86px 0 }
+    .closing h2 { font:600 clamp(34px,5vw,52px)/1.12 'Playfair Display',serif; letter-spacing:-1px; margin:14px auto 15px; max-width:650px }
+    .closing p { color:var(--muted); font-size:15px; margin-bottom:24px }
+    footer { border-top:1px solid var(--line); padding:22px 0; color:var(--muted); font-size:12px }
+    .footer-inner { display:flex; justify-content:space-between; align-items:center }
+    .footer-inner .logo { font-size:20px; color:var(--ink) }
+    @media(max-width:800px) { .hero { grid-template-columns:1fr; padding-top:55px; gap:15px }.hero-copy{max-width:540px}.visual{min-height:390px}.food,.blob{width:min(390px,84vw)}.float-card.top{left:8%}.float-card.bottom{right:5%}.meal-grid{grid-template-columns:repeat(2,1fr)}.plan-grid{grid-template-columns:repeat(4,1fr)} }
+    @media(max-width:540px) { .wrap{width:min(100% - 34px,1160px)} header{height:68px}.navlinks{display:none}.hero{padding:45px 0 48px}.hero-copy{font-size:15px}.visual{min-height:315px}.float-card.top{top:8px}.float-card.bottom{bottom:12px}.section-head{align-items:start;gap:12px;flex-direction:column}.section-head h2{font-size:31px}.meal-grid{gap:10px}.meal-image{height:125px}.meal-info{padding:12px}.meal-info h3{font-size:13px}.feature-grid{grid-template-columns:1fr;gap:27px}.features{padding:55px 0}.closing{padding:66px 0}.footer-inner{gap:8px;flex-wrap:wrap}.account-label{display:none}.account-actions{gap:5px}.account-actions .outline-button{padding:9px 11px}.plan-grid{grid-template-columns:repeat(2,1fr)}.dash-head{align-items:start;flex-direction:column}.auth-dialog{padding:21px} }
+  </style>
 </head>
 <body>
-
-<header class="site-header">
-  <a class="wordmark" href="index.html">
-    <svg class="wordmark-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M4 20C4 12 9 5 20 4C19 15 12 20 4 20Z" fill="#33502F"/>
-      <path d="M5 19C9 15 12 12 18 6" stroke="#EFEAD9" stroke-width="1.3" stroke-linecap="round"/>
-    </svg>
-    Harvest
-  </a>
-</header>
-
-<div class="page">
-
-  <!-- Left: hero -->
-  <section class="hero">
-    <div class="hero-inner">
-      <h1 class="hero-title">Dein Plan.<br>Deine Mahlzeiten.<br><span class="accent-text">Deine Ziele.</span></h1>
-      <p class="hero-sub">Plane ausgewogene Mahlzeiten, spare Zeit und erreiche deine Ziele — ganz einfach.</p>
-
-      <ul class="feature-list">
-        <li>
-          <svg class="check" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.4"/><path d="M6.2 10.2l2.4 2.4 5.2-5.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span>Individuelle Ernährungspläne</span>
-        </li>
-        <li>
-          <svg class="check" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.4"/><path d="M6.2 10.2l2.4 2.4 5.2-5.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span>Gesunde &amp; leckere Rezepte</span>
-        </li>
-        <li>
-          <svg class="check" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.4"/><path d="M6.2 10.2l2.4 2.4 5.2-5.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span>Einkaufslisten auf einen Klick</span>
-        </li>
-        <li>
-          <svg class="check" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.4"/><path d="M6.2 10.2l2.4 2.4 5.2-5.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span>Spare Zeit &amp; reduziere Stress</span>
-        </li>
-      </ul>
-
-      <!-- illustration with floating preview card -->
-      <div class="hero-art">
-        <svg class="bowl-art" viewBox="0 0 320 240" fill="none" aria-hidden="true">
-          <ellipse cx="150" cy="170" rx="130" ry="30" fill="#EFEAD9"/>
-          <ellipse cx="150" cy="170" rx="130" ry="30" stroke="#33502F" stroke-width="1.6"/>
-          <path d="M20 170C20 214 78 226 150 226C222 226 280 214 280 170" stroke="#33502F" stroke-width="1.6"/>
-          <!-- carrot -->
-          <path d="M140 158C140 102 156 68 184 50" stroke="#C9782E" stroke-width="2" stroke-linecap="round"/>
-          <path d="M180 47L194 44M182 54L198 53M177 40L188 35" stroke="#5C7A52" stroke-width="1.5" stroke-linecap="round"/>
-          <!-- leaf sprig -->
-          <path d="M118 163C107 122 79 100 52 91" stroke="#5C7A52" stroke-width="2" stroke-linecap="round"/>
-          <path d="M92 120C101 111 112 109 121 111M78 106C87 99 98 99 106 103" stroke="#5C7A52" stroke-width="1.5" stroke-linecap="round"/>
-          <!-- tomato slice -->
-          <circle cx="197" cy="152" r="25" fill="#EFEAD9" stroke="#C9432B" stroke-width="2"/>
-          <path d="M197 132V172M174 152H220M181 138L213 166M213 138L181 166" stroke="#E3A73A" stroke-width="1" stroke-linecap="round"/>
-        </svg>
-
-        <div class="preview-card">
-          <p class="preview-card-title">Heute</p>
-          <ul class="preview-list">
-            <li><span class="preview-dot" style="background:#E3A73A"></span><div><strong>Frühstück</strong><small>Hafer-Bowl</small></div></li>
-            <li><span class="preview-dot" style="background:#C9432B"></span><div><strong>Mittagessen</strong><small>Quinoa Bowl</small></div></li>
-            <li><span class="preview-dot" style="background:#33502F"></span><div><strong>Abendessen</strong><small>Lachs mit Gemüse</small></div></li>
-          </ul>
-          <button type="button" class="preview-link">Tagesplan anzeigen →</button>
-        </div>
+  <header>
+    <nav class="wrap" aria-label="Main navigation">
+      <a class="logo" href="#home" aria-label="Daily home">daily<span>.</span></a>
+      <div class="navlinks"><a href="#how-it-works">How it works</a><a href="#this-week">This week</a><a href="#about">About</a></div>
+      <div class="account-actions"><span class="account-label" id="account-label" hidden></span><button class="outline-button" id="auth-open" type="button">Log in</button><button class="outline-button" id="logout-button" type="button" hidden>Log out</button><a class="nav-cta" href="#this-week">Explore meals <span aria-hidden="true">↗</span></a></div>
+    </nav>
+  </header>
+  <main>
+    <section class="hero wrap" id="home">
+      <div>
+        <div class="eyebrow"><span class="dot"></span> A calmer kind of meal planning</div>
+        <h1>Good food.<br><em>Less thinking.</em></h1>
+        <p class="hero-copy">Meet Daily: your friendly little helper for figuring out what’s for dinner. Find fresh ideas, plan your week, and make mealtimes feel easy again.</p>
+        <div class="hero-actions"><a class="button" href="#this-week">See this week’s menu <span aria-hidden="true">→</span></a><a class="text-link" href="#how-it-works">How it works <span aria-hidden="true">↗</span></a></div>
+        <div class="hero-note"><div class="avatars" aria-hidden="true"><span class="avatar">☺</span><span class="avatar">☺</span><span class="avatar">☺</span></div><span>Made for real life, one meal at a time</span></div>
       </div>
-    </div>
-  </section>
-
-  <!-- Right: auth card -->
-  <section class="auth">
-    <div class="auth-card">
-
-      <div class="tabs" role="tablist" aria-label="Sign in or create an account">
-        <button class="tab is-active" id="tab-signin" role="tab" aria-selected="true" aria-controls="panel-signin">Sign in</button>
-        <button class="tab" id="tab-signup" role="tab" aria-selected="false" aria-controls="panel-signup">Create account</button>
+      <div class="visual" aria-label="A colorful bowl of fresh food">
+        <div class="blob"></div>
+        <div class="food"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1000&q=85" alt="Fresh salad bowl with vegetables and grains"></div>
+        <div class="float-card top"><small>Your week, sorted</small><strong>5 dinners planned ✓</strong></div>
+        <div class="float-card bottom"><div class="cal-icon">🥑</div><div><small>Today’s little win</small><strong>Ready in 25 minutes</strong></div></div>
       </div>
+    </section>
+    <section class="week wrap" id="this-week">
+      <div class="section-head"><div><div class="eyebrow"><span class="dot"></span> A taste of the week</div><h2>What’s cooking?</h2></div><p>Fresh ideas for the days ahead.</p></div>
+      <div class="firebase-note" id="firebase-note">Add your Firebase web app settings to <strong>firebase-config.js</strong>, then enable Google and Email/Password sign-in in Firebase Console to activate accounts, meal plans, and saved recipes.</div>
+      <form class="recipe-search" id="recipe-search"><input id="recipe-query" type="search" placeholder="Search recipes, like pasta…" aria-label="Search recipes"><button type="submit">Search</button></form>
+      <p class="recipe-status" id="recipe-status" aria-live="polite">Loading a few recipe ideas…</p>
+      <div class="meal-grid" id="meal-grid">
+        <article class="meal"><div class="meal-image"><img src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=700&q=80" alt="Roasted vegetables served with grains" loading="lazy"><span class="day">MONDAY</span></div><div class="meal-info"><h3>Roasty veggie bowls</h3><div class="meta"><span>30 min</span><span>Easy</span></div></div></article>
+        <article class="meal"><div class="meal-image"><img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=700&q=80" alt="Pasta with fresh herbs and tomatoes" loading="lazy"><span class="day">TUESDAY</span></div><div class="meal-info"><h3>Lemony garden pasta</h3><div class="meta"><span>20 min</span><span>Easy</span></div></div></article>
+        <article class="meal"><div class="meal-image"><img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=700&q=80" alt="Colorful fresh meal with greens" loading="lazy"><span class="day">WEDNESDAY</span></div><div class="meal-info"><h3>Crunchy green tacos</h3><div class="meta"><span>25 min</span><span>Easy</span></div></div></article>
+        <article class="meal"><div class="meal-image"><img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=700&q=80" alt="A comforting bowl with fresh toppings" loading="lazy"><span class="day">THURSDAY</span></div><div class="meal-info"><h3>Cozy tomato bowls</h3><div class="meta"><span>35 min</span><span>Easy</span></div></div></article>
+      </div>
+    </section>
+    <section class="dashboard" id="dashboard"><div class="wrap"><div class="dash-head"><div><div class="eyebrow"><span class="dot"></span> Your Daily space</div><h2>Your meal plan</h2></div><p id="dashboard-message">Saved to your account</p></div><div class="plan-grid" id="plan-grid"></div><h3 class="saved-heading">Saved recipes</h3><div class="saved-list" id="saved-list"></div></div></section>
+    <dialog class="recipe-dialog" id="recipe-dialog" aria-labelledby="dialog-title"><img id="dialog-image" alt=""><div class="dialog-content"><h3 id="dialog-title"></h3><p id="dialog-description"></p><div class="dialog-actions"><a id="dialog-source" href="#" target="_blank" rel="noreferrer">See full recipe ↗</a><button id="dialog-close" type="button">Close</button></div><div class="recipe-controls"><select id="plan-day" aria-label="Choose a day"><option value="Monday">Monday</option><option value="Tuesday">Tuesday</option><option value="Wednesday">Wednesday</option><option value="Thursday">Thursday</option><option value="Friday">Friday</option><option value="Saturday">Saturday</option><option value="Sunday">Sunday</option></select><button class="button" id="add-to-plan" type="button">Add to my week</button><button class="outline-button" id="save-recipe" type="button">♡ Save recipe</button></div></div></dialog>
+    <dialog class="auth-dialog" id="auth-dialog" aria-labelledby="auth-title"><div class="auth-top"><h2 id="auth-title">Welcome to Daily</h2><button class="close-icon" id="auth-close" type="button" aria-label="Close">×</button></div><form class="auth-form" id="auth-form"><input id="auth-name" type="text" autocomplete="name" placeholder="Your name" hidden><input id="auth-email" type="email" autocomplete="email" placeholder="Email address" required><input id="auth-password" type="password" autocomplete="current-password" placeholder="Password (at least 6 characters)" minlength="6" required><button class="forgot-button" id="forgot-password" type="button">Forgot password?</button><p class="auth-message" id="auth-message" aria-live="polite"></p><button class="button" id="email-submit" type="submit">Log in with email</button></form><div class="auth-divider">or</div><button class="google-button" id="google-signin" type="button">Continue with Google</button><p class="auth-switch" id="auth-switch">New to Daily? <button type="button">Create an account</button></p></dialog>
+    <section class="features" id="how-it-works"><div class="wrap"><div class="eyebrow"><span class="dot"></span> A little help, right when you need it</div><div class="feature-grid">
+      <div class="feature"><div class="feature-icon">✦</div><h3>Find your next favorite</h3><p>Discover simple, tasty recipes that make the everyday feel a little more special.</p></div>
+      <div class="feature"><div class="feature-icon">▦</div><h3>Make a plan that fits</h3><p>Pick meals for your week and keep all your dinner ideas in one happy place.</p></div>
+      <div class="feature"><div class="feature-icon">♡</div><h3>Enjoy the little things</h3><p>Spend less time wondering what to cook and more time enjoying what’s on your plate.</p></div>
+    </div></div></section>
+    <section class="closing wrap" id="about"><div class="eyebrow" style="justify-content:center"><span class="dot"></span> Your week starts here</div><h2>A little more joy at the dinner table.</h2><p>Good meals don’t have to be complicated. Let’s make them Daily.</p><a class="button" href="#this-week">Get a little inspiration <span aria-hidden="true">→</span></a></section>
+  </main>
+  <footer><div class="wrap footer-inner"><a class="logo" href="#home">daily<span>.</span></a><span>A school project made with a love for good food.</span><span>© 2026 Daily</span></div></footer>
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js';
+    import { getAuth, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js';
+    import { getFirestore, collection, addDoc, deleteDoc, doc, setDoc, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js';
+    import { firebaseConfig } from './firebase-config.js';
 
-      <p class="form-msg" id="form-msg" role="status" aria-live="polite"></p>
+    const apiBase = 'https://forkify-api.jonas.io/api/v2/recipes';
+    const grid = document.querySelector('#meal-grid');
+    const status = document.querySelector('#recipe-status');
+    const recipeDialog = document.querySelector('#recipe-dialog');
+    const authDialog = document.querySelector('#auth-dialog');
+    const authMessage = document.querySelector('#auth-message');
+    const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+    const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+    let currentRecipe = null;
+    let currentUser = null;
+    let plannedMeals = [];
+    let savedRecipes = [];
+    let stopPlanListener = null;
+    let stopSavedListener = null;
+    let authMode = 'login';
+    const appIsConfigured = Boolean(firebaseConfig.apiKey && firebaseConfig.apiKey !== 'YOUR_API_KEY' && firebaseConfig.projectId && firebaseConfig.projectId !== 'YOUR_PROJECT_ID');
+    let auth = null;
+    let db = null;
+    if (appIsConfigured) {
+      const app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+      db = getFirestore(app);
+    }
 
-      <!-- Sign in -->
-      <form class="form is-active" id="panel-signin" role="tabpanel" aria-labelledby="tab-signin">
-        <label class="field">
-          <span>Email</span>
-          <input type="email" name="email" autocomplete="email" required />
-        </label>
-        <label class="field">
-          <span>Password</span>
-          <input type="password" name="password" autocomplete="current-password" required minlength="6" />
-        </label>
-        <button type="submit" class="btn-primary" id="btn-signin">Sign in</button>
-        <button type="button" class="btn-link" id="btn-forgot">Forgot password?</button>
-      </form>
+    function openAuth(message = '') {
+      authMessage.textContent = message;
+      if (!authDialog.open) authDialog.showModal();
+    }
 
-      <!-- Sign up -->
-      <form class="form" id="panel-signup" role="tabpanel" aria-labelledby="tab-signup" hidden>
-        <label class="field">
-          <span>Name</span>
-          <input type="text" name="name" autocomplete="name" required />
-        </label>
-        <label class="field">
-          <span>Email</span>
-          <input type="email" name="email" autocomplete="email" required />
-        </label>
-        <label class="field">
-          <span>Password</span>
-          <input type="password" name="password" autocomplete="new-password" required minlength="6" />
-          <small>At least 6 characters</small>
-        </label>
-        <button type="submit" class="btn-primary" id="btn-signup">Create account</button>
-      </form>
+    function authError(error) {
+      const messages = {
+        'auth/email-already-in-use':'That email already has an account. Try logging in.',
+        'auth/invalid-credential':'Email or password is incorrect.',
+        'auth/weak-password':'Choose a stronger password with at least 6 characters.',
+        'auth/invalid-email':'Enter a valid email address.',
+        'auth/popup-closed-by-user':'Google sign-in was closed before it finished.',
+        'auth/unauthorized-domain':'Add this site’s domain to Firebase Authentication’s authorized domains.'
+      };
+      return messages[error.code] || error.message || 'Something went wrong. Please try again.';
+    }
 
-      <div class="divider"><span>or</span></div>
-
-      <button type="button" class="btn-google" id="btn-google">
-        <svg viewBox="0 0 18 18" width="18" height="18" aria-hidden="true">
-          <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.87 2.7-6.62z"/>
-          <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.96v2.33A9 9 0 0 0 9 18z"/>
-          <path fill="#FBBC05" d="M3.95 10.7A5.4 5.4 0 0 1 3.66 9c0-.59.1-1.17.29-1.7V4.97H.96A9 9 0 0 0 0 9c0 1.45.35 2.83.96 4.03l2.99-2.33z"/>
-          <path fill="#EA4335" d="M9 3.58c1.32 0 2.51.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.97l2.99 2.33C4.66 5.17 6.65 3.58 9 3.58z"/>
-        </svg>
-        Continue with Google
-      </button>
-
-      <p class="fine-print">By continuing, you agree this is a student project and not a real product.</p>
-    </div>
-  </section>
-
-</div>
-
-<script type="module" src="firebase-config.js"></script>
-<script type="module" src="app.js"></script>
-<script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("service-worker.js").catch((err) => {
-        console.warn("Service worker registration failed:", err);
+    function renderMeals(meals) {
+      grid.replaceChildren();
+      meals.slice(0, 12).forEach((meal) => {
+        const card = document.createElement('article');
+        card.className = 'meal';
+        card.tabIndex = 0;
+        card.setAttribute('role', 'button');
+        card.setAttribute('aria-label', `View ${meal.title} recipe`);
+        const imageUrl = String(meal.image_url || '').replace(/^http:/, 'https:');
+        card.innerHTML = `<div class="meal-image"><img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(meal.title)}" loading="lazy"><span class="day">${escapeHtml(meal.publisher || 'RECIPE')}</span></div><div class="meal-info"><h3>${escapeHtml(meal.title)}</h3><div class="meta"><span>Open recipe</span><span>Forkify</span></div></div>`;
+        const open = () => showRecipe(meal);
+        card.addEventListener('click', open);
+        card.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); open(); } });
+        grid.append(card);
       });
+    }
+
+    async function showRecipe(meal) {
+      status.textContent = `Loading ${meal.title}…`;
+      try {
+        const response = await fetch(`${apiBase}/${encodeURIComponent(meal.id)}`);
+        if (!response.ok) throw new Error('Recipe details unavailable');
+        const data = await response.json();
+        currentRecipe = data.data.recipe;
+        const imageUrl = String(currentRecipe.image_url || meal.image_url || '').replace(/^http:/, 'https:');
+        document.querySelector('#dialog-image').src = imageUrl;
+        document.querySelector('#dialog-image').alt = currentRecipe.title;
+        document.querySelector('#dialog-title').textContent = currentRecipe.title;
+        const ingredients = (currentRecipe.ingredients || []).map((item) => `${item.quantity || ''} ${item.unit || ''} ${item.description || ''}`.trim());
+        document.querySelector('#dialog-description').textContent = ingredients.length ? `Ingredients: ${ingredients.join(' · ')}` : `Recipe by ${currentRecipe.publisher}. Open the original recipe for ingredients and instructions.`;
+        document.querySelector('#dialog-source').href = currentRecipe.source_url || '#';
+        status.textContent = 'Select a recipe to see its ingredients.';
+        recipeDialog.showModal();
+      } catch {
+        status.textContent = 'Could not load that recipe. Please try again.';
+      }
+    }
+
+    function renderDashboard() {
+      const planGrid = document.querySelector('#plan-grid');
+      planGrid.replaceChildren();
+      days.forEach((day) => {
+        const box = document.createElement('div');
+        box.className = 'plan-day';
+        const entries = plannedMeals.filter((meal) => meal.day === day);
+        box.innerHTML = `<strong>${day}</strong>${entries.length ? entries.map((meal) => `<div class="plan-item"><span>${escapeHtml(meal.title)}</span><button type="button" data-delete-plan="${escapeHtml(meal.id)}" aria-label="Remove ${escapeHtml(meal.title)} from ${day}">×</button></div>`).join('') : '<span class="plan-empty">Nothing planned</span>'}`;
+        planGrid.append(box);
+      });
+      const savedList = document.querySelector('#saved-list');
+      savedList.replaceChildren();
+      if (!savedRecipes.length) savedList.innerHTML = '<span class="plan-empty">Save a recipe and it will show up here.</span>';
+      savedRecipes.forEach((recipe) => {
+        const item = document.createElement('div');
+        item.className = 'saved-item';
+        const imageUrl = String(recipe.image_url || '').replace(/^http:/, 'https:');
+        item.innerHTML = `<img src="${escapeHtml(imageUrl)}" alt=""><span>${escapeHtml(recipe.title)}</span><button type="button" data-delete-saved="${escapeHtml(recipe.id)}" aria-label="Remove ${escapeHtml(recipe.title)} from saved recipes">×</button>`;
+        savedList.append(item);
+      });
+      document.querySelector('#dashboard').classList.toggle('visible', Boolean(currentUser));
+    }
+
+    function watchUserData(user) {
+      stopPlanListener?.();
+      stopSavedListener?.();
+      plannedMeals = [];
+      savedRecipes = [];
+      if (!user || !db) { renderDashboard(); return; }
+      const planRef = collection(db, 'users', user.uid, 'plannedMeals');
+      const savedRef = collection(db, 'users', user.uid, 'savedRecipes');
+      stopPlanListener = onSnapshot(planRef, (snapshot) => {
+        plannedMeals = snapshot.docs.map((entry) => ({ id: entry.id, ...entry.data() }));
+        renderDashboard();
+      }, (error) => { document.querySelector('#dashboard-message').textContent = `Could not load your plan: ${error.message}`; });
+      stopSavedListener = onSnapshot(savedRef, (snapshot) => {
+        savedRecipes = snapshot.docs.map((entry) => ({ id: entry.id, ...entry.data() }));
+        renderDashboard();
+      }, (error) => { document.querySelector('#dashboard-message').textContent = `Could not load saved recipes: ${error.message}`; });
+    }
+
+    async function requireLogin() {
+      if (!currentUser) { openAuth('Log in or create an account to save your meals.'); return false; }
+      if (!db) { openAuth('Firebase is not configured yet. Add your project settings in firebase-config.js.'); return false; }
+      return true;
+    }
+
+    document.querySelector('#recipe-search').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const query = document.querySelector('#recipe-query').value.trim();
+      if (!query) return;
+      status.textContent = `Looking for “${query}”…`;
+      try {
+        const response = await fetch(`${apiBase}?search=${encodeURIComponent(query)}`);
+        if (!response.ok) throw new Error('Recipe service unavailable');
+        const data = await response.json();
+        const meals = data.data?.recipes || [];
+        renderMeals(meals);
+        status.textContent = meals.length ? `Showing ${Math.min(meals.length, 12)} of ${meals.length} recipe${meals.length === 1 ? '' : 's'} found.` : 'No recipes found. Try another search.';
+      } catch {
+        status.textContent = 'Could not load recipes right now. Please try again in a moment.';
+      }
     });
-  }
-</script>
+    document.querySelector('#recipe-query').value = 'pizza';
+    document.querySelector('#recipe-search').requestSubmit();
+    document.querySelector('#dialog-close').addEventListener('click', () => recipeDialog.close());
+    document.querySelector('#auth-open').addEventListener('click', () => openAuth());
+    document.querySelector('#auth-close').addEventListener('click', () => authDialog.close());
+    document.querySelector('#logout-button').addEventListener('click', async () => { if (auth) await signOut(auth); });
+    document.querySelector('#auth-switch').addEventListener('click', () => {
+      authMode = authMode === 'login' ? 'signup' : 'login';
+      document.querySelector('#auth-title').textContent = authMode === 'signup' ? 'Create your account' : 'Welcome to Daily';
+      document.querySelector('#auth-name').hidden = authMode !== 'signup';
+      document.querySelector('#auth-password').autocomplete = authMode === 'signup' ? 'new-password' : 'current-password';
+      document.querySelector('#forgot-password').hidden = authMode === 'signup';
+      document.querySelector('#email-submit').textContent = authMode === 'signup' ? 'Create account with email' : 'Log in with email';
+      document.querySelector('#auth-switch').innerHTML = authMode === 'signup' ? 'Already have an account? <button type="button">Log in</button>' : 'New to Daily? <button type="button">Create an account</button>';
+      authMessage.textContent = '';
+    });
+    document.querySelector('#auth-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!appIsConfigured) { authMessage.textContent = 'Add your Firebase web app settings in firebase-config.js first.'; return; }
+      const email = document.querySelector('#auth-email').value.trim();
+      const password = document.querySelector('#auth-password').value;
+      authMessage.textContent = 'Please wait…';
+      try {
+        if (authMode === 'signup') {
+          const credential = await createUserWithEmailAndPassword(auth, email, password);
+          const name = document.querySelector('#auth-name').value.trim();
+          if (name) await updateProfile(credential.user, { displayName: name });
+        } else {
+          await signInWithEmailAndPassword(auth, email, password);
+        }
+        authDialog.close();
+        event.currentTarget.reset();
+      } catch (error) { authMessage.textContent = authError(error); }
+    });
+    document.querySelector('#google-signin').addEventListener('click', async () => {
+      if (!appIsConfigured) { authMessage.textContent = 'Add your Firebase web app settings in firebase-config.js first.'; return; }
+      authMessage.textContent = 'Opening Google sign-in…';
+      try { await signInWithPopup(auth, new GoogleAuthProvider()); authDialog.close(); }
+      catch (error) { authMessage.textContent = authError(error); }
+    });
+    document.querySelector('#forgot-password').addEventListener('click', async () => {
+      if (!appIsConfigured) { authMessage.textContent = 'Add your Firebase web app settings in firebase-config.js first.'; return; }
+      const email = document.querySelector('#auth-email').value.trim();
+      if (!email) { authMessage.textContent = 'Enter your email address first.'; return; }
+      try { await sendPasswordResetEmail(auth, email); authMessage.textContent = 'Password reset email sent. Check your inbox.'; }
+      catch (error) { authMessage.textContent = authError(error); }
+    });
+    document.querySelector('#add-to-plan').addEventListener('click', async () => {
+      if (!(await requireLogin()) || !currentRecipe) return;
+      const day = document.querySelector('#plan-day').value;
+      try {
+        await addDoc(collection(db, 'users', currentUser.uid, 'plannedMeals'), { day, recipeId: currentRecipe.id, title: currentRecipe.title, image_url: currentRecipe.image_url || '', publisher: currentRecipe.publisher || '', createdAt: serverTimestamp() });
+        status.textContent = `${currentRecipe.title} added to ${day}.`;
+        recipeDialog.close();
+      } catch (error) { status.textContent = `Could not save meal: ${error.message}`; }
+    });
+    document.querySelector('#save-recipe').addEventListener('click', async () => {
+      if (!(await requireLogin()) || !currentRecipe) return;
+      try {
+        await setDoc(doc(db, 'users', currentUser.uid, 'savedRecipes', currentRecipe.id), { id: currentRecipe.id, title: currentRecipe.title, image_url: currentRecipe.image_url || '', publisher: currentRecipe.publisher || '', source_url: currentRecipe.source_url || '' });
+        status.textContent = `${currentRecipe.title} saved to your recipes.`;
+        recipeDialog.close();
+      } catch (error) { status.textContent = `Could not save recipe: ${error.message}`; }
+    });
+    document.querySelector('#plan-grid').addEventListener('click', async (event) => {
+      const button = event.target.closest('[data-delete-plan]');
+      if (button && db && currentUser) await deleteDoc(doc(db, 'users', currentUser.uid, 'plannedMeals', button.dataset.deletePlan));
+    });
+    document.querySelector('#saved-list').addEventListener('click', async (event) => {
+      const button = event.target.closest('[data-delete-saved]');
+      if (button && db && currentUser) await deleteDoc(doc(db, 'users', currentUser.uid, 'savedRecipes', button.dataset.deleteSaved));
+    });
+    document.querySelector('#account-label').hidden = true;
+    if (auth) onAuthStateChanged(auth, (user) => {
+      currentUser = user;
+      const loginButton = document.querySelector('#auth-open');
+      const logoutButton = document.querySelector('#logout-button');
+      const accountLabel = document.querySelector('#account-label');
+      loginButton.hidden = Boolean(user);
+      logoutButton.hidden = !user;
+      accountLabel.hidden = !user;
+      accountLabel.textContent = user?.displayName || user?.email || '';
+      watchUserData(user);
+    });
+    else {
+      document.querySelector('#dashboard-message').textContent = 'Add Firebase config to enable accounts and saving.';
+      document.querySelector('#firebase-note').style.display = 'block';
+    }
+  </script>
 </body>
 </html>
