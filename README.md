@@ -1,6 +1,6 @@
 # Daily
 
-A static meal planner website using Forkify API v2 for recipes and Firebase Authentication + Cloud Firestore for accounts and saved meals.
+A static meal planner website for GitHub Pages. `index.html` is the public Daily landing page; `app.html` is the separate workspace for recipes, the weekly planner, and the personal dashboard. It uses Forkify API v2 for recipes and Firebase Authentication + Cloud Firestore for accounts and saved meals.
 
 ## Connect Firebase
 
@@ -20,7 +20,7 @@ Because the site uses JavaScript modules, open it through a local web server rat
 python -m http.server 8000
 ```
 
-Then open `http://localhost:8000`. Add `localhost` to Firebase Authentication's authorized domains if needed.
+Then open `http://localhost:8000` for the landing page or `http://localhost:8000/app.html` for the planner. Add `localhost` to Firebase Authentication's authorized domains if needed.
 
 ## Features
 
