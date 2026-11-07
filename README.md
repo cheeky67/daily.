@@ -1,6 +1,6 @@
 # Daily
 
-A static meal planner website for GitHub Pages. `index.html` is the public Daily landing page; `app.html` is the separate workspace for recipes, the weekly planner, and the personal dashboard. It uses Forkify API v2 for recipes and Firebase Authentication + Cloud Firestore for accounts and saved meals.
+A static meal planner website for GitHub Pages. `index.html` is the public Daily landing page; `app.html` is the separate workspace for recipes, the weekly planner, and the personal dashboard. It uses TheMealDB's V1 API for recipes and Firebase Authentication + Cloud Firestore for accounts and saved meals.
 
 ## Connect Firebase
 
@@ -24,11 +24,12 @@ Then open `http://localhost:8000` for the landing page or `http://localhost:8000
 
 ## Features
 
-- Search Forkify recipes, inspect ingredients and source links, and scale ingredient quantities by serving count.
+- Search TheMealDB recipes, inspect ingredients and source links, and scale ingredient quantities by serving count.
 - Create an account with email and password, sign in with either method, reset a password, or use Google sign-in.
 - Add recipes to a dated weekly plan, move meals between weekdays, and mark meals as cooked.
 - Track this week's planned and cooked meals, saved recipes, and a personal cooking goal on the dashboard.
 - Reopen recipes from the planner or saved-recipe collection. Plan, favorite, and goal data are stored under `users/{uid}` in Cloud Firestore.
 - Switch the interface between English and German, and toggle dark mode from the footer. Both preferences are saved in the browser.
 
-The Firebase features remain inactive until `firebase-config.js` is filled in and the Firebase project is configured as above. Forkify API v2 also applies request limits and a restricted set of search terms.
+The Firebase features remain inactive until `firebase-config.js` is filled in and the Firebase project is configured as above. TheMealDB's free key `1` is intended for development and learning; its docs recommend a supporter key for a publicly shipped app. Search and detail requests use its `search.php` and `lookup.php` endpoints.
+
