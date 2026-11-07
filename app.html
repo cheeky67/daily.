@@ -24,6 +24,7 @@ nav{height:100%;display:flex;align-items:center;justify-content:space-between;ga
 .account-actions{gap:8px}.account-label{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:12px}
 .pill,.nav-cta,.button,.outline-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:12px 17px;font-size:12px;font-weight:800;transition:transform .25s,background .2s,box-shadow .2s}
 .outline-button{background:#e6e5dc;color:var(--ink)}.nav-cta,.button{background:var(--acid);color:#1b1c20}
+.account-actions [hidden]{display:none!important}
 .nav-cta:hover,.button:hover,.outline-button:hover{transform:translateY(-3px);box-shadow:0 12px 25px #090a1e22}
 .hero-scene{height:172svh;background:var(--blue);position:relative}
 .hero{--story-scale:1;--story-y:0px;--story-rotation:0deg;position:sticky;top:76px;height:calc(100svh - 76px);min-height:590px;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse at 76% 44%,#514ae8 0,transparent 36%),radial-gradient(ellipse at 0 100%,#211a9f 0,transparent 58%),var(--blue);color:#fffdf1}
@@ -247,11 +248,12 @@ mon:'Montag',tue:'Dienstag',wed:'Mittwoch',thu:'Donnerstag',fri:'Freitag',sat:'S
 };
 let language=localStorage.getItem('daily-language')==='de'?'de':'en',darkMode=localStorage.getItem('daily-theme')==='dark';
 const t=(key,values={})=>Object.entries(values).reduce((s,[k,v])=>s.replaceAll('{'+k+'}',String(v)),words[language][key]||words.en[key]||key);
-const api='https://forkify-api.jonas.io/api/v2/recipes',grid=document.querySelector('#meal-grid'),status=document.querySelector('#recipe-status');
+const api='https://www.themealdb.com/api/json/v1/1',grid=document.querySelector('#meal-grid'),status=document.querySelector('#recipe-status');
 const authDialog=document.querySelector('#auth-dialog'),recipeDialog=document.querySelector('#recipe-dialog'),authMessage=document.querySelector('#auth-message');
 let auth=null,db=null,currentUser=null,currentRecipe=null,authMode='login',planItems=[],savedItems=[],stopPlan=null,stopSaved=null,stopPrefs=null,weeklyGoal=5,baseServings=4,servingCount=4,searchSeq=0,recipeSeq=0,weekOffset=0,dragClickIgnoreUntil=0;
 function esc(v=''){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function imageUrl(v=''){const u=String(v).replace(/^http:/,'https:');return /^https:\/\//.test(u)?u:''}
+function normalizeMeal(meal){if(!meal)return null;const ingredients=[];for(let i=1;i<=20;i++){const description=meal['strIngredient'+i]?.trim(),quantity=meal['strMeasure'+i]?.trim();if(description)ingredients.push({quantity,unit:'',description})}return{id:meal.idMeal,title:meal.strMeal,image_url:meal.strMealThumb?meal.strMealThumb+'/large':'',publisher:[meal.strArea,meal.strCategory].filter(Boolean).join(' · ')||'TheMealDB',cooking_time:null,servings:4,source_url:meal.strSource||'https://www.themealdb.com/meal/'+meal.idMeal,ingredients,instructions:meal.strInstructions||''}}
 function setStatus(value){status.textContent=value}
 function numericQuantity(value){if(typeof value==='number'&&Number.isFinite(value))return value;const s=String(value??'').trim();let m=s.match(/^(\d+)\s+(\d+)\/(\d+)$/);if(m)return Number(m[1])+Number(m[2])/Number(m[3]);m=s.match(/^(\d+)\/(\d+)$/);if(m)return Number(m[1])/Number(m[2]);return /^\d+(?:\.\d+)?$/.test(s)?Number(s):null}
 function renderIngredients(){if(!currentRecipe)return;const list=document.querySelector('#ingredient-list');list.innerHTML=(currentRecipe.ingredients||[]).map(item=>{const raw=item.quantity,n=numericQuantity(raw),amount=n===null?String(raw??''):new Intl.NumberFormat(language,{maximumFractionDigits:2}).format(n*servingCount/baseServings);return '<li>'+esc([amount,item.unit,item.description].filter(Boolean).join(' '))+'</li>'}).join('')||'<li>'+esc(t('statusRecipeError'))+'</li>';document.querySelector('#servings-count').textContent=String(servingCount)}
@@ -260,25 +262,25 @@ grid.replaceChildren();
 if(!recipes.length){grid.innerHTML='<p class="plan-empty">'+esc(t('searchNone'))+'</p>';return}
 recipes.slice(0,20).forEach(recipe=>{
 const card=document.createElement('article');card.className='meal';card.tabIndex=0;card.setAttribute('role','button');card.setAttribute('aria-label',t('viewRecipe',{title:recipe.title}));
-card.innerHTML='<div class="meal-image"><img src="'+esc(imageUrl(recipe.image_url))+'" alt="'+esc(recipe.title)+'" loading="lazy"><span class="day">'+esc(recipe.publisher||'DAILY PICK')+'</span></div><div class="meal-info"><h3>'+esc(recipe.title)+'</h3><div class="meta"><span>'+esc(recipe.publisher||'Forkify')+'</span><span>↗ '+esc(t('recipeReady'))+'</span></div></div>';
+card.innerHTML='<div class="meal-image"><img src="'+esc(imageUrl(recipe.image_url))+'" alt="'+esc(recipe.title)+'" loading="lazy"><span class="day">'+esc(recipe.publisher||'DAILY PICK')+'</span></div><div class="meal-info"><h3>'+esc(recipe.title)+'</h3><div class="meta"><span>'+esc(recipe.publisher||'TheMealDB')+'</span><span>↗ '+esc(t('recipeReady'))+'</span></div></div>';
 card.addEventListener('click',()=>showRecipe(recipe));card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();showRecipe(recipe)}});
 grid.append(card);reveal(card);
 });
 }
 async function searchRecipes(query){
 const seq=++searchSeq;setStatus(t('searchStatus'));
-try{const res=await fetch(api+'?search='+encodeURIComponent(query));if(!res.ok)throw new Error('Search failed');const json=await res.json();if(seq!==searchSeq)return;
-const list=json.data?.recipes||[];renderMeals(list);setStatus(list.length?t('searchFound',{count:list.length}):t('searchNone'));
+try{const res=await fetch(api+'/search.php?s='+encodeURIComponent(query));if(!res.ok)throw new Error('Search failed');const json=await res.json();if(seq!==searchSeq)return;
+const list=(json.meals||[]).map(normalizeMeal).filter(Boolean);renderMeals(list);setStatus(list.length?t('searchFound',{count:list.length}):t('searchNone'));
 }catch{if(seq===searchSeq){renderMeals([]);setStatus(t('searchError'))}}
 }
 async function showRecipe(recipe){
 const request=++recipeSeq;currentRecipe=recipe;baseServings=Math.max(1,Number(recipe.servings)||4);servingCount=baseServings;recipeDialog.showModal();setStatus(t('recipeLoading'));
 document.querySelector('#dialog-title').textContent=recipe.title;document.querySelector('#dialog-image').src=imageUrl(recipe.image_url);document.querySelector('#dialog-image').alt=recipe.title;
-document.querySelector('#dialog-description').textContent=(recipe.publisher||'Forkify')+' · '+(recipe.cooking_time||'?')+' min · '+(recipe.servings||'?')+' servings';
+document.querySelector('#dialog-description').textContent=(recipe.publisher||'TheMealDB')+' · '+(recipe.servings||4)+' servings';
 const source=document.querySelector('#dialog-source');source.href=recipe.source_url||'#';source.textContent=t('recipeSource');
 const list=document.querySelector('#ingredient-list');list.innerHTML='<li>'+esc(t('recipeLoading'))+'</li>';
-try{const res=await fetch(api+'/'+encodeURIComponent(recipe.id));if(!res.ok)throw new Error('Details unavailable');const json=await res.json();if(request!==recipeSeq)return;currentRecipe=json.data?.recipe||recipe;baseServings=Math.max(1,Number(currentRecipe.servings)||baseServings);servingCount=baseServings;renderIngredients();
-document.querySelector('#dialog-description').textContent=(currentRecipe.publisher||'Forkify')+' · '+(currentRecipe.cooking_time||'?')+' min · '+(currentRecipe.servings||'?')+' servings';source.href=currentRecipe.source_url||'#';
+try{const res=await fetch(api+'/lookup.php?i='+encodeURIComponent(recipe.id));if(!res.ok)throw new Error('Details unavailable');const json=await res.json();if(request!==recipeSeq)return;currentRecipe=normalizeMeal(json.meals?.[0])||recipe;baseServings=Math.max(1,Number(currentRecipe.servings)||baseServings);servingCount=baseServings;renderIngredients();
+document.querySelector('#dialog-description').textContent=(currentRecipe.publisher||'TheMealDB')+' · '+(currentRecipe.servings||4)+' servings';source.href=currentRecipe.source_url||'#';
 }catch{if(request===recipeSeq)list.innerHTML='<li>'+esc(t('statusRecipeError'))+'</li>'}
 if(request===recipeSeq)setStatus(t('statusReady'));
 }
@@ -293,7 +295,7 @@ document.querySelector('#dashboard').classList.add('visible');
 const key=weekKey(),weekItems=planItems.filter(x=>x.weekStart===key||(!x.weekStart&&weekOffset===0)),cooked=weekItems.filter(x=>x.cooked).length,goal=Math.max(1,Math.min(7,weeklyGoal));
 document.querySelector('#week-range').textContent=formatWeek();document.querySelector('#stat-planned').textContent=String(weekItems.length);document.querySelector('#stat-cooked').textContent=String(cooked);document.querySelector('#stat-saved').textContent=String(savedItems.length);document.querySelector('#stat-goal-count').textContent=String(cooked);document.querySelector('#stat-goal-target').textContent=' / '+goal;document.querySelector('#goal-select').value=String(goal);document.querySelector('#goal-progress').style.width=Math.min(100,cooked/goal*100)+'%';
 days.forEach(day=>{const box=document.createElement('div');box.className='plan-day';box.dataset.dropDay=day;const entries=weekItems.filter(x=>x.day===day);
-const items=entries.map(x=>'<article class="plan-item'+(x.cooked?' cooked':'')+'" draggable="true" data-plan-card="'+esc(x.id)+'"><img src="'+esc(imageUrl(x.image_url))+'" alt="" loading="lazy"><div class="plan-item-copy"><button type="button" class="plan-open" data-open-plan="'+esc(x.id)+'">'+esc(x.title)+'</button><small>'+esc(x.publisher||'Forkify')+(x.cooking_time?' · '+esc(x.cooking_time)+' min':'')+'</small></div><div class="plan-item-actions"><button type="button" data-toggle-cooked="'+esc(x.id)+'" data-cooked="'+(x.cooked?'1':'0')+'" aria-pressed="'+String(Boolean(x.cooked))+'">'+esc(t(x.cooked?'undoCooked':'markCooked'))+'</button><button class="delete-plan" type="button" data-delete-plan="'+esc(x.id)+'" aria-label="'+esc(t('remove',{title:x.title}))+'">×</button></div><select class="move-plan" data-move-plan="'+esc(x.id)+'" aria-label="'+esc(t('moveMeal',{title:x.title}))+'">'+days.map(d=>'<option value="'+d+'"'+(x.day===d?' selected':'')+'>'+esc(t(dayKey[d]))+'</option>').join('')+'</select></article>').join('');
+const items=entries.map(x=>'<article class="plan-item'+(x.cooked?' cooked':'')+'" draggable="true" data-plan-card="'+esc(x.id)+'"><img src="'+esc(imageUrl(x.image_url))+'" alt="" loading="lazy"><div class="plan-item-copy"><button type="button" class="plan-open" data-open-plan="'+esc(x.id)+'">'+esc(x.title)+'</button><small>'+esc(x.publisher||'TheMealDB')+(x.cooking_time?' · '+esc(x.cooking_time)+' min':'')+'</small></div><div class="plan-item-actions"><button type="button" data-toggle-cooked="'+esc(x.id)+'" data-cooked="'+(x.cooked?'1':'0')+'" aria-pressed="'+String(Boolean(x.cooked))+'">'+esc(t(x.cooked?'undoCooked':'markCooked'))+'</button><button class="delete-plan" type="button" data-delete-plan="'+esc(x.id)+'" aria-label="'+esc(t('remove',{title:x.title}))+'">×</button></div><select class="move-plan" data-move-plan="'+esc(x.id)+'" aria-label="'+esc(t('moveMeal',{title:x.title}))+'">'+days.map(d=>'<option value="'+d+'"'+(x.day===d?' selected':'')+'>'+esc(t(dayKey[d]))+'</option>').join('')+'</select></article>').join('');
 box.innerHTML='<strong>'+esc(t(dayKey[day]))+'<span>'+entries.length+'</span></strong>'+(items||'<span class="plan-empty">'+esc(t('emptyPlan'))+'</span>');plan.append(box)});
 if(!savedItems.length)saved.innerHTML='<span class="plan-empty">'+esc(t('savedEmpty'))+'</span>';
 savedItems.forEach(x=>{const row=document.createElement('div');row.className='saved-item';row.innerHTML='<img src="'+esc(imageUrl(x.image_url))+'" alt=""><button type="button" class="saved-open" data-open-saved="'+esc(x.id)+'">'+esc(x.title)+'</button><button type="button" data-delete-saved="'+esc(x.id)+'" aria-label="'+esc(t('remove',{title:x.title}))+'">×</button>';saved.append(row)});
@@ -389,4 +391,5 @@ document.querySelector('#dialog-source').textContent=t('recipeSource');document.
 }
 applyPreferences();document.querySelector('#recipe-query').value='pizza';searchRecipes('pizza');
 </script></body></html>
+
 
