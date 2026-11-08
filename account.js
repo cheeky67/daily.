@@ -1,5 +1,6 @@
 import{getAuth,onAuthStateChanged,sendPasswordResetEmail,signOut,updateProfile}from'https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js';
-import{getFirestore,collection,doc,getDoc,getDocs,initializeApp,serverTimestamp,setDoc}from'https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js';
+import{initializeApp}from'https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js';
+import{getFirestore,collection,doc,getDoc,getDocs,serverTimestamp,setDoc}from'https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js';
 import{firebaseConfig}from'./firebase-config.js';
 
 const words={
