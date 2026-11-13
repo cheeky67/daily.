@@ -1,7 +1,7 @@
 /* Shared expandable navigation for Daily. Existing localized links are reused. */
 (()=>{
   const language=()=>document.documentElement.lang?document.documentElement.lang.toLowerCase().startsWith('de')?'de':'en':localStorage.getItem('daily-language')==='de'?'de':'en';
-  const labels={en:{more:'Explore',menu:'Your Daily space'},de:{more:'Entdecken',menu:'Dein Daily-Bereich'}};
+  const labels={en:{more:'Menu',menu:'Your Daily space'},de:{more:'Menü',menu:'Dein Daily-Bereich'}};
   const current=new URL(location.href);
   const isCurrent=link=>{const target=new URL(link.href,location.href);return target.pathname===current.pathname&&(!target.hash||target.hash===current.hash)};
   document.querySelectorAll('.nav-center,.navlinks,.account-navlinks').forEach(list=>{
