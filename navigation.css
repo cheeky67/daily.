@@ -1,6 +1,6 @@
 /* Daily's persistent, native left drawer (works without JavaScript). */
 .daily-navigation{position:static}
-.daily-side-toggle{position:fixed;z-index:140;top:14px;left:14px;display:grid;place-content:center;gap:4px;width:42px;height:42px;margin:0;padding:0;border:1px solid #ffffff40;border-radius:14px;background:#3028cf;color:#fff;box-shadow:0 4px 0 #211b9f,0 9px 22px #15152235;cursor:pointer;list-style:none;transition:transform .34s cubic-bezier(.2,.85,.25,1),background .25s,box-shadow .3s,left .42s cubic-bezier(.22,1,.36,1)}
+.daily-side-toggle{position:fixed;z-index:1001;top:14px;left:14px;display:grid;place-content:center;gap:4px;width:42px;height:42px;margin:0;padding:0;border:1px solid #ffffff40;border-radius:14px;background:#3028cf;color:#fff;box-shadow:0 4px 0 #211b9f,0 9px 22px #15152235;cursor:pointer;list-style:none;visibility:visible;opacity:1;pointer-events:auto;transition:transform .34s cubic-bezier(.2,.85,.25,1),background .25s,box-shadow .3s,left .42s cubic-bezier(.22,1,.36,1)}
 .daily-side-toggle::-webkit-details-marker{display:none}
 .daily-side-toggle:focus-visible{outline:3px solid #ff795e;outline-offset:3px}
 .daily-side-toggle:hover{transform:translateY(-2px) scale(1.035);background:#4039e0;box-shadow:0 5px 0 #211b9f,0 13px 26px #15152245}
