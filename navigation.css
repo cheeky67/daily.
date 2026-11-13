@@ -5,6 +5,10 @@
 .daily-sidebar-top{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:47px;padding:0 4px 13px;border-bottom:1px solid #ffffff19}
 .daily-side-brand{display:flex;align-items:center;gap:10px;min-width:0;color:#fff;text-decoration:none}
 .daily-side-mark{display:grid;place-items:center;width:36px;height:36px;flex:none;border-radius:12px;background:#e2fa57;color:#3028cf;font:800 21px 'Space Grotesk',sans-serif;box-shadow:0 5px 0 #a8c738;transform:rotate(-6deg)}
+.daily-side-mark{transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.daily-side-brand:hover .daily-side-mark{transform:rotate(8deg) scale(1.06)}
+.side-nav-open .daily-side-mark{animation:daily-brand-arrive .62s cubic-bezier(.2,.8,.25,1) both}
+@keyframes daily-brand-arrive{0%{transform:rotate(-23deg) scale(.72)}65%{transform:rotate(3deg) scale(1.1)}100%{transform:rotate(-6deg) scale(1)}}
 .daily-side-word{font:700 25px/1 'Space Grotesk',sans-serif;letter-spacing:-1.7px}.daily-side-word span{color:#ff795e}
 .daily-sidebar-collapse{display:flex;align-items:center;gap:7px;min-width:35px;min-height:34px;padding:0 9px;border:1px solid #ffffff1c;border-radius:11px;background:#ffffff0c;color:#e6e4ff;font-size:10px;font-weight:800;cursor:pointer;transition:background .2s,transform .2s}
 .daily-sidebar-collapse:hover{transform:translateY(-2px);background:#ffffff18}.daily-sidebar-collapse>span:first-child{font-size:15px}
@@ -46,6 +50,15 @@ body.has-side-nav.side-nav-collapsed .daily-sidebar-bottom{justify-content:cente
 .daily-home-shell .nav-center{display:flex;align-items:center;gap:6px}
 .daily-home-shell .nav-center>a{padding:9px 15px;border-radius:999px;color:var(--muted);font-size:12px;font-weight:800;text-decoration:none;transition:background .2s,color .2s,transform .2s}
 .daily-home-shell .nav-center>a:hover{transform:translateY(-2px);background:var(--paper);color:var(--ink)}
+.brand-mark,.logo-symbol{display:grid;place-items:center;width:34px;height:34px;flex:none;border-radius:12px;background:#3028cf;color:#e2fa57;font:800 20px 'Space Grotesk',sans-serif;box-shadow:0 5px 0 #211b9f;transform:rotate(-6deg);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.brand .brand-mark{color:#e2fa57}
+.logo-symbol+.logo-word{margin-left:7px}
+.brand:hover .brand-mark,.logo:hover .logo-symbol{transform:rotate(8deg) scale(1.06)}
+.brand-word,.logo-word{color:inherit}
+.brand-word>span,.logo-word>b,.logo-word .logo-period{color:#ff795e}
+.account-brand-mark{transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.account-brand:hover .account-brand-mark{transform:rotate(8deg) scale(1.06)}
+.daily-home-shell .daily-side-toggle{display:grid;left:18px;top:17px}
 .daily-home-shell .daily-sidebar{transform:translateX(-105%)}
 .daily-home-shell.side-nav-open .daily-sidebar{transform:translateX(0)}
 .daily-home-shell .daily-sidebar-collapse{display:none}
