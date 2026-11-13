@@ -1,10 +1,95 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Each signed-in user can access only their own meal plans and saved recipes.
+    function signedIn() { return request.auth != null; }
+    function memberDoc(householdId, uid) {
+      return /databases/$(database)/documents/households/$(householdId)/members/$(uid);
+    }
+    function isMember(householdId) {
+      return signedIn() && exists(memberDoc(householdId, request.auth.uid));
+    }
+    function isParent(householdId) {
+      return isMember(householdId) &&
+        get(memberDoc(householdId, request.auth.uid)).data.role == 'parent';
+    }
+
+    // Existing personal Daily data stays private to its account.
     match /users/{userId}/{document=**} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read, write: if signedIn() && request.auth.uid == userId;
+    }
+
+    // Signed-in visitors can submit a suggestion to the owner's inbox.
+    // Clients cannot read, update, or delete suggestions, including their own.
+    match /userFeedback/{feedbackId} {
+      allow create: if signedIn() &&
+        request.resource.data.keys().hasOnly(['userId', 'email', 'message', 'includeEmail', 'language', 'source', 'createdAt']) &&
+        request.resource.data.userId == request.auth.uid &&
+        request.auth.token.email is string &&
+        request.resource.data.email == request.auth.token.email &&
+        request.resource.data.includeEmail == true &&
+        request.resource.data.message is string &&
+        request.resource.data.message.size() >= 8 &&
+        request.resource.data.message.size() <= 2000 &&
+        request.resource.data.language in ['en', 'de'] &&
+        request.resource.data.source == 'feedback-page' &&
+        request.resource.data.createdAt == request.time;
+      allow read, update, delete: if false;
+    }
+
+    // Invite IDs are random bearer links. Only a signed-in person with the
+    // link can read an unexpired invite; invites cannot be listed publicly.
+    match /householdInvites/{inviteId} {
+      allow get: if signedIn() && request.time < resource.data.expiresAt;
+      allow list: if false;
+      allow create: if signedIn() &&
+        request.resource.data.createdBy == request.auth.uid &&
+        request.resource.data.role in ['parent', 'child'] &&
+        request.resource.data.expiresAt is timestamp &&
+        isParent(request.resource.data.householdId);
+      allow update, delete: if signedIn() &&
+        resource.data.createdBy == request.auth.uid &&
+        isParent(resource.data.householdId);
+    }
+
+    match /households/{householdId} {
+      allow create: if signedIn() &&
+        request.resource.data.ownerUid == request.auth.uid &&
+        request.resource.data.name is string &&
+        request.resource.data.name.size() > 0;
+      allow get: if isMember(householdId);
+      allow list: if false;
+      allow update, delete: if isParent(householdId) &&
+        get(/databases/$(database)/documents/households/$(householdId)).data.ownerUid == request.auth.uid;
+
+      match /members/{memberUid} {
+        allow get, list: if isMember(householdId);
+        allow create: if signedIn() && request.auth.uid == memberUid && (
+          (get(/databases/$(database)/documents/households/$(householdId)).data.ownerUid == request.auth.uid &&
+           request.resource.data.role == 'parent') ||
+          (request.resource.data.inviteId is string &&
+           get(/databases/$(database)/documents/householdInvites/$(request.resource.data.inviteId)).data.householdId == householdId &&
+           get(/databases/$(database)/documents/householdInvites/$(request.resource.data.inviteId)).data.role == request.resource.data.role &&
+           request.time < get(/databases/$(database)/documents/householdInvites/$(request.resource.data.inviteId)).data.expiresAt)
+        );
+        allow update: if signedIn() && request.auth.uid == memberUid &&
+          isMember(householdId) &&
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName']);
+        allow delete: if signedIn() && request.auth.uid == memberUid && resource.data.role == 'child';
+      }
+
+      // Each person's latest swipe on a recipe is stored separately. Children
+      // can only read their own swipes; parent/organizer accounts can review all.
+      match /suggestions/{suggestionId} {
+        allow get, list: if isMember(householdId) &&
+          (isParent(householdId) || resource.data.userUid == request.auth.uid);
+        allow create, update: if isMember(householdId) &&
+          request.resource.data.userUid == request.auth.uid &&
+          request.resource.data.recipeId is string &&
+          request.resource.data.title is string &&
+          request.resource.data.liked is bool;
+        allow delete: if isMember(householdId) &&
+          (isParent(householdId) || resource.data.userUid == request.auth.uid);
+      }
     }
   }
 }
