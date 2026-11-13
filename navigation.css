@@ -1,17 +1,22 @@
-/* Shared left navigation for every Daily app area. */
-.daily-sidebar,.daily-side-toggle,.daily-side-backdrop{font-family:'DM Sans',sans-serif}
-.daily-sidebar{position:fixed;z-index:120;inset:0 auto 0 0;display:flex;flex-direction:column;width:252px;padding:19px 14px 16px;background:radial-gradient(ellipse at 5% 0,#3833bf 0,transparent 30%),linear-gradient(160deg,#24218f 0%,#191747 57%,#15151c 100%);color:#f7f5ec;box-shadow:9px 0 38px #14142724;transition:width .32s cubic-bezier(.2,.8,.2,1),transform .32s cubic-bezier(.2,.8,.2,1);}
+/* Daily's persistent, native left drawer (works without JavaScript). */
+.daily-nav-check{position:fixed;width:1px;height:1px;opacity:0;pointer-events:none}
+.daily-side-toggle{position:fixed;z-index:140;top:14px;left:14px;display:grid;place-content:center;gap:4px;width:42px;height:42px;border:1px solid #ffffff40;border-radius:14px;background:#3028cf;color:#fff;box-shadow:0 4px 0 #211b9f,0 9px 22px #15152235;cursor:pointer;transition:transform .2s,background .2s,left .3s}
+.daily-side-toggle:hover{transform:translateY(-2px);background:#4039e0}
+.daily-side-toggle span{display:block;width:16px;height:2px;border-radius:2px;background:#e2fa57;transition:transform .22s,opacity .18s}
+.daily-nav-check:checked+.daily-side-toggle span:first-child{transform:translateY(6px) rotate(45deg)}
+.daily-nav-check:checked+.daily-side-toggle span:nth-child(2){opacity:0}
+.daily-nav-check:checked+.daily-side-toggle span:last-child{transform:translateY(-6px) rotate(-45deg)}
+.daily-nav-check:checked+.daily-side-toggle{left:min(calc(86vw + 8px),calc(100vw - 54px),322px)}
+.daily-sidebar{position:fixed;z-index:120;inset:0 auto 0 0;display:flex;flex-direction:column;width:min(310px,86vw);padding:19px 14px 16px;background:radial-gradient(ellipse at 5% 0,#3833bf 0,transparent 30%),linear-gradient(160deg,#24218f 0%,#191747 57%,#15151c 100%);color:#f7f5ec;box-shadow:9px 0 38px #14142735;transform:translateX(-105%);visibility:hidden;transition:transform .32s cubic-bezier(.2,.8,.2,1),visibility .32s}
+.daily-nav-check:checked~.daily-sidebar{transform:translateX(0);visibility:visible}
 .daily-sidebar:after{content:"";position:absolute;right:-32px;bottom:96px;width:94px;height:94px;border:1px solid #ffffff13;border-radius:28px;transform:rotate(22deg);pointer-events:none}
-.daily-sidebar-top{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:47px;padding:0 4px 13px;border-bottom:1px solid #ffffff19}
+.daily-sidebar-top{display:flex;align-items:center;min-height:48px;padding:0 4px 13px;border-bottom:1px solid #ffffff19}
 .daily-side-brand{display:flex;align-items:center;gap:10px;min-width:0;color:#fff;text-decoration:none}
-.daily-side-mark{display:grid;place-items:center;width:36px;height:36px;flex:none;border-radius:12px;background:#e2fa57;color:#3028cf;font:800 21px 'Space Grotesk',sans-serif;box-shadow:0 5px 0 #a8c738;transform:rotate(-6deg)}
-.daily-side-mark{transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.daily-side-mark{display:grid;place-items:center;width:36px;height:36px;flex:none;border-radius:12px;background:#e2fa57;color:#3028cf;font:800 21px 'Space Grotesk',sans-serif;box-shadow:0 5px 0 #a8c738;transform:rotate(-6deg);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
 .daily-side-brand:hover .daily-side-mark{transform:rotate(8deg) scale(1.06)}
-.side-nav-open .daily-side-mark{animation:daily-brand-arrive .62s cubic-bezier(.2,.8,.25,1) both}
+.daily-nav-check:checked~.daily-sidebar .daily-side-mark{animation:daily-brand-arrive .62s cubic-bezier(.2,.8,.25,1) both}
 @keyframes daily-brand-arrive{0%{transform:rotate(-23deg) scale(.72)}65%{transform:rotate(3deg) scale(1.1)}100%{transform:rotate(-6deg) scale(1)}}
 .daily-side-word{font:700 25px/1 'Space Grotesk',sans-serif;letter-spacing:-1.7px}.daily-side-word span{color:#ff795e}
-.daily-sidebar-collapse{display:flex;align-items:center;gap:7px;min-width:35px;min-height:34px;padding:0 9px;border:1px solid #ffffff1c;border-radius:11px;background:#ffffff0c;color:#e6e4ff;font-size:10px;font-weight:800;cursor:pointer;transition:background .2s,transform .2s}
-.daily-sidebar-collapse:hover{transform:translateY(-2px);background:#ffffff18}.daily-sidebar-collapse>span:first-child{font-size:15px}
 .daily-sidebar-caption{padding:20px 11px 10px;color:#bdbbff;font-size:9px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
 .daily-sidebar-links{display:grid;gap:5px;margin-top:2px}
 .daily-side-link{position:relative;display:flex;align-items:center;gap:12px;min-height:47px;padding:6px 11px;border:1px solid transparent;border-radius:14px;color:#d3d2e5;text-decoration:none;font-size:12px;font-weight:700;transition:transform .22s cubic-bezier(.2,.8,.2,1),background .22s,color .22s,border-color .22s,box-shadow .22s}
@@ -19,7 +24,6 @@
 .daily-side-link[aria-current="page"]{border-color:#ffffff2a;background:#e2fa57;color:#17181d;box-shadow:0 4px 0 #a9c93b,0 10px 22px #08081945;transform:translateX(3px)}
 .daily-side-icon{display:grid;place-items:center;width:30px;height:30px;flex:none;border-radius:10px;background:#ffffff13;color:#d7d5ff;font:700 16px/1 'Space Grotesk',sans-serif;transition:transform .22s,background .22s,color .22s}
 .daily-side-link[aria-current="page"] .daily-side-icon{background:#3028cf;color:#e2fa57;transform:rotate(-7deg) scale(1.04)}
-.daily-side-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .daily-side-arrow{margin-left:auto;color:#bdbbff;font-size:14px;opacity:0;transform:translate(-4px,4px);transition:opacity .18s,transform .18s}
 .daily-side-link:hover .daily-side-arrow{opacity:1;transform:translate(0,0)}
 .daily-sidebar-plan{display:flex;align-items:center;gap:11px;min-height:49px;margin:auto 2px 12px;padding:8px 11px;border-radius:15px;background:#dff658;color:#17181d;text-decoration:none;font-size:12px;font-weight:900;box-shadow:0 5px 0 #a8c738;transition:transform .2s,box-shadow .2s}
@@ -27,69 +31,33 @@
 .daily-plan-icon{display:grid;place-items:center;width:29px;height:29px;border-radius:10px;background:#3028cf;color:#e2fa57;font-size:15px}
 .daily-sidebar-bottom{display:flex;align-items:center;gap:10px;padding:12px 8px 2px;border-top:1px solid #ffffff19;color:#aaa9c0;font-size:9px;font-weight:800;letter-spacing:.1em}
 .daily-sidebar-orb{width:9px;height:9px;flex:none;border-radius:50%;background:#ff795e;box-shadow:0 0 0 4px #ff795e20}
-.daily-side-toggle{position:fixed;z-index:140;top:14px;left:14px;display:none;place-content:center;gap:4px;width:42px;height:42px;border:1px solid #ffffff33;border-radius:14px;background:#24218f;color:#fff;box-shadow:0 4px 0 #171547,0 9px 22px #1515222b;cursor:pointer;transition:transform .2s,background .2s}
-.daily-side-toggle:hover{transform:translateY(-2px);background:#3028cf}
-.daily-side-toggle span{display:block;width:16px;height:2px;border-radius:2px;background:#e2fa57;transition:transform .22s,opacity .18s}
-.side-nav-open .daily-side-toggle span:first-child{transform:translateY(6px) rotate(45deg)}.side-nav-open .daily-side-toggle span:nth-child(2){opacity:0}.side-nav-open .daily-side-toggle span:last-child{transform:translateY(-6px) rotate(-45deg)}
-.daily-side-backdrop{display:none}
-body.has-side-nav{padding-left:252px;transition:padding-left .32s cubic-bezier(.2,.8,.2,1)}
-body.has-side-nav .navlinks,body.has-side-nav .account-navlinks{display:none!important}
-body.has-side-nav .nav-cta,body.has-side-nav #plan-link{display:none!important}
-body.has-side-nav.side-nav-collapsed{padding-left:78px}
-body.has-side-nav.side-nav-collapsed .daily-sidebar{width:78px;padding-inline:10px}
-body.has-side-nav.side-nav-collapsed .daily-sidebar-top{justify-content:center;padding-inline:0}
-body.has-side-nav.side-nav-collapsed .daily-side-brand{display:none}
-body.has-side-nav.side-nav-collapsed .daily-sidebar-collapse{justify-content:center;padding:0;width:39px}
-body.has-side-nav.side-nav-collapsed .daily-collapse-label,body.has-side-nav.side-nav-collapsed .daily-sidebar-caption,body.has-side-nav.side-nav-collapsed .daily-side-label,body.has-side-nav.side-nav-collapsed .daily-side-arrow,body.has-side-nav.side-nav-collapsed .daily-sidebar-plan-label,body.has-side-nav.side-nav-collapsed .daily-sidebar-tagline{display:none}
-body.has-side-nav.side-nav-collapsed .daily-side-link{justify-content:center;padding:6px}
-body.has-side-nav.side-nav-collapsed .daily-sidebar-plan{justify-content:center;padding:7px}
-body.has-side-nav.side-nav-collapsed .daily-sidebar-bottom{justify-content:center;padding-inline:0}
-.daily-mobile-nav{display:none!important}
-
-/* Keep the marketing links in the homepage header, while app links live in the side menu. */
+.daily-sidebar-backdrop{position:fixed;z-index:110;inset:0;display:none;border:0;background:#10101b91;backdrop-filter:blur(4px);cursor:pointer}
+.daily-nav-check:checked~.daily-sidebar-backdrop{display:block}
 .daily-home-shell .nav-center{display:flex;align-items:center;gap:6px}
 .daily-home-shell .nav-center>a{padding:9px 15px;border-radius:999px;color:var(--muted);font-size:12px;font-weight:800;text-decoration:none;transition:background .2s,color .2s,transform .2s}
 .daily-home-shell .nav-center>a:hover{transform:translateY(-2px);background:var(--paper);color:var(--ink)}
 .brand-mark,.logo-symbol{display:grid;place-items:center;width:34px;height:34px;flex:none;border-radius:12px;background:#3028cf;color:#e2fa57;font:800 20px 'Space Grotesk',sans-serif;box-shadow:0 5px 0 #211b9f;transform:rotate(-6deg);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
-.brand .brand-mark{color:#e2fa57}
-.logo-symbol+.logo-word{margin-left:7px}
+.brand .brand-mark{color:#e2fa57}.logo-symbol+.logo-word{margin-left:7px}
 .brand:hover .brand-mark,.logo:hover .logo-symbol{transform:rotate(8deg) scale(1.06)}
-.brand-word,.logo-word{color:inherit}
-.brand-word>span,.logo-word>b,.logo-word .logo-period{color:#ff795e}
-.account-brand-mark{transition:transform .3s cubic-bezier(.2,.8,.2,1)}
-.account-brand:hover .account-brand-mark{transform:rotate(8deg) scale(1.06)}
-.daily-home-shell .daily-side-toggle{display:grid;left:18px;top:17px}
-.daily-home-shell .daily-sidebar{transform:translateX(-105%)}
-.daily-home-shell.side-nav-open .daily-sidebar{transform:translateX(0)}
-.daily-home-shell .daily-sidebar-collapse{display:none}
-.daily-home-shell .daily-sidebar-top{justify-content:flex-start}
-
-/* The homepage menu toggle and compact-screen drawer. */
-.daily-home-shell .daily-side-toggle{display:grid;left:18px;top:17px}
-@media(min-width:951px){body.has-side-nav .daily-sidebar-collapse{display:flex}body.has-side-nav .daily-side-toggle{display:none}}
-@media(max-width:950px){body.has-side-nav{padding-left:0;padding-bottom:0!important}body.has-side-nav.side-nav-collapsed{padding-left:0}body.has-side-nav .daily-sidebar{width:min(310px,86vw);transform:translateX(-105%);padding:18px 14px max(20px,env(safe-area-inset-bottom))}body.has-side-nav.side-nav-open .daily-sidebar{transform:translateX(0)}body.has-side-nav .daily-sidebar-collapse{display:none}.daily-side-toggle{display:grid}.daily-side-backdrop{position:fixed;z-index:110;inset:0;border:0;background:#10101b91;backdrop-filter:blur(4px);cursor:pointer}.side-nav-open .daily-side-backdrop{display:block}.daily-home-shell .daily-side-toggle{left:12px;top:12px}.daily-home-shell .nav{padding-left:48px;box-sizing:border-box}body.has-side-nav .account-nav{padding-left:48px;box-sizing:border-box}body.has-side-nav header>nav.wrap{padding-left:48px;box-sizing:border-box}.daily-home-shell .daily-sidebar{width:min(310px,86vw);padding:18px 14px max(20px,env(safe-area-inset-bottom))}.daily-home-shell.side-nav-open .daily-sidebar{transform:translateX(0)}body.has-side-nav .daily-sidebar-bottom{margin-top:auto}}
+.brand-word,.logo-word{color:inherit}.brand-word>span,.logo-word>b,.logo-word .logo-period{color:#ff795e}
+.account-brand-mark{transition:transform .3s cubic-bezier(.2,.8,.2,1)}.account-brand:hover .account-brand-mark{transform:rotate(8deg) scale(1.06)}
+.daily-mobile-nav{display:none!important}
+body.has-side-nav .navlinks,body.has-side-nav .account-navlinks{display:none!important}
+body.has-side-nav .nav-cta,body.has-side-nav #plan-link{display:none!important}
+.daily-sidebar-plan-label,.daily-nav-en,.daily-nav-de,.daily-plan-en,.daily-plan-de{display:none}
+html[lang="en"] .daily-nav-en,html:not([lang="de"]) .daily-nav-en{display:inline}
+html[lang="de"] .daily-nav-de{display:inline}
+html[lang="en"] .daily-plan-en,html:not([lang="de"]) .daily-plan-en{display:inline}
+html[lang="de"] .daily-plan-de{display:inline}
+body[data-page="home"] [data-page-link="home"],body[data-page="shopping"] [data-page-link="shopping"],body[data-page="household"] [data-page-link="family"],body[data-page="profile"] [data-page-link="profile"],body[data-page="settings"] [data-page-link="settings"],body[data-page="feedback"] [data-page-link="feedback"]{border-color:#ffffff2a;background:#e2fa57;color:#17181d;box-shadow:0 4px 0 #a9c93b,0 10px 22px #08081945;transform:translateX(3px)}
+body[data-page="home"] [data-page-link="home"] .daily-side-icon,body[data-page="shopping"] [data-page-link="shopping"] .daily-side-icon,body[data-page="household"] [data-page-link="family"] .daily-side-icon,body[data-page="profile"] [data-page-link="profile"] .daily-side-icon,body[data-page="settings"] [data-page-link="settings"] .daily-side-icon,body[data-page="feedback"] [data-page-link="feedback"] .daily-side-icon{background:#3028cf;color:#e2fa57;transform:rotate(-7deg) scale(1.04)}
+@media(min-width:951px){.daily-home-shell .nav,body.has-side-nav header nav.wrap,body.has-side-nav .account-nav{padding-left:56px;box-sizing:border-box}}
+@media(max-width:950px){body.has-side-nav .navlinks,body.has-side-nav .account-navlinks{display:none!important}.daily-home-shell .nav,body.has-side-nav .account-nav,body.has-side-nav header>nav.wrap{padding-left:56px!important;box-sizing:border-box}}
 @media(max-width:540px){.daily-home-shell .nav-center{display:none!important}.daily-home-shell .nav{grid-template-columns:1fr auto}.daily-home-shell .nav-actions{gap:5px}.daily-home-shell .nav-button{padding:10px 12px;font-size:10px}}
-
-/* Smooth transitions for page changes and in-page tabs/sections. */
 @view-transition{navigation:auto}
 ::view-transition-old(root){animation:daily-route-out .16s ease-in both}
 ::view-transition-new(root){animation:daily-route-in .38s cubic-bezier(.2,.85,.25,1) both}
 @keyframes daily-route-out{to{opacity:0;filter:blur(2px);transform:translateY(-4px) scale(.997)}}
 @keyframes daily-route-in{from{opacity:0;filter:blur(4px);transform:translateY(9px) scale(.993)}to{opacity:1;filter:blur(0);transform:translateY(0) scale(1)}}
 html{scroll-behavior:smooth;scroll-padding-top:92px}
-@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none!important}html,body{scroll-behavior:auto!important;transition:none!important}.daily-sidebar,.daily-side-link,.daily-side-toggle,.daily-sidebar-collapse,.daily-sidebar-plan,.daily-side-toggle span{transition:none!important}}
-
-/* Same openable left drawer on the homepage and every app page. */
-body.has-side-nav{padding-left:0!important;padding-bottom:0!important}
-body.has-side-nav.side-nav-collapsed{padding-left:0!important}
-.daily-sidebar,.daily-home-shell .daily-sidebar,body.has-side-nav .daily-sidebar{width:min(310px,86vw);transform:translateX(-105%)}
-.side-nav-open .daily-sidebar,.daily-home-shell.side-nav-open .daily-sidebar,body.has-side-nav.side-nav-open .daily-sidebar{transform:translateX(0)}
-.daily-sidebar-collapse{display:none!important}
-.daily-sidebar-top{justify-content:flex-start!important}
-.daily-home-shell .daily-side-toggle,.daily-side-toggle,body.has-side-nav .daily-side-toggle{display:grid!important}
-.side-nav-open .daily-side-toggle{left:min(calc(86vw + 8px),calc(100vw - 54px),322px);background:#24218f}
-.daily-side-backdrop{z-index:110}
-.side-nav-open .daily-side-backdrop{display:block}
-body.has-side-nav .nav-cta,body.has-side-nav #plan-link{display:none!important}
-@media(min-width:951px){.daily-home-shell .nav,body.has-side-nav header nav.wrap,body.has-side-nav .account-nav{padding-left:56px;box-sizing:border-box}}
-@media(max-width:950px){body.has-side-nav{padding-left:0!important;padding-bottom:0!important}.daily-home-shell .nav,body.has-side-nav .account-nav,body.has-side-nav header>nav.wrap{padding-left:56px!important;box-sizing:border-box}.daily-home-shell .daily-sidebar,body.has-side-nav .daily-sidebar{width:min(310px,86vw)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none!important}html,body{scroll-behavior:auto!important;transition:none!important}.daily-sidebar,.daily-side-link,.daily-side-toggle,.daily-sidebar-plan,.daily-side-toggle span{transition:none!important}.daily-nav-check:checked~.daily-sidebar .daily-side-mark{animation:none!important}}
