@@ -65,3 +65,18 @@ body.has-side-nav.side-nav-collapsed .daily-sidebar-bottom{justify-content:cente
 @keyframes daily-route-in{from{opacity:0;filter:blur(4px);transform:translateY(9px) scale(.993)}to{opacity:1;filter:blur(0);transform:translateY(0) scale(1)}}
 html{scroll-behavior:smooth;scroll-padding-top:92px}
 @media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none!important}html,body{scroll-behavior:auto!important;transition:none!important}.daily-sidebar,.daily-side-link,.daily-side-toggle,.daily-sidebar-collapse,.daily-sidebar-plan,.daily-side-toggle span{transition:none!important}}
+
+/* Same openable left drawer on the homepage and every app page. */
+body.has-side-nav{padding-left:0!important;padding-bottom:0!important}
+body.has-side-nav.side-nav-collapsed{padding-left:0!important}
+.daily-sidebar,.daily-home-shell .daily-sidebar,body.has-side-nav .daily-sidebar{width:min(310px,86vw);transform:translateX(-105%)}
+.side-nav-open .daily-sidebar,.daily-home-shell.side-nav-open .daily-sidebar,body.has-side-nav.side-nav-open .daily-sidebar{transform:translateX(0)}
+.daily-sidebar-collapse{display:none!important}
+.daily-sidebar-top{justify-content:flex-start!important}
+.daily-home-shell .daily-side-toggle,.daily-side-toggle,body.has-side-nav .daily-side-toggle{display:grid!important}
+.side-nav-open .daily-side-toggle{left:min(calc(86vw + 8px),calc(100vw - 54px),322px);background:#24218f}
+.daily-side-backdrop{z-index:110}
+.side-nav-open .daily-side-backdrop{display:block}
+body.has-side-nav .nav-cta,body.has-side-nav #plan-link{display:none!important}
+@media(min-width:951px){.daily-home-shell .nav,body.has-side-nav header nav.wrap,body.has-side-nav .account-nav{padding-left:56px;box-sizing:border-box}}
+@media(max-width:950px){body.has-side-nav{padding-left:0!important;padding-bottom:0!important}.daily-home-shell .nav,body.has-side-nav .account-nav,body.has-side-nav header>nav.wrap{padding-left:56px!important;box-sizing:border-box}.daily-home-shell .daily-sidebar,body.has-side-nav .daily-sidebar{width:min(310px,86vw)}}
