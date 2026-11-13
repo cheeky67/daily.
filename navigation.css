@@ -1,20 +1,22 @@
 /* Daily's persistent, native left drawer (works without JavaScript). */
-.daily-nav-check{position:fixed;width:1px;height:1px;opacity:0;pointer-events:none}
-.daily-side-toggle{position:fixed;z-index:140;top:14px;left:14px;display:grid;place-content:center;gap:4px;width:42px;height:42px;border:1px solid #ffffff40;border-radius:14px;background:#3028cf;color:#fff;box-shadow:0 4px 0 #211b9f,0 9px 22px #15152235;cursor:pointer;transition:transform .2s,background .2s,left .3s}
+.daily-navigation{position:static}
+.daily-side-toggle{position:fixed;z-index:140;top:14px;left:14px;display:grid;place-content:center;gap:4px;width:42px;height:42px;margin:0;padding:0;border:1px solid #ffffff40;border-radius:14px;background:#3028cf;color:#fff;box-shadow:0 4px 0 #211b9f,0 9px 22px #15152235;cursor:pointer;list-style:none;transition:transform .2s,background .2s,left .3s}
+.daily-side-toggle::-webkit-details-marker{display:none}
+.daily-side-toggle:focus-visible{outline:3px solid #ff795e;outline-offset:3px}
 .daily-side-toggle:hover{transform:translateY(-2px);background:#4039e0}
 .daily-side-toggle span{display:block;width:16px;height:2px;border-radius:2px;background:#e2fa57;transition:transform .22s,opacity .18s}
-.daily-nav-check:checked+.daily-side-toggle span:first-child{transform:translateY(6px) rotate(45deg)}
-.daily-nav-check:checked+.daily-side-toggle span:nth-child(2){opacity:0}
-.daily-nav-check:checked+.daily-side-toggle span:last-child{transform:translateY(-6px) rotate(-45deg)}
-.daily-nav-check:checked+.daily-side-toggle{left:min(calc(86vw + 8px),calc(100vw - 54px),322px)}
+.daily-navigation[open]>.daily-side-toggle span:first-child{transform:translateY(6px) rotate(45deg)}
+.daily-navigation[open]>.daily-side-toggle span:nth-child(2){opacity:0}
+.daily-navigation[open]>.daily-side-toggle span:last-child{transform:translateY(-6px) rotate(-45deg)}
+.daily-navigation[open]>.daily-side-toggle{left:min(calc(86vw + 8px),calc(100vw - 54px),322px)}
 .daily-sidebar{position:fixed;z-index:120;inset:0 auto 0 0;display:flex;flex-direction:column;width:min(310px,86vw);padding:19px 14px 16px;background:radial-gradient(ellipse at 5% 0,#3833bf 0,transparent 30%),linear-gradient(160deg,#24218f 0%,#191747 57%,#15151c 100%);color:#f7f5ec;box-shadow:9px 0 38px #14142735;transform:translateX(-105%);visibility:hidden;transition:transform .32s cubic-bezier(.2,.8,.2,1),visibility .32s}
-.daily-nav-check:checked~.daily-sidebar{transform:translateX(0);visibility:visible}
+.daily-navigation[open] .daily-sidebar{transform:translateX(0);visibility:visible}
 .daily-sidebar:after{content:"";position:absolute;right:-32px;bottom:96px;width:94px;height:94px;border:1px solid #ffffff13;border-radius:28px;transform:rotate(22deg);pointer-events:none}
 .daily-sidebar-top{display:flex;align-items:center;min-height:48px;padding:0 4px 13px;border-bottom:1px solid #ffffff19}
 .daily-side-brand{display:flex;align-items:center;gap:10px;min-width:0;color:#fff;text-decoration:none}
 .daily-side-mark{display:grid;place-items:center;width:36px;height:36px;flex:none;border-radius:12px;background:#e2fa57;color:#3028cf;font:800 21px 'Space Grotesk',sans-serif;box-shadow:0 5px 0 #a8c738;transform:rotate(-6deg);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
 .daily-side-brand:hover .daily-side-mark{transform:rotate(8deg) scale(1.06)}
-.daily-nav-check:checked~.daily-sidebar .daily-side-mark{animation:daily-brand-arrive .62s cubic-bezier(.2,.8,.25,1) both}
+.daily-navigation[open] .daily-side-mark{animation:daily-brand-arrive .62s cubic-bezier(.2,.8,.25,1) both}
 @keyframes daily-brand-arrive{0%{transform:rotate(-23deg) scale(.72)}65%{transform:rotate(3deg) scale(1.1)}100%{transform:rotate(-6deg) scale(1)}}
 .daily-side-word{font:700 25px/1 'Space Grotesk',sans-serif;letter-spacing:-1.7px}.daily-side-word span{color:#ff795e}
 .daily-sidebar-caption{padding:20px 11px 10px;color:#bdbbff;font-size:9px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
@@ -31,8 +33,6 @@
 .daily-plan-icon{display:grid;place-items:center;width:29px;height:29px;border-radius:10px;background:#3028cf;color:#e2fa57;font-size:15px}
 .daily-sidebar-bottom{display:flex;align-items:center;gap:10px;padding:12px 8px 2px;border-top:1px solid #ffffff19;color:#aaa9c0;font-size:9px;font-weight:800;letter-spacing:.1em}
 .daily-sidebar-orb{width:9px;height:9px;flex:none;border-radius:50%;background:#ff795e;box-shadow:0 0 0 4px #ff795e20}
-.daily-sidebar-backdrop{position:fixed;z-index:110;inset:0;display:none;border:0;background:#10101b91;backdrop-filter:blur(4px);cursor:pointer}
-.daily-nav-check:checked~.daily-sidebar-backdrop{display:block}
 .daily-home-shell .nav-center{display:flex;align-items:center;gap:6px}
 .daily-home-shell .nav-center>a{padding:9px 15px;border-radius:999px;color:var(--muted);font-size:12px;font-weight:800;text-decoration:none;transition:background .2s,color .2s,transform .2s}
 .daily-home-shell .nav-center>a:hover{transform:translateY(-2px);background:var(--paper);color:var(--ink)}
@@ -60,4 +60,4 @@ body[data-page="home"] [data-page-link="home"] .daily-side-icon,body[data-page="
 @keyframes daily-route-out{to{opacity:0;filter:blur(2px);transform:translateY(-4px) scale(.997)}}
 @keyframes daily-route-in{from{opacity:0;filter:blur(4px);transform:translateY(9px) scale(.993)}to{opacity:1;filter:blur(0);transform:translateY(0) scale(1)}}
 html{scroll-behavior:smooth;scroll-padding-top:92px}
-@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none!important}html,body{scroll-behavior:auto!important;transition:none!important}.daily-sidebar,.daily-side-link,.daily-side-toggle,.daily-sidebar-plan,.daily-side-toggle span{transition:none!important}.daily-nav-check:checked~.daily-sidebar .daily-side-mark{animation:none!important}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none!important}html,body{scroll-behavior:auto!important;transition:none!important}.daily-sidebar,.daily-side-link,.daily-side-toggle,.daily-sidebar-plan,.daily-side-toggle span{transition:none!important}.daily-navigation[open] .daily-side-mark{animation:none!important}}
