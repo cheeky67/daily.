@@ -1,16 +1,16 @@
 /* Daily's persistent, native left drawer (works without JavaScript). */
 .daily-navigation{position:static}
-.daily-side-toggle{position:fixed;z-index:140;top:14px;left:14px;display:grid;place-content:center;gap:4px;width:42px;height:42px;margin:0;padding:0;border:1px solid #ffffff40;border-radius:14px;background:#3028cf;color:#fff;box-shadow:0 4px 0 #211b9f,0 9px 22px #15152235;cursor:pointer;list-style:none;transition:transform .2s,background .2s,left .3s}
+.daily-side-toggle{position:fixed;z-index:140;top:14px;left:14px;display:grid;place-content:center;gap:4px;width:42px;height:42px;margin:0;padding:0;border:1px solid #ffffff40;border-radius:14px;background:#3028cf;color:#fff;box-shadow:0 4px 0 #211b9f,0 9px 22px #15152235;cursor:pointer;list-style:none;transition:transform .34s cubic-bezier(.2,.85,.25,1),background .25s,box-shadow .3s,left .42s cubic-bezier(.22,1,.36,1)}
 .daily-side-toggle::-webkit-details-marker{display:none}
 .daily-side-toggle:focus-visible{outline:3px solid #ff795e;outline-offset:3px}
-.daily-side-toggle:hover{transform:translateY(-2px);background:#4039e0}
-.daily-side-toggle span{display:block;width:16px;height:2px;border-radius:2px;background:#e2fa57;transition:transform .22s,opacity .18s}
+.daily-side-toggle:hover{transform:translateY(-2px) scale(1.035);background:#4039e0;box-shadow:0 5px 0 #211b9f,0 13px 26px #15152245}
+.daily-side-toggle span{display:block;width:16px;height:2px;border-radius:2px;background:#e2fa57;transition:transform .36s cubic-bezier(.2,.85,.25,1),opacity .2s}
 .daily-navigation[open]>.daily-side-toggle span:first-child{transform:translateY(6px) rotate(45deg)}
 .daily-navigation[open]>.daily-side-toggle span:nth-child(2){opacity:0}
 .daily-navigation[open]>.daily-side-toggle span:last-child{transform:translateY(-6px) rotate(-45deg)}
 .daily-navigation[open]>.daily-side-toggle{left:min(calc(86vw + 8px),calc(100vw - 54px),322px)}
-.daily-sidebar{position:fixed;z-index:120;inset:0 auto 0 0;display:flex;flex-direction:column;width:min(310px,86vw);padding:19px 14px 16px;background:radial-gradient(ellipse at 5% 0,#3833bf 0,transparent 30%),linear-gradient(160deg,#24218f 0%,#191747 57%,#15151c 100%);color:#f7f5ec;box-shadow:9px 0 38px #14142735;transform:translateX(-105%);visibility:hidden;transition:transform .32s cubic-bezier(.2,.8,.2,1),visibility .32s}
-.daily-navigation[open] .daily-sidebar{transform:translateX(0);visibility:visible}
+.daily-sidebar{position:fixed;z-index:120;inset:0 auto 0 0;display:flex;flex-direction:column;width:min(326px,86vw);padding:19px 14px 16px;background:radial-gradient(ellipse at 5% 0,#3833bf 0,transparent 30%),linear-gradient(160deg,#24218f 0%,#191747 57%,#15151c 100%);color:#f7f5ec;box-shadow:9px 0 38px #14142735;transform:translate3d(-105%,0,0);visibility:hidden;transition:transform .52s cubic-bezier(.22,1,.36,1),visibility .52s;will-change:transform}
+.daily-navigation[open] .daily-sidebar{transform:translate3d(0,0,0);visibility:visible}
 .daily-sidebar:after{content:"";position:absolute;right:-32px;bottom:96px;width:94px;height:94px;border:1px solid #ffffff13;border-radius:28px;transform:rotate(22deg);pointer-events:none}
 .daily-sidebar-top{display:flex;align-items:center;min-height:48px;padding:0 4px 13px;border-bottom:1px solid #ffffff19}
 .daily-side-brand{display:flex;align-items:center;gap:10px;min-width:0;color:#fff;text-decoration:none}
@@ -21,14 +21,18 @@
 .daily-side-word{font:700 25px/1 'Space Grotesk',sans-serif;letter-spacing:-1.7px}.daily-side-word span{color:#ff795e}
 .daily-sidebar-caption{padding:20px 11px 10px;color:#bdbbff;font-size:9px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
 .daily-sidebar-links{display:grid;gap:5px;margin-top:2px}
-.daily-side-link{position:relative;display:flex;align-items:center;gap:12px;min-height:47px;padding:6px 11px;border:1px solid transparent;border-radius:14px;color:#d3d2e5;text-decoration:none;font-size:12px;font-weight:700;transition:transform .22s cubic-bezier(.2,.8,.2,1),background .22s,color .22s,border-color .22s,box-shadow .22s}
+.daily-side-link{position:relative;display:flex;align-items:center;gap:12px;min-height:47px;padding:6px 11px;border:1px solid transparent;border-radius:14px;color:#d3d2e5;text-decoration:none;font-size:12px;font-weight:700;transition:transform .32s cubic-bezier(.2,.85,.25,1),background .25s,color .25s,border-color .25s,box-shadow .3s}
+.daily-navigation:not([open]) .daily-side-link{opacity:.72;transform:translate3d(-10px,0,0)}
+.daily-navigation[open] .daily-side-link{animation:daily-link-arrive .46s both cubic-bezier(.2,.85,.25,1)}
+.daily-navigation[open] .daily-side-link:nth-child(1){animation-delay:.04s}.daily-navigation[open] .daily-side-link:nth-child(2){animation-delay:.075s}.daily-navigation[open] .daily-side-link:nth-child(3){animation-delay:.11s}.daily-navigation[open] .daily-side-link:nth-child(4){animation-delay:.145s}.daily-navigation[open] .daily-side-link:nth-child(5){animation-delay:.18s}.daily-navigation[open] .daily-side-link:nth-child(6){animation-delay:.215s}.daily-navigation[open] .daily-side-link:nth-child(7){animation-delay:.25s}.daily-navigation[open] .daily-side-link:nth-child(8){animation-delay:.285s}
+@keyframes daily-link-arrive{from{opacity:.65;transform:translate3d(-10px,0,0)}to{opacity:1;transform:translate3d(0,0,0)}}
 .daily-side-link:hover{transform:translateX(4px);border-color:#ffffff1b;background:#ffffff10;color:#fff}
 .daily-side-link[aria-current="page"]{border-color:#ffffff2a;background:#e2fa57;color:#17181d;box-shadow:0 4px 0 #a9c93b,0 10px 22px #08081945;transform:translateX(3px)}
 .daily-side-icon{display:grid;place-items:center;width:30px;height:30px;flex:none;border-radius:10px;background:#ffffff13;color:#d7d5ff;font:700 16px/1 'Space Grotesk',sans-serif;transition:transform .22s,background .22s,color .22s}
 .daily-side-link[aria-current="page"] .daily-side-icon{background:#3028cf;color:#e2fa57;transform:rotate(-7deg) scale(1.04)}
 .daily-side-arrow{margin-left:auto;color:#bdbbff;font-size:14px;opacity:0;transform:translate(-4px,4px);transition:opacity .18s,transform .18s}
 .daily-side-link:hover .daily-side-arrow{opacity:1;transform:translate(0,0)}
-.daily-sidebar-plan{display:flex;align-items:center;gap:11px;min-height:49px;margin:auto 2px 12px;padding:8px 11px;border-radius:15px;background:#dff658;color:#17181d;text-decoration:none;font-size:12px;font-weight:900;box-shadow:0 5px 0 #a8c738;transition:transform .2s,box-shadow .2s}
+.daily-sidebar-plan{display:flex;align-items:center;gap:11px;min-height:49px;margin:auto 2px 12px;padding:8px 11px;border-radius:15px;background:#dff658;color:#17181d;text-decoration:none;font-size:12px;font-weight:900;box-shadow:0 5px 0 #a8c738;transition:transform .32s cubic-bezier(.2,.85,.25,1),box-shadow .3s}
 .daily-sidebar-plan:hover{transform:translateY(-3px);box-shadow:0 8px 0 #a8c738,0 14px 24px #0003}
 .daily-plan-icon{display:grid;place-items:center;width:29px;height:29px;border-radius:10px;background:#3028cf;color:#e2fa57;font-size:15px}
 .daily-sidebar-bottom{display:flex;align-items:center;gap:10px;padding:12px 8px 2px;border-top:1px solid #ffffff19;color:#aaa9c0;font-size:9px;font-weight:800;letter-spacing:.1em}
@@ -55,9 +59,9 @@ body[data-page="home"] [data-page-link="home"] .daily-side-icon,body[data-page="
 @media(max-width:950px){body.has-side-nav .navlinks,body.has-side-nav .account-navlinks{display:none!important}.daily-home-shell .nav,body.has-side-nav .account-nav,body.has-side-nav header>nav.wrap{padding-left:56px!important;box-sizing:border-box}}
 @media(max-width:540px){.daily-home-shell .nav-center{display:none!important}.daily-home-shell .nav{grid-template-columns:1fr auto}.daily-home-shell .nav-actions{gap:5px}.daily-home-shell .nav-button{padding:10px 12px;font-size:10px}}
 @view-transition{navigation:auto}
-::view-transition-old(root){animation:daily-route-out .16s ease-in both}
-::view-transition-new(root){animation:daily-route-in .38s cubic-bezier(.2,.85,.25,1) both}
-@keyframes daily-route-out{to{opacity:0;filter:blur(2px);transform:translateY(-4px) scale(.997)}}
-@keyframes daily-route-in{from{opacity:0;filter:blur(4px);transform:translateY(9px) scale(.993)}to{opacity:1;filter:blur(0);transform:translateY(0) scale(1)}}
+::view-transition-old(root){animation:daily-route-out .2s ease-in both}
+::view-transition-new(root){animation:daily-route-in .48s cubic-bezier(.22,1,.36,1) both}
+@keyframes daily-route-out{to{opacity:0;filter:blur(1px);transform:translateY(-3px)}}
+@keyframes daily-route-in{from{opacity:0;filter:blur(2px);transform:translateY(7px)}to{opacity:1;filter:blur(0);transform:translateY(0)}}
 html{scroll-behavior:smooth;scroll-padding-top:92px}
-@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none!important}html,body{scroll-behavior:auto!important;transition:none!important}.daily-sidebar,.daily-side-link,.daily-side-toggle,.daily-sidebar-plan,.daily-side-toggle span{transition:none!important}.daily-navigation[open] .daily-side-mark{animation:none!important}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root),.daily-navigation[open] .daily-side-link{animation:none!important}html,body{scroll-behavior:auto!important;transition:none!important}.daily-sidebar,.daily-side-link,.daily-side-toggle,.daily-sidebar-plan,.daily-side-toggle span{transition:none!important}.daily-side-link{opacity:1!important;transform:none!important}.daily-navigation[open] .daily-side-mark{animation:none!important}}
