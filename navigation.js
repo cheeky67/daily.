@@ -22,6 +22,26 @@ import{firebaseConfig}from'./firebase-config.js';
     if(toggle)toggle.setAttribute('aria-label',document.documentElement.lang==='de'?'Menü öffnen / schließen':'Open / close menu');
   };
   new MutationObserver(updateLanguage).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+  const addAnnouncement=async()=>{
+    try{
+      const app=getApps().length?getApp():initializeApp(firebaseConfig),db=getFirestore(app);
+      const snapshot=await getDoc(doc(db,'dailySite','announcement'));
+      if(!snapshot.exists())return;
+      const notice=snapshot.data();if(notice.active!==true||(notice.expiresAt?.toMillis?.()&&notice.expiresAt.toMillis()<=Date.now()))return;
+      const language=document.documentElement.lang==='de'?'de':'en';
+      const title=language==='de'?notice.titleDe:notice.titleEn,body=language==='de'?notice.bodyDe:notice.bodyEn;
+      if(!title&&!body)return;
+      const version=notice.updatedAt?.toMillis?.()||'current';if(sessionStorage.getItem('daily-announcement-dismissed')===String(version))return;
+      const bar=document.createElement('aside');bar.className='daily-announcement';bar.setAttribute('role','status');
+      const copy=document.createElement('div');copy.className='daily-announcement-copy';
+      if(title){const heading=document.createElement('strong');heading.textContent=title;copy.append(heading)}
+      if(body){const message=document.createElement('span');message.textContent=body;copy.append(message)}
+      const close=document.createElement('button');close.type='button';close.className='daily-announcement-close';close.setAttribute('aria-label',language==='de'?'Mitteilung schließen':'Dismiss announcement');close.textContent='×';
+      close.addEventListener('click',()=>{sessionStorage.setItem('daily-announcement-dismissed',String(version));bar.remove()});bar.append(copy,close);
+      const header=document.querySelector('header');if(header)header.insertAdjacentElement('afterend',bar);else document.body.prepend(bar);
+    }catch(error){console.warn('Daily announcement could not load.',error)}
+  };
+  addAnnouncement();
   const adminLinks=[...document.querySelectorAll('[data-admin-only]')];
   if(!adminLinks.length)return;
   const hideAdmin=()=>adminLinks.forEach(link=>{link.hidden=true});
