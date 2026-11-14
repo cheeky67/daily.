@@ -22,7 +22,7 @@ html.dark-theme body{color-scheme:dark;background-color:#14151a}
 @keyframes daily-brand-arrive{0%{transform:rotate(-23deg) scale(.72)}65%{transform:rotate(3deg) scale(1.1)}100%{transform:rotate(-6deg) scale(1)}}
 .daily-side-word{font:700 25px/1 'Space Grotesk',sans-serif;letter-spacing:-1.7px}.daily-side-word span{color:#ff795e}
 .daily-sidebar-caption{padding:20px 11px 10px;color:#bdbbff;font-size:9px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
-.daily-sidebar-links{display:grid;gap:5px;margin-top:2px}
+.daily-sidebar-links{display:grid;align-items:stretch;justify-content:initial;gap:5px;width:100%;height:auto;margin-top:2px;box-sizing:border-box}
 .daily-side-link{position:relative;display:flex;align-items:center;gap:12px;min-height:47px;padding:6px 11px;border:1px solid transparent;border-radius:14px;color:#d3d2e5;text-decoration:none;font-size:12px;font-weight:700;transition:transform .32s cubic-bezier(.2,.85,.25,1),background .25s,color .25s,border-color .25s,box-shadow .3s}
 .daily-navigation:not([open]) .daily-side-link{opacity:.72;transform:translate3d(-10px,0,0)}
 .daily-navigation[open] .daily-side-link{animation:daily-link-arrive .46s both cubic-bezier(.2,.85,.25,1)}
@@ -51,12 +51,14 @@ html.dark-theme body{color-scheme:dark;background-color:#14151a}
 body.has-side-nav .navlinks,body.has-side-nav .account-navlinks{display:none!important}
 body.has-side-nav .nav-cta,body.has-side-nav #plan-link{display:none!important}
 .daily-sidebar-plan-label,.daily-nav-en,.daily-nav-de,.daily-plan-en,.daily-plan-de{display:none}
+[data-admin-only][hidden]{display:none!important}
 html[lang="en"] .daily-nav-en,html:not([lang="de"]) .daily-nav-en{display:inline}
 html[lang="de"] .daily-nav-de{display:inline}
 html[lang="en"] .daily-plan-en,html:not([lang="de"]) .daily-plan-en{display:inline}
 html[lang="de"] .daily-plan-de{display:inline}
 body[data-page="home"] [data-page-link="home"],body[data-page="shopping"] [data-page-link="shopping"],body[data-page="household"] [data-page-link="family"],body[data-page="profile"] [data-page-link="profile"],body[data-page="settings"] [data-page-link="settings"],body[data-page="feedback"] [data-page-link="feedback"]{border-color:#ffffff2a;background:#e2fa57;color:#17181d;box-shadow:0 4px 0 #a9c93b,0 10px 22px #08081945;transform:translateX(3px)}
-body[data-page="home"] [data-page-link="home"] .daily-side-icon,body[data-page="shopping"] [data-page-link="shopping"] .daily-side-icon,body[data-page="household"] [data-page-link="family"] .daily-side-icon,body[data-page="profile"] [data-page-link="profile"] .daily-side-icon,body[data-page="settings"] [data-page-link="settings"] .daily-side-icon,body[data-page="feedback"] [data-page-link="feedback"] .daily-side-icon{background:#3028cf;color:#e2fa57;transform:rotate(-7deg) scale(1.04)}
+body[data-page="admin"] [data-page-link="admin"]{border-color:#ffffff2a;background:#e2fa57;color:#17181d;box-shadow:0 4px 0 #a9c93b,0 10px 22px #08081945;transform:translateX(3px)}
+body[data-page="home"] [data-page-link="home"] .daily-side-icon,body[data-page="shopping"] [data-page-link="shopping"] .daily-side-icon,body[data-page="household"] [data-page-link="family"] .daily-side-icon,body[data-page="profile"] [data-page-link="profile"] .daily-side-icon,body[data-page="settings"] [data-page-link="settings"] .daily-side-icon,body[data-page="feedback"] [data-page-link="feedback"] .daily-side-icon,body[data-page="admin"] [data-page-link="admin"] .daily-side-icon{background:#3028cf;color:#e2fa57;transform:rotate(-7deg) scale(1.04)}
 @media(min-width:951px){.daily-home-shell .nav,body.has-side-nav header nav.wrap,body.has-side-nav .account-nav{padding-left:56px;box-sizing:border-box}}
 @media(max-width:950px){body.has-side-nav .navlinks,body.has-side-nav .account-navlinks{display:none!important}.daily-home-shell .nav,body.has-side-nav .account-nav,body.has-side-nav header>nav.wrap{padding-left:56px!important;box-sizing:border-box}}
 @media(max-width:540px){.daily-home-shell .nav-center{display:none!important}.daily-home-shell .nav{grid-template-columns:1fr auto}.daily-home-shell .nav-actions{gap:5px}.daily-home-shell .nav-button{padding:10px 12px;font-size:10px}}
