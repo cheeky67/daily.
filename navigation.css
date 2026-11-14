@@ -43,9 +43,12 @@ html.dark-theme body{color-scheme:dark;background-color:#14151a}
 .daily-home-shell .nav-center>a{padding:9px 15px;border-radius:999px;color:var(--muted);font-size:12px;font-weight:800;text-decoration:none;transition:background .2s,color .2s,transform .2s}
 .daily-home-shell .nav-center>a:hover{transform:translateY(-2px);background:var(--paper);color:var(--ink)}
 .brand,.logo,.account-brand{display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none;font:700 27px/1 'Space Grotesk',sans-serif;letter-spacing:-1.8px}
+.has-side-nav header .brand,.has-side-nav header .logo,.account-header .account-brand{flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important;gap:10px!important;width:max-content;white-space:nowrap;color:inherit!important;text-decoration:none}
 .brand-mark,.logo-symbol,.account-brand-mark,.daily-side-mark{display:grid;place-items:center;width:34px;height:34px;flex:none;border:0;border-radius:12px;background:#3028cf;color:#e2fa57;font:800 20px/1 'Space Grotesk',sans-serif;box-shadow:0 5px 0 #211b9f;transform:rotate(-6deg);transition:transform .32s cubic-bezier(.2,.85,.25,1),box-shadow .28s}
+.has-side-nav header .brand-mark,.has-side-nav header .logo-symbol,.account-header .account-brand-mark{width:34px!important;height:34px!important;background:#3028cf!important;color:#e2fa57!important;font:800 20px/1 'Space Grotesk',sans-serif!important}
 .brand-word,.logo-word,.account-brand>span:last-child{color:inherit}
 .brand-word>span,.logo-word>b,.logo-word .logo-period,.account-brand>span:last-child span,.daily-side-word>span{color:inherit}
+.has-side-nav header .brand-word,.has-side-nav header .logo-word,.account-header .account-brand>span:last-child,.has-side-nav header .brand-word>span,.has-side-nav header .logo-word>b,.has-side-nav header .logo-word .logo-period,.account-header .account-brand>span:last-child span{color:inherit!important}
 .brand:hover .brand-mark,.logo:hover .logo-symbol,.account-brand:hover .account-brand-mark,.daily-side-brand:hover .daily-side-mark{transform:rotate(7deg) scale(1.06);box-shadow:0 7px 0 #211b9f}
 .daily-side-mark{background:#3028cf;color:#e2fa57;box-shadow:0 5px 0 #211b9f}
 .daily-side-word{font-size:27px;letter-spacing:-1.8px}
