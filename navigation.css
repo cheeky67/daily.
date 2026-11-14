@@ -42,11 +42,13 @@ html.dark-theme body{color-scheme:dark;background-color:#14151a}
 .daily-home-shell .nav-center{display:flex;align-items:center;gap:6px}
 .daily-home-shell .nav-center>a{padding:9px 15px;border-radius:999px;color:var(--muted);font-size:12px;font-weight:800;text-decoration:none;transition:background .2s,color .2s,transform .2s}
 .daily-home-shell .nav-center>a:hover{transform:translateY(-2px);background:var(--paper);color:var(--ink)}
-.brand-mark,.logo-symbol{display:grid;place-items:center;width:34px;height:34px;flex:none;border-radius:12px;background:#3028cf;color:#e2fa57;font:800 20px 'Space Grotesk',sans-serif;box-shadow:0 5px 0 #211b9f;transform:rotate(-6deg);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
-.brand .brand-mark{color:#e2fa57}.logo-symbol+.logo-word{margin-left:7px}
-.brand:hover .brand-mark,.logo:hover .logo-symbol{transform:rotate(8deg) scale(1.06)}
-.brand-word,.logo-word{color:inherit}.brand-word>span,.logo-word>b,.logo-word .logo-period{color:#ff795e}
-.account-brand-mark{transition:transform .3s cubic-bezier(.2,.8,.2,1)}.account-brand:hover .account-brand-mark{transform:rotate(8deg) scale(1.06)}
+.brand,.logo,.account-brand{display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none;font:700 27px/1 'Space Grotesk',sans-serif;letter-spacing:-1.8px}
+.brand-mark,.logo-symbol,.account-brand-mark,.daily-side-mark{display:grid;place-items:center;width:34px;height:34px;flex:none;border:0;border-radius:12px;background:#3028cf;color:#e2fa57;font:800 20px/1 'Space Grotesk',sans-serif;box-shadow:0 5px 0 #211b9f;transform:rotate(-6deg);transition:transform .32s cubic-bezier(.2,.85,.25,1),box-shadow .28s}
+.brand-word,.logo-word,.account-brand>span:last-child{color:inherit}
+.brand-word>span,.logo-word>b,.logo-word .logo-period,.account-brand>span:last-child span,.daily-side-word>span{color:inherit}
+.brand:hover .brand-mark,.logo:hover .logo-symbol,.account-brand:hover .account-brand-mark,.daily-side-brand:hover .daily-side-mark{transform:rotate(7deg) scale(1.06);box-shadow:0 7px 0 #211b9f}
+.daily-side-mark{background:#3028cf;color:#e2fa57;box-shadow:0 5px 0 #211b9f}
+.daily-side-word{font-size:27px;letter-spacing:-1.8px}
 .daily-mobile-nav{display:none!important}
 body.has-side-nav .navlinks,body.has-side-nav .account-navlinks{display:none!important}
 body.has-side-nav .nav-cta,body.has-side-nav #plan-link{display:none!important}
@@ -70,4 +72,9 @@ body[data-page="app"]:not(:has(#this-week:target)) [data-page-link="dashboard"] 
 @keyframes daily-route-out{to{opacity:0;filter:blur(1px);transform:translateY(-3px)}}
 @keyframes daily-route-in{from{opacity:0;filter:blur(2px);transform:translateY(7px)}to{opacity:1;filter:blur(0);transform:translateY(0)}}
 html{scroll-behavior:smooth;scroll-padding-top:92px}
+@media(max-width:650px){.brand,.logo,.account-brand{font-size:24px;gap:8px}.brand-mark,.logo-symbol,.account-brand-mark,.daily-side-mark{width:32px;height:32px;font-size:19px}}
+@media(hover:hover){:where(.account-card,.admin-panel,.list-card,.side-card,.panel){transition:transform .25s cubic-bezier(.2,.85,.25,1),box-shadow .25s,border-color .25s}:where(.account-card,.admin-panel,.list-card,.side-card,.panel):hover{transform:translateY(-2px);box-shadow:0 18px 38px #10121b18}}
+:where(button,.button,.nav-button,.pill,.nav-cta,.account-button,.outline,.outline-button){transition-timing-function:cubic-bezier(.2,.85,.25,1)}
+:where(button:not(:disabled),.button,.nav-button,.pill,.nav-cta,.account-button,.outline,.outline-button):active{transform:translateY(1px) scale(.985);transition-duration:.08s}
+:focus-visible{outline:3px solid #ff795e;outline-offset:3px}
 @media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root),.daily-navigation[open] .daily-side-link{animation:none!important}html,body{scroll-behavior:auto!important;transition:none!important}.daily-sidebar,.daily-side-link,.daily-side-toggle,.daily-sidebar-plan,.daily-side-toggle span{transition:none!important}.daily-side-link{opacity:1!important;transform:none!important}.daily-navigation[open] .daily-side-mark{animation:none!important}}
